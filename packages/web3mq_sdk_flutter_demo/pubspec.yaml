@@ -46,8 +46,7 @@ dependencies:
   shimmer: ^2.0.0
 
   # The Web3MQ SDK
-  web3mq:
-    path: ../web3mq_sdk_dart/
+  web3mq: ^0.1.1-dev.1
 
 dev_dependencies:
   flutter_test:
