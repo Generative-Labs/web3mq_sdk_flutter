@@ -129,6 +129,9 @@ xcuserdata/
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
 
+### Coverage
+coverage
+
 ### AndroidStudio ###
 # Covers files to be ignored for android development using Android Studio.
 
