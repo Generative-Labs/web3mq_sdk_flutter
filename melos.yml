@@ -1,0 +1,3 @@
+name: web3mq_sdk
+packages:
+  - packages/*

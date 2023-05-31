@@ -1,0 +1,10 @@
+name: web3mq_core
+description: A starting point for Dart libraries or applications.
+version: 0.1.0-dev.1
+
+environment:
+  sdk: ">=2.19.4 <3.0.0"
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.21.0
