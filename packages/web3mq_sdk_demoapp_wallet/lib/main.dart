@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:web3mq_sdk_demoapp_wallet/scan_page.dart';
-import 'package:web3mq/web3mq.dart';
-
-final dappConnectClient = DappConnectClient(
-    'eKsEePNSVXTaBLRy',
-    AppMetadata(
-        'Dart-Wallet', 'for dart wallet test', 'web3mq.com', const [], null));
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  dappConnectClient.connectUser();
   runApp(const MyApp());
 }
 
