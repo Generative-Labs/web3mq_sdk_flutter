@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web3mq/web3mq.dart';
 
 class RequestPresenter extends StatefulWidget {
-  const RequestPresenter({Key? key}) : super(key: key);
+  const RequestPresenter({Key? key, required this.request}) : super(key: key);
 
   final Request request;
 
