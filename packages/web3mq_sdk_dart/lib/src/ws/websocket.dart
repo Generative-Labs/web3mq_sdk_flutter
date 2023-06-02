@@ -5,7 +5,6 @@ import 'dart:math' as math;
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:web3mq/src/dapp_connect/model/user.dart';
 import 'package:web3mq/src/utils/command_generator.dart';
 import 'package:web3mq/src/ws/timer_helper.dart';
 import 'package:web_socket_channel/io.dart';
@@ -34,9 +33,6 @@ typedef WebSocketChannelProvider = WebSocketChannel Function(
 abstract class WebSocketAbs {
   /// Connects to the `web3mq` server.
   Future<Event> connect(User user);
-
-  /// Connects to the `web3mq` server.
-  Future<Event> bridgeConnect(DappConnectUser user);
 
   /// Disconnect from the `web3mq` server.
   void disconnect();
@@ -124,9 +120,6 @@ class Web3MQWebSocket with TimerHelper implements WebSocketAbs {
   /// The message sender.
   User? _user;
 
-  /// The bridge message sender.
-  DappConnectUser? _bridgeUser;
-
   DateTime? _lastEventAt;
 
   String? _nodeId;
@@ -160,32 +153,6 @@ class Web3MQWebSocket with TimerHelper implements WebSocketAbs {
     connectionCompleter = Completer<Event>();
 
     _signer.updateUser(user);
-
-    try {
-      await _initAndSubscribeToWebSocketChannel(_buildUri());
-    } catch (e, stk) {
-      _onConnectionError(e, stk);
-    }
-
-    return connectionCompleter!.future;
-  }
-
-  @override
-  Future<Event> bridgeConnect(DappConnectUser user) async {
-    if (_connectRequestInProgress) {
-      throw const Web3MQWebSocketError('''
-        You've called connect twice,
-        can only attempt 1 connection at the time,
-        ''');
-    }
-    _connectRequestInProgress = true;
-    _manuallyClosed = false;
-
-    _bridgeUser = user;
-    _connectionStatus = ConnectionStatus.connecting;
-    connectionCompleter = Completer<Event>();
-
-    _signer.updateBridgeUser(user);
 
     try {
       await _initAndSubscribeToWebSocketChannel(_buildUri());
@@ -261,12 +228,7 @@ class Web3MQWebSocket with TimerHelper implements WebSocketAbs {
       }
       _subscribeToWebSocketChannel();
       // sends connect command.
-      if (null != _user) {
-        send(await WebSocketMessageGenerator.connectMessage(_signer));
-      } else if (null != _bridgeUser) {
-        send(await WebSocketMessageGenerator.bridgeConnectMessage(
-            apiKey, _signer));
-      }
+      send(await WebSocketMessageGenerator.connectMessage(_signer));
     } catch (error) {
       _logger?.warning('Connect Failed with ${error.toString()}');
       throw Web3MQWebSocketError.fromAnyMessage(error.toString());

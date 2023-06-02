@@ -37,25 +37,27 @@ class ChatMessage extends Web3MQWebSocketMessage with Web3MQBufferConvertible {
 
 /// A message factory
 class MessageFactory {
-  static Future<ChatMessage> _from(List<int> value, PayloadType payloadType,
-      String topic, String senderUserId, String privateKey, String? nodeId,
+  /// Generate a [ChatMessage]
+  static Future<ChatMessage> fromText(String text, String topic,
+      String senderUserId, String privateKey, String nodeId,
       {bool needStore = true,
       String cipherSuite = "NONE",
       String? threadId,
       Map<String, String>? extraData}) async {
     var message = Web3MQRequestMessage(
         version: 1,
+        payloadType: PayloadType.text.value,
         comeFrom: senderUserId,
         contentTopic: topic,
         cipherSuite: cipherSuite,
-        payloadType: payloadType.value,
         needStore: needStore,
         extraData: extraData);
     final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final payload = utf8.encode(text);
     final messageId = MessageIdGenerator.generate(
-        senderUserId, topic, timestamp, Uint8List.fromList(value));
+        senderUserId, topic, timestamp, Uint8List.fromList(payload));
     message.messageId = messageId;
-    message.payload = value;
+    message.payload = payload;
     message.messageType =
         threadId != null ? MessageType.thread : MessageType.common;
     final ed25519 = Ed25519();
@@ -69,25 +71,4 @@ class MessageFactory {
     message.validatePubKey = base64Encode(privateKeyBytes);
     return ChatMessage(message);
   }
-
-  /// Generate a [ChatMessage]
-  static Future<ChatMessage> fromText(String text, String topic,
-      String senderUserId, String privateKey, String nodeId,
-      {bool needStore = true,
-      String cipherSuite = "NONE",
-      String? threadId,
-      Map<String, String>? extraData}) async {
-    final payload = utf8.encode(text);
-    return _from(
-        payload, PayloadType.text, topic, senderUserId, privateKey, nodeId);
-  }
-
-  /// Generate a [ChatMessage]
-  static Future<ChatMessage> fromBytes(List<int> bytes, String topic,
-          String senderUserId, String privateKey, String? nodeId,
-          {bool needStore = true,
-          String cipherSuite = "NONE",
-          String? threadId,
-          Map<String, String>? extraData}) =>
-      _from(bytes, PayloadType.bytes, topic, senderUserId, privateKey, nodeId);
 }

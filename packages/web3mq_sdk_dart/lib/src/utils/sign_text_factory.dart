@@ -16,12 +16,12 @@ class SignTextFactory {
       String domainUrl,
       String nonceContent,
       String formattedDateString,
-      SetPasswordType type) {
-    final purpase = type.purpase;
+      PasswordSettingType type) {
+    final purpose = type.purpose;
     return """
 Web3MQ wants you to sign in with your $walletTypeName account:
 $didValue
-For Web3MQ $purpase
+For Web3MQ $purpose
 URI: $domainUrl
 Version: 1
 

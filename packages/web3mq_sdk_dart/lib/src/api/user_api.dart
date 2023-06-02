@@ -7,7 +7,7 @@ import '../http/http_client.dart';
 import '../utils/signer.dart';
 
 ///
-enum SetPasswordType {
+enum PasswordSettingType {
   /// register
   register,
 
@@ -17,25 +17,24 @@ enum SetPasswordType {
   /// The api path.
   String get path {
     switch (this) {
-      case SetPasswordType.register:
+      case PasswordSettingType.register:
         return "/api/user_register_v2/";
-      case SetPasswordType.reset:
+      case PasswordSettingType.reset:
         return '/api/user_reset_password_v2/';
     }
   }
 
   ///
-  String get purpase {
+  String get purpose {
     switch (this) {
-      case SetPasswordType.register:
+      case PasswordSettingType.register:
         return "register";
-      case SetPasswordType.reset:
+      case PasswordSettingType.reset:
         return 'reset password';
     }
   }
 }
 
-///
 class UserApi {
   UserApi(this._client, this._signer);
 
@@ -43,7 +42,6 @@ class UserApi {
 
   final Signer _signer;
 
-  ///
   Future<UserRegisterResponse> register(
       String didType,
       String didValue,
@@ -54,7 +52,7 @@ class UserApi {
       String signature,
       DateTime timestamp,
       String accessKey,
-      {SetPasswordType type = SetPasswordType.register}) async {
+      {PasswordSettingType type = PasswordSettingType.register}) async {
     final response = await _client.post(
       type.path,
       data: {
@@ -66,6 +64,35 @@ class UserApi {
         "pubkey_type": pubKeyType,
         "timestamp": timestamp.millisecondsSinceEpoch,
         "signature_content": signatureRaw,
+        "testnet_access_key": accessKey
+      },
+    );
+    final res = Web3MQResponse<UserRegisterResponse>.fromJson(
+        response.data, (json) => UserRegisterResponse.fromJson(json));
+    final data = res.data;
+    if (res.code == 0 && null != data) {
+      return data;
+    }
+    throw Web3MQNetworkError.raw(code: res.code, message: res.message ?? "");
+  }
+
+  Future<UserRegisterResponse> preRegister(
+      String dappId,
+      String dappSignature,
+      String didType,
+      String didValue,
+      String userId,
+      DateTime timestamp,
+      String accessKey) async {
+    final response = await _client.post(
+      '/api/dapp_register_user/',
+      data: {
+        'dapp_id': dappId,
+        'dapp_signature': dappSignature,
+        'userid': userId,
+        "did_type": didType,
+        "did_value": didValue,
+        "timestamp": timestamp.millisecondsSinceEpoch,
         "testnet_access_key": accessKey
       },
     );
@@ -102,36 +129,6 @@ class UserApi {
       "pubkey_expired_timestamp": publicKeyExpiredTimestamp
     });
 
-    final res = Web3MQResponse<UserLoginResponse>.fromJson(
-        response.data, (json) => UserLoginResponse.fromJson(json));
-    final data = res.data;
-    if (res.code == 0 && null != data) {
-      return data;
-    }
-    throw Web3MQNetworkError.raw(code: res.code, message: res.message ?? "");
-  }
-
-  Future<UserLoginResponse> resetpassword(
-      String didType,
-      String didValue,
-      String userId,
-      String pubKey,
-      String pubKeyType,
-      String signatureRaw,
-      String signature,
-      DateTime timestamp,
-      String accessKey) async {
-    final response = await _client.post("/api/user_reset_password_v2/", data: {
-      "userid": userId,
-      "did_type": didType,
-      "did_value": didValue,
-      "did_signature": signature,
-      "signature_content": signatureRaw,
-      "pubkey_value": pubKey,
-      "pubkey_type": pubKeyType,
-      "timestamp": timestamp,
-      "testnet_access_key": accessKey,
-    });
     final res = Web3MQResponse<UserLoginResponse>.fromJson(
         response.data, (json) => UserLoginResponse.fromJson(json));
     final data = res.data;

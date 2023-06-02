@@ -1,6 +1,6 @@
 /// Support for doing something awesome.
 ///
-/// More dart docs go here.
+/// More dartdocs go here.
 library web3mq;
 
 export 'src/api/cyber_service.dart';
@@ -11,4 +11,3 @@ export 'src/models/models.dart';
 export 'src/ws/models/ws_models.dart';
 export 'src/persistence/persistence_client.dart';
 export 'src/utils/wallet_connector.dart';
-export 'src/dapp_connect/dapp_connect_client.dart';

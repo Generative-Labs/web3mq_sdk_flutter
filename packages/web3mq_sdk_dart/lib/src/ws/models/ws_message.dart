@@ -29,14 +29,11 @@ class WSPayloadType {
 
 ///
 class MessageType {
-  /// the message type of `common`, which except for `thread` and `bridge`
+  /// the message type except `thead`
   static const String common = '';
 
-  /// the message type of `thread`
+  ///
   static const String thread = 'Web3MQ/thread';
-
-  /// the message type of `bridge`
-  static const String bridge = 'Web3MQ/bridge';
 }
 
 /// This message is for websocket.

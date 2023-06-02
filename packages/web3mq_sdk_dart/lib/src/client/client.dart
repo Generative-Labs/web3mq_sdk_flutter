@@ -28,7 +28,6 @@ import 'package:web3mq/src/ws/websocket.dart';
 
 import '../api/responses.dart';
 import '../http/http_client.dart';
-import '../logger/logger.dart';
 import '../models/cyber_profile.dart';
 import '../models/pagination.dart';
 import '../utils/signer.dart';
@@ -47,10 +46,20 @@ part 'client_topic.dart';
 
 part 'client_user.dart';
 
+/// Handler function used for logging records. Function requires a single
+/// [LogRecord] as the only parameter.
+typedef LogHandlerFunction = void Function(LogRecord record);
+
+final _levelEmojiMapper = {
+  Level.INFO: 'ℹ️',
+  Level.WARNING: '⚠️',
+  Level.SEVERE: '🚨',
+};
+
 class Web3MQClient {
   Web3MQClient(String apiKey,
       {this.logLevel = Level.ALL,
-      this.logHandlerFunction = Web3MQLogger.defaultLogHandler,
+      this.logHandlerFunction = Web3MQClient.defaultLogHandler,
       String? baseURL,
       Duration connectTimeout = const Duration(seconds: 15),
       Duration receiveTimeout = const Duration(seconds: 15),
@@ -204,6 +213,17 @@ class Web3MQClient {
     ..level = logLevel
     ..onRecord.listen(logHandlerFunction);
 
+  /// Default log handler function for the [Web3MQClient] logger.
+  static void defaultLogHandler(LogRecord record) {
+    print(
+      '${record.time} '
+      '${_levelEmojiMapper[record.level] ?? record.level.name} '
+      '${record.loggerName} ${record.message} ',
+    );
+    if (record.error != null) print(record.error);
+    if (record.stackTrace != null) print(record.stackTrace);
+  }
+
   /// Connects the current user, this triggers a connection to the API.
   /// It returns a [Future] that resolves when the connection is setup.
   /// Pass [connectWebSocket]: false, if you want to connect to websocket
@@ -329,7 +349,7 @@ class Web3MQClient {
     }
   }
 
-  /// Call this function to dispose the client
+  /// Call this function to dispose the clients
   Future<void> dispose() async {
     logger.info('Disposing new Web3MQClient');
 

@@ -5,9 +5,9 @@ extension ClientChat on Web3MQClient {
   Future<List<ChannelState>> fetchChannelsFromLocalDatabase({
     Pagination paginationParams = const Pagination(page: 1, size: 50),
   }) async {
-    final offlineChannels = await _persistenceClient?.getChannelStates(
+    final offlineChannels = (await _persistenceClient?.getChannelStates(
           paginationParams: paginationParams,
-        ) ??
+        )) ??
         [];
     final updatedData =
         _mapChannelStateToChannelModel(offlineChannels, state.channels);

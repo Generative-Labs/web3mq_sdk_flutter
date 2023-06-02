@@ -15,12 +15,12 @@ and the Flutter guide for
 
 ## REQUIREMENTS
 
-- Dart SDK:  “>=2.18.5 <3.0.0”
+- Dart SDK:  “>=2.18.5 <4.0.0”
 - A Web3MQ API Key
 
 ## Add dependency
 
-Add this to your package's `pubspec.yaml` file, use the `latestversion` 
+Add this to your package's `pubspec.yaml` file, use the `latestversion`
 
 ```yaml
 dependencies:
@@ -86,8 +86,8 @@ abstract class WalletConnector {
 abstract class Wallet {
   /// account_id support CAIP-10
   final List<String> accounts;
-	
-	Wallet(this.accounts);
+ 
+ Wallet(this.accounts);
 }
 ```
 
@@ -135,7 +135,7 @@ Or if you has the `PrivateKey` .
 final user = await client.user(did, privateKeyHex, expiredDuration)
 ```
 
-you could persist `user` for the connection next time. 
+you could persist `user` for the connection next time.
 
 ### Connect with a `User`
 
@@ -169,7 +169,7 @@ You can use the following method to subscribe notifications from the web3mq serv
 
 ```dart
 client.notificationStream.listen( (notifications) {
-		// handle the notifications.
+  // handle the notifications.
 });
 ```
 
@@ -197,7 +197,7 @@ To keep track of the list of channels, listen to the **`channelsStream`** event:
 
 ```dart
 client.state.channelsStream.listen((event) {
-		// handle the channel list 
+  // handle the channel list 
 });
 ```
 
@@ -215,8 +215,8 @@ To receive updates on the message sending status, listen to the **`messageUpdate
 
 ```dart
 client.on(EventType.messageUpdated).listen((event) {
-		// handle the message status update 
-		final status = event.messageStatusResponse;
+  // handle the message status update 
+  final status = event.messageStatusResponse;
 }
 ```
 
@@ -226,7 +226,7 @@ To receive new messages, listen to the **`newMessageStream`** event:
 
 ```dart
 client.newMessageStream.listen((message) {
-		// handle the message.			
+  // handle the message.   
 }
 ```
 
