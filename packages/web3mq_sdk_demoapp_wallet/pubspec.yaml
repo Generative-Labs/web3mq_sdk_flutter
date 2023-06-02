@@ -19,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0-437.0.dev <4.0.0"
+  sdk: ">=2.19.4 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -38,8 +38,9 @@ dependencies:
   mobile_scanner: ^3.2.0
 
   # The Web3MQ SDK
-  web3mq:
-    path: ../web3mq_sdk_dart/
+
+  # The Web3MQ SDK
+  web3mq: ^0.1.1-dev.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
