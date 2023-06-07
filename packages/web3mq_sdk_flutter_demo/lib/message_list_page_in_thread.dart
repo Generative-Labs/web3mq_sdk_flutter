@@ -58,6 +58,7 @@ class _MessageListPageState extends State<MessageListPage> {
               message: message.text ?? '',
               time: DateTime.fromMillisecondsSinceEpoch(message.timestamp),
               isSent: message.sendingStatus == MessageSendingStatus.sent,
+              messageStatus: message.messageStatus?.status ?? '',
             ),
           );
         },

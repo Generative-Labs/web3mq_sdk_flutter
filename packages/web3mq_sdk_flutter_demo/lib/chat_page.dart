@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:web3mq/web3mq.dart';
@@ -28,7 +29,9 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
 
-    print('debug:topicId:${widget.topicId}');
+    if (kDebugMode) {
+      print('debug:topicId:${widget.topicId}');
+    }
 
     WidgetsBinding.instance.addObserver(this);
 
@@ -68,7 +71,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     //         widget.topicId, const Pagination(page: 1, size: 100),
     //         threadId: widget.threadId)
     //     .then((value) => _onMessagesUpdate(value.result.reversed.toList()));
-
     // mark all messags read
 
     _listenMessages();
@@ -232,6 +234,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                           message.timestamp),
                       isSent:
                           message.sendingStatus == MessageSendingStatus.sent,
+                      messageStatus: message.messageStatus?.status,
                     ),
                   );
                 },
@@ -272,6 +275,7 @@ class ChatMessageCell extends StatelessWidget {
   final String message;
   final DateTime time;
   final bool isSent;
+  final String? messageStatus;
 
   const ChatMessageCell({
     required this.message,
@@ -279,6 +283,7 @@ class ChatMessageCell extends StatelessWidget {
     required this.time,
     required this.isSent,
     Key? key,
+    required this.messageStatus,
   }) : super(key: key);
 
   @override
@@ -325,6 +330,13 @@ class ChatMessageCell extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ),
+                Visibility(
+                  visible: messageStatus != null,
+                  child: Text(
+                    messageStatus ?? '',
+                    textAlign: TextAlign.right,
+                  ),
+                )
               ],
             ),
           ),
