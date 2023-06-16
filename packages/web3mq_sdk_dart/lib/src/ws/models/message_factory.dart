@@ -67,8 +67,8 @@ class MessageFactory {
         await ed25519.sign(utf8.encode(content), keyPair: keyPair);
     message.fromSign = base64Encode(signature.bytes);
     message.timestamp = Int64(timestamp);
-    final privateKeyBytes = await keyPair.extractPrivateKeyBytes();
-    message.validatePubKey = base64Encode(privateKeyBytes);
+    final publicKey = await keyPair.extractPublicKey();
+    message.validatePubKey = base64Encode(publicKey.bytes);
     return ChatMessage(message);
   }
 }
