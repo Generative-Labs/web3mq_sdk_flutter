@@ -1,7 +1,7 @@
 name: web3mq
 description: Provides a modern way of implementing Web3MQ APIs. Web3MQ is the fastest and most scalable social Layer 1 & messaging network.
 
-version: 0.1.1-dev.1
+version: 0.1.1
 homepage: https://www.web3mq.com
 
 environment:

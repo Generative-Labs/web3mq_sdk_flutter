@@ -139,8 +139,7 @@ extension UserExtension on Web3MQClient {
     final publicKey = await keyPair.extractPublicKey();
     final publicKeyHex = hex.encode(publicKey.bytes);
 
-    final acknowledgement =
-        '''
+    final acknowledgement = '''
 I authorize CyberConnect from this device using signing key:
 ''';
 
