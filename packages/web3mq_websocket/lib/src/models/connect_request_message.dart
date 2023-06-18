@@ -1,0 +1,29 @@
+import 'package:fixnum/fixnum.dart';
+import 'package:protobuf/protobuf.dart';
+import 'package:web3mq_websocket/src/models/pb/connect.pb.dart';
+
+import 'buffer_convertible.dart';
+
+///
+class ConnectRequestMessage extends Web3MQWebSocketMessage
+    with Web3MQBufferConvertible {
+  final String nodeId;
+  final String userId;
+  final Int64 timestamp;
+  final String signature;
+
+  @override
+  GeneratedMessage toProto3Object() {
+    return ConnectCommand(
+        nodeId: nodeId,
+        userId: userId,
+        timestamp: timestamp,
+        msgSign: signature);
+  }
+
+  ConnectRequestMessage(
+      this.nodeId, this.userId, this.timestamp, this.signature);
+
+  @override
+  WSCommandType get commandType => WSCommandType.connectRequest;
+}

@@ -1,26 +1,27 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
+import 'dart:typed_data';
 
+import 'package:convert/convert.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:web3mq/src/utils/command_generator.dart';
-import 'package:web3mq/src/ws/timer_helper.dart';
+import 'package:web3mq_core/models.dart';
+import 'package:web3mq_websocket/src/message_signer.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../error/error.dart';
-import '../utils/signer.dart';
 import 'channel_sender.dart';
+import 'command_generator.dart';
+import 'error/error.dart';
 import 'models/buffer_convertible.dart';
 import 'models/connection_status.dart';
 import 'models/event.dart';
 import 'models/pb/connect.pb.dart';
 import 'models/pb/message.pb.dart';
 import 'models/ping_message.dart';
-import 'models/user.dart';
+import 'timer_helper.dart';
 
 /// A Signature for a handler function which will expose a [event].
 typedef EventHandler = void Function(Event event);
@@ -30,7 +31,7 @@ typedef WebSocketChannelProvider = WebSocketChannel Function(
   Iterable<String>? protocols,
 });
 
-abstract class WebSocketAbs {
+abstract class Web3MQWeb3Socket {
   /// Connects to the `web3mq` server.
   Future<Event> connect(User user);
 
@@ -41,26 +42,21 @@ abstract class WebSocketAbs {
   Stream<ConnectionStatus> get connectionStatusStream;
 }
 
-/// A WebSocket connection that reconnects upon failure.
-class Web3MQWebSocket with TimerHelper implements WebSocketAbs {
-  /// Creates a new websocket
+class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
+  /// Creates a new websocket manager
   ///
   /// To connect the WS call [connect].
-  Web3MQWebSocket({
-    required this.apiKey,
+  Web3MQWebSocketManager({
     required this.baseUrl,
     this.handler,
     this.reconnectionMonitorInterval = 10,
     this.healthCheckInterval = 20,
     this.reconnectionMonitorTimeout = 40,
     Logger? logger,
-    Signer? signer,
+    MessageSinger? signer,
     this.webSocketChannelProvider,
   })  : _logger = logger,
-        _signer = signer ?? Signer.instance;
-
-  ///
-  final String apiKey;
+        _signer = signer ?? Web3MQEd25519MessageSigner();
 
   /// Websocket base Url
   final String baseUrl;
@@ -68,14 +64,13 @@ class Web3MQWebSocket with TimerHelper implements WebSocketAbs {
   /// The logger
   final Logger? _logger;
 
-  final Signer _signer;
+  final MessageSinger _signer;
 
   /// Which signs the message.
-  Signer get signer => _signer;
+  MessageSinger get signer => _signer;
 
   /// Connection function
   /// Used only for testing purpose
-  @visibleForTesting
   final WebSocketChannelProvider? webSocketChannelProvider;
 
   /// Functions that will be called every time a new event is received from the
@@ -152,10 +147,9 @@ class Web3MQWebSocket with TimerHelper implements WebSocketAbs {
     _connectionStatus = ConnectionStatus.connecting;
     connectionCompleter = Completer<Event>();
 
-    _signer.updateUser(user);
-
     try {
-      await _initAndSubscribeToWebSocketChannel(_buildUri());
+      await _initAndSubscribeToWebSocketChannel(_buildUri(), user.userId,
+          Uint8List.fromList(hex.decode(user.privateKeyHex)));
     } catch (e, stk) {
       _onConnectionError(e, stk);
     }
@@ -187,6 +181,8 @@ class Web3MQWebSocket with TimerHelper implements WebSocketAbs {
 
   void _reconnect() async {
     _logger?.info('Retrying connection : $_reconnectAttempt');
+    final user = _user;
+    if (user == null) return;
     if (_reconnectRequestInProgress) return;
     _reconnectRequestInProgress = true;
 
@@ -203,7 +199,8 @@ class Web3MQWebSocket with TimerHelper implements WebSocketAbs {
       () async {
         final uri = _buildUri();
         try {
-          _initAndSubscribeToWebSocketChannel(uri);
+          _initAndSubscribeToWebSocketChannel(uri, user.userId,
+              Uint8List.fromList(hex.decode(user.privateKeyHex)));
         } catch (e, stk) {
           _onConnectionError(e, stk);
         }
@@ -211,7 +208,8 @@ class Web3MQWebSocket with TimerHelper implements WebSocketAbs {
     );
   }
 
-  Future<void> _initAndSubscribeToWebSocketChannel(Uri uri) async {
+  Future<void> _initAndSubscribeToWebSocketChannel(
+      Uri uri, String userId, Uint8List privateKey) async {
     final wsUrl = uri.toString();
     _logger?.info('Initiating connection with $wsUrl');
     if (_channel != null) {
@@ -228,14 +226,13 @@ class Web3MQWebSocket with TimerHelper implements WebSocketAbs {
       }
       _subscribeToWebSocketChannel();
       // sends connect command.
-      send(await WebSocketMessageGenerator.connectMessage(_signer));
+      send(await WebSocketMessageGenerator.connectCommandMessage(
+          userId, privateKey, _signer));
     } catch (error) {
       _logger?.warning('Connect Failed with ${error.toString()}');
       throw Web3MQWebSocketError.fromAnyMessage(error.toString());
     }
   }
-
-  
 
   void send(Web3MQBufferConvertible message) {
     _channel?.send(message);

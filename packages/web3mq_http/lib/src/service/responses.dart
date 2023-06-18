@@ -1,15 +1,5 @@
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:web3mq/src/models/cyber_user_follow_status.dart';
-
-import '../models/channel_state.dart';
-import '../models/cyber_profile.dart';
-import '../utils/serializer.dart';
-import '../ws/models/pb/message.pb.dart';
-import '../ws/models/ws_message.dart';
-
 part 'responses.g.dart';
 
 DateTime _dateTimeFromJson(int value) =>
@@ -92,7 +82,6 @@ class CommonResponse extends Web3MQResponse {
 /// Model response for [Web3MQNetworkError] data
 @JsonSerializable()
 class ErrorResponse extends Web3MQResponse {
-  ///
   ErrorResponse(super.code, super.message, super.data);
 
   /// Create a new instance from a json
