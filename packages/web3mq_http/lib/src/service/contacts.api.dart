@@ -1,10 +1,9 @@
-import 'package:web3mq/src/api/responses.dart';
-import 'package:web3mq/src/models/pagination.dart';
 import 'package:web3mq_http/src/service/request_signer.dart';
 
-import '../error/error.dart';
-import '../http/http_client.dart';
-import '../utils/signer.dart';
+import '../client/http_client.dart';
+import '../model/error.dart';
+import '../model/pagination.dart';
+import 'responses.dart';
 
 enum FollowAction {
   follow,

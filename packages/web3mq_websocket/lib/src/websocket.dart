@@ -148,8 +148,8 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
     connectionCompleter = Completer<Event>();
 
     try {
-      await _initAndSubscribeToWebSocketChannel(_buildUri(), user.userId,
-          Uint8List.fromList(hex.decode(user.privateKeyHex)));
+      await _initAndSubscribeToWebSocketChannel(
+          _buildUri(), user.userId, user.privateKey);
     } catch (e, stk) {
       _onConnectionError(e, stk);
     }
@@ -199,8 +199,8 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
       () async {
         final uri = _buildUri();
         try {
-          _initAndSubscribeToWebSocketChannel(uri, user.userId,
-              Uint8List.fromList(hex.decode(user.privateKeyHex)));
+          _initAndSubscribeToWebSocketChannel(
+              uri, user.userId, user.privateKey);
         } catch (e, stk) {
           _onConnectionError(e, stk);
         }

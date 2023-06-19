@@ -1,14 +1,22 @@
-import 'dart:typed_data';
-
-import 'package:dio/dio.dart';
-import 'package:fixnum/fixnum.dart';
-import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:web3mq_http/src/service/request_signer.dart';
+import 'package:web3mq_http/web3mq_http.dart';
+
+class MockRequestSignedResult extends RequestSignedResult {
+  @override
+  String get signature => 'signature';
+
+  @override
+  DateTime get time => DateTime.now();
+
+  @override
+  String get userId => 'userId';
+}
 
 class MockSigner extends Mock implements RequestSigner {
   @override
-  Future<String> sign(String raw, Uint8List privateKey) {
-    return Future(() => "test-signature");
+  Future<RequestSignedResult> sign(String? parameter) {
+    return Future(() => MockRequestSignedResult());
   }
 }
+
+class MockHttpClient extends Mock implements Web3MQHttpClient {}

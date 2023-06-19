@@ -1,11 +1,10 @@
-import 'package:web3mq/src/api/requests.dart';
-import 'package:web3mq/src/api/responses.dart';
-import 'package:web3mq/src/error/error.dart';
 import 'package:web3mq_http/src/service/request_signer.dart';
 
-import '../http/http_client.dart';
-import '../models/pagination.dart';
-import '../utils/signer.dart';
+import '../client/http_client.dart';
+import '../model/error.dart';
+import '../model/pagination.dart';
+import 'requests.dart';
+import 'responses.dart';
 
 ///
 class NotificationApi {

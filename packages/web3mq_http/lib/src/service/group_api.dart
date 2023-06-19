@@ -1,10 +1,9 @@
-import 'package:web3mq/src/api/requests.dart';
-import 'package:web3mq/src/api/responses.dart';
-import 'package:web3mq/src/models/pagination.dart';
-
-import '../error/error.dart';
-import '../http/http_client.dart';
-import '../utils/signer.dart';
+import '../../web3mq_http.dart';
+import '../model/error.dart';
+import '../model/pagination.dart';
+import 'request_signer.dart';
+import 'requests.dart';
+import 'responses.dart';
 
 class GroupApi {
   /// Initializes a new GroupApi instance.

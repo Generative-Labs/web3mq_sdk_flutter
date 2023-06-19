@@ -9,7 +9,7 @@ class Web3MQHttpClientOptions {
     this.receiveTimeout = const Duration(seconds: 15),
     this.queryParameters = const {},
     this.headers = const {},
-  }) : baseUrl = baseUrl ?? TestnetEndpoint.sg1;
+  }) : baseUrl = baseUrl ?? DevEndpoint.sg1;
 
   /// base url to use with client.
   final String baseUrl;

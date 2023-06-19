@@ -1,10 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
-import 'package:web3mq/src/error/error.dart';
-import 'package:web3mq/src/http/web3mq_dio_error.dart';
-import 'package:web3mq/src/models/endpoint.dart';
+import 'package:web3mq_core/models.dart';
+import 'package:web3mq_http/src/client/web3mq_dio_error.dart';
 
+import '../model/error.dart';
 import 'interceptor/additional_headers_interceptor.dart';
 import 'interceptor/logging_interceptor.dart';
 
@@ -12,7 +11,10 @@ part 'http_client_options.dart';
 
 class Web3MQHttpClient {
   Web3MQHttpClient(this.apiKey,
-      {Dio? dio, Web3MQHttpClientOptions? options, Logger? logger})
+      {Dio? dio,
+      Web3MQHttpClientOptions? options,
+      Logger? logger,
+      Map<String, dynamic> additionalHeaders = const {}})
       : _options = options ?? const Web3MQHttpClientOptions(),
         httpClient = dio ?? Dio() {
     httpClient
@@ -27,7 +29,7 @@ class Web3MQHttpClient {
         ..._options.headers,
       }
       ..interceptors.addAll([
-        AdditionalHeadersInterceptor(),
+        AdditionalHeadersInterceptor(additionalHeaders),
         if (logger != null && logger.level != Level.OFF)
           LoggingInterceptor(
             requestHeader: true,
@@ -55,7 +57,6 @@ class Web3MQHttpClient {
   /// It's been chosen because it's easy to use
   /// and supports interesting features out of the box
   /// (Interceptors, Global configuration, FormData, File downloading etc.)
-  @visibleForTesting
   final Dio httpClient;
 
   void close({bool force = false}) => httpClient.close(force: force);
@@ -175,12 +176,12 @@ class Web3MQHttpClient {
         cancelToken: cancelToken,
       );
       return response;
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       throw _parseError(error);
     }
   }
 
-  Web3MQNetworkError _parseError(DioError err) {
+  Web3MQNetworkError _parseError(DioException err) {
     Web3MQNetworkError error;
     // locally thrown dio error
     if (err is Web3MQDioError) {

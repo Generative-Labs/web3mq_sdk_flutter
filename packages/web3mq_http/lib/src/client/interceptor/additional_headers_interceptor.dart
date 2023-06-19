@@ -2,6 +2,12 @@ import 'package:dio/dio.dart';
 
 /// Interceptor that sets additional headers for all requests.
 class AdditionalHeadersInterceptor extends Interceptor {
+  /// AdditionalHeaders
+  Map<String, dynamic> additionalHeaders = {};
+
+  ///
+  AdditionalHeadersInterceptor(this.additionalHeaders);
+
   @override
   Future<void> onRequest(
     RequestOptions options,
@@ -9,7 +15,7 @@ class AdditionalHeadersInterceptor extends Interceptor {
   ) async {
     options.headers = {
       ...options.headers,
-      ...Web3MQClient.additionalHeaders,
+      ...additionalHeaders,
     };
     return handler.next(options);
   }

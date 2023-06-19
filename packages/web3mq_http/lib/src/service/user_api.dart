@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:web3mq/src/api/responses.dart';
+import 'package:web3mq_http/src/service/request_signer.dart';
 
-import '../error/error.dart';
-import '../http/http_client.dart';
-import '../utils/signer.dart';
+import '../client/http_client.dart';
+import '../model/error.dart';
+import 'responses.dart';
 
 ///
 enum PasswordSettingType {
@@ -40,7 +40,7 @@ class UserApi {
 
   final Web3MQHttpClient _client;
 
-  final Signer _signer;
+  final RequestSigner _signer;
 
   Future<UserRegisterResponse> register(
       String didType,

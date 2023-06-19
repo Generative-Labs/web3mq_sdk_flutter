@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
+import 'package:web3mq_http/src/model/pagination.dart';
+import 'package:web3mq_http/src/service/api.dart';
+import 'package:web3mq_http/src/service/request_signer.dart';
+import 'package:web3mq_http/src/service/requests.dart';
 import 'mocks.dart';
 
 void main() {
@@ -14,7 +18,7 @@ void main() {
   late UserApi userApi;
   late NotificationApi notificationApi;
   late TopicApi topicApi;
-  late Signer signer;
+  late RequestSigner signer;
 
   setUp(() {
     signer = MockSigner();

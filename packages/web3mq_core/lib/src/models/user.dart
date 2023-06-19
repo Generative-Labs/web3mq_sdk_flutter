@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:json_annotation/json_annotation.dart';
 
 import 'did.dart';
@@ -14,10 +16,10 @@ class User {
   final DID did;
 
   ///
-  final String privateKeyHex;
+  final Uint8List privateKey;
 
   ///
-  User(this.userId, this.did, this.privateKeyHex);
+  User(this.userId, this.did, this.privateKey);
 
   ///
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
@@ -25,12 +27,3 @@ class User {
   /// Serialize to json
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }
-
-  // // TODO： 以懒加载的方式获取 publicKeyHex
-  // String get publicKey {
-  //   if (null != _publicKeyHex) {
-  //     return _publicKeyHex;
-  //   }
-  //   final keyPair = await Ed25519().newKeyPairFromSeed(hex.decode(sessionKey));
-  //   return keyPair.publicKeyHex;
-  // }

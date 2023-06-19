@@ -1,9 +1,15 @@
-
+import 'package:logging/logging.dart';
+import 'package:web3mq_core/models.dart';
 import 'package:web3mq_http/src/service/request_signer.dart';
 
+import '../../web3mq_http.dart';
+import 'chat_api.dart';
+import 'contacts.api.dart';
+import 'group_api.dart';
 import 'notification_api.dart';
 import 'topic_api.dart';
 import 'user_api.dart';
+import 'utils_api.dart';
 
 class Web3MQService {
   /// Initialize a new web3mq service
@@ -14,11 +20,11 @@ class Web3MQService {
       Logger? logger})
       : _client = client ??
             Web3MQHttpClient(apiKey, options: options, logger: logger),
-        _signer = signer ?? Signer.instance;
+        _signer = signer ?? Web3MQRequestSigner();
 
   final Web3MQHttpClient _client;
 
-  final Signer _signer;
+  final RequestSigner _signer;
 
   NotificationApi? _notification;
   UserApi? _user;
@@ -27,6 +33,11 @@ class Web3MQService {
   ContactsApi? _contacts;
   GroupApi? _group;
   UtilsApi? _utils;
+
+  /// Connect user to the service
+  void connectUser(User user) {
+    _signer.connectUser(user);
+  }
 
   /// Api dedicated to users operations
   NotificationApi get notification =>

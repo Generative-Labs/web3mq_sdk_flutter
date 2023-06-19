@@ -7,9 +7,17 @@ environment:
 
 dependencies:
   path: ^1.8.0
-  web3mq_core: ^0.1.0
+  web3mq_core: ^0.1.0-dev.1
   dio: ^5.0.0
+  logging: ^1.1.0
+  collection: ^1.17.0
+  equatable: ^2.0.5
+  json_annotation: ^4.7.0
+  cryptography: ^2.0.5
 
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.21.0
+  mocktail: ^0.3.0
+  json_serializable: ^6.0.0
+  build_runner: ^2.0.0

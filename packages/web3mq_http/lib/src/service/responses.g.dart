@@ -119,9 +119,7 @@ UserInfo _$UserInfoFromJson(Map<String, dynamic> json) => UserInfo(
       json['signature_content'] as String?,
       json['did_signature'] as String?,
       json['timestamp'] as int?,
-    )..cyberProfile = json['cyberProfile'] == null
-        ? null
-        : CyberProfile.fromJson(json['cyberProfile'] as Map<String, dynamic>);
+    );
 
 UserRegisterResponse _$UserRegisterResponseFromJson(
         Map<String, dynamic> json) =>
@@ -315,10 +313,7 @@ FollowUser _$FollowUserFromJson(Map<String, dynamic> json) => FollowUser(
       json['wallet_type'] as String?,
       json['avatar_url'] as String?,
       json['nickname'] as String?,
-    )..cyberStatus = json['cyber_status'] == null
-        ? null
-        : CyberFollowStatus.fromJson(
-            json['cyber_status'] as Map<String, dynamic>);
+    );
 
 Thread _$ThreadFromJson(Map<String, dynamic> json) => Thread(
       json['threadid'] as String,

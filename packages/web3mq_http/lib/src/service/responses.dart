@@ -1,5 +1,11 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:web3mq_core/models.dart';
+
+import '../serializer.dart';
+
 part 'responses.g.dart';
 
 DateTime _dateTimeFromJson(int value) =>
@@ -236,9 +242,6 @@ class UserInfo {
 
   final int? timestamp;
 
-  @JsonKey(includeIfNull: false, toJson: Serializer.readOnly)
-  CyberProfile? cyberProfile;
-
   /// Create a new instance from a json
   static UserInfo fromJson(Map<String, dynamic> json) =>
       _$UserInfoFromJson(json);
@@ -361,11 +364,6 @@ class ChannelModel {
   /// The unread message count
   @JsonKey(includeIfNull: false, toJson: Serializer.readOnly)
   int unreadMessageCount;
-
-  /// Create a channel client instance from a [ChannelState] object.
-  factory ChannelModel.fromState(ChannelState channelState) {
-    return channelState.channel;
-  }
 
   /// Creates a copy of [ChannelModel] with specified attributes overridden.
   ChannelModel copyWith(
@@ -532,23 +530,6 @@ class Notification {
 
   /// Serialize to json
   Map<String, dynamic> toJson() => _$NotificationToJson(this);
-
-  factory Notification.fromMessageItem(MessageItem item) {
-    final map = {
-      "messageId": item.messageId,
-      "version": item.version,
-      "payload": item.payload,
-      "payloadType": item.payloadType,
-      "comeFrom": item.comeFrom,
-      "fromSign": item.fromSign,
-      "contentTopic": item.contentTopic,
-      "cipherSuite": item.cipherSuite,
-      "timestamp": item.timestamp.toInt(),
-      "read": item.read,
-      "readTimestamp": item.readTimestamp.toInt()
-    };
-    return fromJson(map);
-  }
 }
 
 ///
@@ -667,40 +648,6 @@ class Message {
     return message.copyWith(text: text);
   }
 
-  /// Creates a new instance form [WSMessage]
-  factory Message.fromWSMessage(WSMessage message) {
-    final text = utf8.decode(message.payload);
-    return Message(
-        message.topicId,
-        message.userId,
-        message.cipherSuite,
-        message.id,
-        message.timestamp,
-        null,
-        null,
-        text,
-        message.threadId,
-        message.messageType,
-        message.extraData);
-  }
-
-  /// Creates a new instance form [Web3MQRequestMessage]
-  factory Message.fromProtobufMessage(Web3MQRequestMessage message) {
-    final text = utf8.decode(message.payload);
-    return Message(
-        message.contentTopic,
-        message.comeFrom,
-        message.cipherSuite,
-        message.messageId,
-        message.timestamp.toInt(),
-        null,
-        null,
-        text,
-        message.threadId,
-        message.messageType,
-        message.extraData);
-  }
-
   Message copyWith({
     String? topic,
     String? from,
@@ -781,9 +728,6 @@ class FollowUser {
   final String? avatarUrl;
 
   final String? nickname;
-
-  @JsonKey(includeIfNull: false, toJson: Serializer.readOnly)
-  CyberFollowStatus? cyberStatus;
 
   FollowUser(this.userId, this.followStatus, this.walletAddress,
       this.walletType, this.avatarUrl, this.nickname);

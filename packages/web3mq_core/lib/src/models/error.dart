@@ -1,5 +1,7 @@
+import 'package:equatable/equatable.dart';
+
 /// Base error class.
-class Web3MQError implements Exception {
+class Web3MQError with EquatableMixin implements Exception {
   ///
   const Web3MQError(this.message);
 
@@ -8,4 +10,7 @@ class Web3MQError implements Exception {
 
   @override
   String toString() => 'Web3MQError(message: $message)';
+
+  @override
+  List<Object?> get props => [message];
 }
