@@ -6,6 +6,7 @@ import 'package:web3mq_sdk_flutter_demo/contacts_page.dart';
 import 'package:web3mq_sdk_flutter_demo/notification_list_page.dart';
 import 'package:web3mq_sdk_flutter_demo/profile_page.dart';
 import 'package:web3mq_sdk_flutter_demo/topic_page.dart';
+
 import 'main.dart';
 
 class HomePage extends StatefulWidget {

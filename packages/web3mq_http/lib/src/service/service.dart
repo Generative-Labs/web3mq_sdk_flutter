@@ -1,15 +1,7 @@
 import 'package:logging/logging.dart';
 import 'package:web3mq_core/models.dart';
-import 'package:web3mq_http/src/service/request_signer.dart';
 
 import '../../web3mq_http.dart';
-import 'chat_api.dart';
-import 'contacts.api.dart';
-import 'group_api.dart';
-import 'notification_api.dart';
-import 'topic_api.dart';
-import 'user_api.dart';
-import 'utils_api.dart';
 
 class Web3MQService {
   /// Initialize a new web3mq service

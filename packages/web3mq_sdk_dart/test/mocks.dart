@@ -7,8 +7,8 @@ import 'package:web3mq/src/api/user_api.dart';
 import 'package:web3mq/src/client/client.dart';
 import 'package:web3mq/src/http/http_client.dart';
 import 'package:web3mq/src/utils/signer.dart';
-import 'package:web3mq/src/ws/models/user.dart';
 import 'package:web3mq/src/utils/wallet_connector.dart';
+import 'package:web3mq/src/ws/models/user.dart';
 import 'package:web3mq/src/ws/websocket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 

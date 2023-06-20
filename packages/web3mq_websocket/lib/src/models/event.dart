@@ -1,7 +1,6 @@
 import 'package:web3mq_websocket/src/models/pb/message.pb.dart';
 import 'package:web3mq_websocket/src/models/ws_models.dart';
 
-import 'connection_status.dart';
 import 'notification.dart';
 
 class EventType {

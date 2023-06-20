@@ -116,14 +116,14 @@ class LoggingInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException  err, ErrorInterceptorHandler handler) {
     if (error) {
-      if (err.type == DioErrorType.badResponse) {
+      if (err.type == DioExceptionType.badResponse) {
         final uri = err.response?.requestOptions.uri;
         _printBoxed(
           _logPrintError,
           header:
-              'DioError ║ Status: ${err.response?.statusCode} ${err.response?.statusMessage}',
+              'DioException  ║ Status: ${err.response?.statusCode} ${err.response?.statusMessage}',
           text: uri.toString(),
         );
         if (err.response != null && err.response?.data != null) {
@@ -135,7 +135,7 @@ class LoggingInterceptor extends Interceptor {
       } else {
         _printBoxed(
           _logPrintError,
-          header: 'DioError ║ ${err.type}',
+          header: 'DioException  ║ ${err.type}',
           text: err.message,
         );
         _printRequestHeader(_logPrintError, err.requestOptions);

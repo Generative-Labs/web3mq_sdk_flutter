@@ -1,8 +1,6 @@
 import '../../web3mq_http.dart';
 import '../model/error.dart';
 import '../model/pagination.dart';
-import 'request_signer.dart';
-import 'responses.dart';
 
 ///
 class TopicApi {

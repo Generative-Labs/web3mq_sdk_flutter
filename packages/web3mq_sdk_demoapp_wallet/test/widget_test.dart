@@ -7,7 +7,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:web3mq_sdk_demoapp_wallet/main.dart';
 
 void main() {

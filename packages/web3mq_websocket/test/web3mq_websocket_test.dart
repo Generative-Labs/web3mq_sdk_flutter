@@ -1,5 +1,5 @@
-import 'package:web3mq_websocket/web3mq_websocket.dart';
 import 'package:test/test.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 void main() {
   group('A group of tests', () {

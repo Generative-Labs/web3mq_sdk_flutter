@@ -6,6 +6,7 @@ import 'package:fixnum/fixnum.dart';
 import 'package:protobuf/protobuf.dart';
 import 'package:web3mq_websocket/src/models/pb/message.pb.dart';
 import 'package:web3mq_websocket/src/models/ws_message.dart';
+
 import '../message_id_generator.dart';
 import '../private_key_utils.dart';
 import 'buffer_convertible.dart';

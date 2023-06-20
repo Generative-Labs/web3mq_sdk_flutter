@@ -35,15 +35,10 @@ import '../utils/wallet_connector.dart';
 import 'client_state.dart';
 
 part 'client_chat.dart';
-
 part 'client_contacts.dart';
-
 part 'client_group.dart';
-
 part 'client_notification.dart';
-
 part 'client_topic.dart';
-
 part 'client_user.dart';
 
 /// Handler function used for logging records. Function requires a single

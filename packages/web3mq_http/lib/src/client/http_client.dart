@@ -78,7 +78,7 @@ class Web3MQHttpClient {
         cancelToken: cancelToken,
       );
       return response;
-    } on DioError catch (error) {
+    } on DioException  catch (error) {
       throw _parseError(error);
     }
   }
@@ -104,7 +104,7 @@ class Web3MQHttpClient {
         cancelToken: cancelToken,
       );
       return response;
-    } on DioError catch (error) {
+    } on DioException  catch (error) {
       throw _parseError(error);
     }
   }
@@ -124,7 +124,7 @@ class Web3MQHttpClient {
         cancelToken: cancelToken,
       );
       return response;
-    } on DioError catch (error) {
+    } on DioException  catch (error) {
       throw _parseError(error);
     }
   }
@@ -150,7 +150,7 @@ class Web3MQHttpClient {
         cancelToken: cancelToken,
       );
       return response;
-    } on DioError catch (error) {
+    } on DioException  catch (error) {
       throw _parseError(error);
     }
   }

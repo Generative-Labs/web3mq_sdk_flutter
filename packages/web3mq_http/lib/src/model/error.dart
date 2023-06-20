@@ -34,7 +34,7 @@ class Web3MQNetworkError extends Web3MQError {
   }) : super(message);
 
   ///
-  factory Web3MQNetworkError.fromDioError(DioError error) {
+  factory Web3MQNetworkError.fromDioError(DioException error) {
     final response = error.response;
     ErrorResponse? errorResponse;
     final data = response?.data;
