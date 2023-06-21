@@ -3,6 +3,7 @@ import 'package:web3mq_core/models.dart';
 
 import '../../web3mq_http.dart';
 
+///
 class Web3MQService {
   /// Initialize a new web3mq service
   Web3MQService(String apiKey,
@@ -27,8 +28,15 @@ class Web3MQService {
   UtilsApi? _utils;
 
   /// Connect user to the service
-  void connectUser(User user) {
+  Future<void> connectUser(User user) async {
     _signer.connectUser(user);
+    _client.connectUser(user);
+  }
+
+  /// Disconnect user from the service
+  void disconnectUser() {
+    _signer.disconnectUser();
+    _client.disconnectUser();
   }
 
   /// Api dedicated to users operations

@@ -17,6 +17,7 @@ class Web3MQHttpClient {
       Map<String, dynamic> additionalHeaders = const {}})
       : _options = options ?? const Web3MQHttpClientOptions(),
         httpClient = dio ?? Dio() {
+    _additionalHeadersInterceptor.additionalHeaders = additionalHeaders;
     httpClient
       ..options.baseUrl = _options.baseUrl
       ..options.receiveTimeout = _options.receiveTimeout
@@ -29,7 +30,7 @@ class Web3MQHttpClient {
         ..._options.headers,
       }
       ..interceptors.addAll([
-        AdditionalHeadersInterceptor(additionalHeaders),
+        _additionalHeadersInterceptor,
         if (logger != null && logger.level != Level.OFF)
           LoggingInterceptor(
             requestHeader: true,
@@ -46,6 +47,23 @@ class Web3MQHttpClient {
           ),
       ]);
   }
+
+  Future<void> connectUser(User user) async {
+    final keyPair = KeyPair(user.privateKey);
+    final publicKeyHex = await keyPair.publicKeyHex;
+    _additionalHeadersInterceptor.additionalHeaders = {
+      "api-version": 2,
+      "web3mq-request-pubkey": publicKeyHex,
+      "didkey": "${user.did.type}:${user.did.value}"
+    };
+  }
+
+  void disconnectUser() {
+    _additionalHeadersInterceptor.additionalHeaders = {};
+  }
+
+  final AdditionalHeadersInterceptor _additionalHeadersInterceptor =
+      AdditionalHeadersInterceptor({});
 
   /// Your project Stream Chat api key.
   final String apiKey;
@@ -78,7 +96,7 @@ class Web3MQHttpClient {
         cancelToken: cancelToken,
       );
       return response;
-    } on DioException  catch (error) {
+    } on DioException catch (error) {
       throw _parseError(error);
     }
   }
@@ -104,7 +122,7 @@ class Web3MQHttpClient {
         cancelToken: cancelToken,
       );
       return response;
-    } on DioException  catch (error) {
+    } on DioException catch (error) {
       throw _parseError(error);
     }
   }
@@ -124,7 +142,7 @@ class Web3MQHttpClient {
         cancelToken: cancelToken,
       );
       return response;
-    } on DioException  catch (error) {
+    } on DioException catch (error) {
       throw _parseError(error);
     }
   }
@@ -150,7 +168,7 @@ class Web3MQHttpClient {
         cancelToken: cancelToken,
       );
       return response;
-    } on DioException  catch (error) {
+    } on DioException catch (error) {
       throw _parseError(error);
     }
   }

@@ -1,22 +1,19 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# web3mq_http
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+web3mq_http is an Web3MQ JSON-RPC client based on the HTTP protocol, using the http package to send requests and parse responses. It supports all standard Web3mq methods, including user registerion, chats and notification queries.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
+## Installation
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+To use web3mq_http, add it to your pubspec.yaml file:
+
+```yaml
+dependencies:
+  web3mq_http: ^0.1.0-dev.1
+```
+
+You should then run `flutter packages get`
 
 ## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
 
 ## Getting started
 
@@ -26,14 +23,19 @@ start using the package.
 ## Usage
 
 TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+to `/example` folder.
 
 ```dart
-const like = 'sample';
+  final service = Web3MQService('{apiKey}');
+
+  // If you want to execute the registration and login interfaces,
+  // we strongly recommend that you use the web3mq package.
+  // Once you have the login credential User, you can use the service like above
+
+  final aUser = User('userId', DID('type', 'value'), Uint8List.fromList([]));
+  await service.connectUser(aUser);
+
+  // fetch chats:
+  final chats = await service.chat.queryChannels(Pagination(size: 20));
+  print(chats);
 ```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.

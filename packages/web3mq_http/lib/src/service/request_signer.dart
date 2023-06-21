@@ -9,6 +9,9 @@ abstract class RequestSigner {
   void connectUser(User user);
 
   ///
+  void disconnectUser();
+
+  ///
   Future<RequestSignedResult> sign(String? parameter);
 }
 
@@ -66,5 +69,10 @@ class Web3MQRequestSigner implements RequestSigner {
   @override
   void connectUser(User user) {
     this.user = user;
+  }
+
+  @override
+  void disconnectUser() {
+    user = null;
   }
 }
