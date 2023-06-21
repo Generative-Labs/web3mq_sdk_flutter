@@ -1,9 +1,10 @@
 name: web3mq_core
-description: A starting point for Dart libraries or applications.
+description: a foundation package for web3mq flutter monorepo.
 version: 0.1.0-dev.1
+homepage: https://www.web3mq.com
 
 environment:
-  sdk: ">=2.19.4 <3.0.0"
+  sdk: ">=2.19.4 <4.0.0"
 
 dependencies:
   json_annotation: ^4.7.0
