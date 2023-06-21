@@ -17,13 +17,11 @@ import 'error/error.dart';
 import 'models/buffer_convertible.dart';
 import 'models/connection_status.dart';
 import 'models/event.dart';
+import 'models/message_factory.dart';
 import 'models/pb/connect.pb.dart';
 import 'models/pb/message.pb.dart';
 import 'models/ping_message.dart';
 import 'timer_helper.dart';
-
-/// A Signature for a handler function which will expose a [event].
-typedef EventHandler = void Function(Event event);
 
 typedef WebSocketChannelProvider = WebSocketChannel Function(
   Uri uri, {
@@ -47,7 +45,6 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
   /// To connect the WS call [connect].
   Web3MQWebSocketManager({
     required this.baseUrl,
-    this.handler,
     this.reconnectionMonitorInterval = 10,
     this.healthCheckInterval = 20,
     this.reconnectionMonitorTimeout = 40,
@@ -71,10 +68,6 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
   /// Connection function
   /// Used only for testing purpose
   final WebSocketChannelProvider? webSocketChannelProvider;
-
-  /// Functions that will be called every time a new event is received from the
-  /// connection
-  final EventHandler? handler;
 
   /// Interval of the reconnection monitor timer
   /// This checks that it received a new event in the last
@@ -107,6 +100,23 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
 
   /// Flag for whether connect request is in progress.
   bool _connectRequestInProgress = false;
+
+  final _messageController = StreamController<Web3MQRequestMessage>();
+
+  /// Stream of messages received.
+  Stream<Web3MQRequestMessage> get messageStream => _messageController.stream;
+
+  final _messageUpdateController = StreamController<Web3MQMessageStatusResp>();
+
+  /// Stream of message status updates received.
+  Stream<Web3MQMessageStatusResp> get messageUpdateStream =>
+      _messageUpdateController.stream;
+
+  final _notificationController = StreamController<Web3MQMessageListResponse>();
+
+  /// Stream of messages received.
+  Stream<Web3MQMessageListResponse> get notificationStream =>
+      _notificationController.stream;
 
   ///
   WebSocketChannel? _channel;
@@ -233,8 +243,30 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
     }
   }
 
+  ///　Sends message.
   void send(Web3MQBufferConvertible message) {
     _channel?.send(message);
+  }
+
+  /// Sends text message to the given topic.
+  Future<void> sendText(String text, String topic,
+      {String? threadId,
+      String cipherSuite = 'NONE',
+      bool needStore = true,
+      Map<String, String>? extraData}) async {
+    final user = _user;
+    final nodeId = _nodeId;
+    if (user == null || nodeId == null) {
+      throw Web3MQWebSocketError(
+          "Send message error: you should be connected first");
+    }
+    final chatMessage = await MessageFactory.fromText(
+        text, topic, user.userId, user.privateKey, nodeId,
+        threadId: threadId,
+        needStore: needStore,
+        cipherSuite: cipherSuite,
+        extraData: extraData);
+    send(chatMessage);
   }
 
   void _closeWebSocketChannel() {
@@ -287,30 +319,20 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
             nodeId: connectCommand.nodeId, userId: connectCommand.userId);
         _nodeId = connectCommand.nodeId;
         _handleConnectedEvent(event);
-        handler?.call(event);
         break;
       case WSCommandType.notificationList:
         final notificationBundle =
             Web3MQMessageListResponse.fromBuffer(eventBuffer);
-        final event = Event.fromNotification(notificationBundle);
-        handler?.call(event);
+        _notificationController.add(notificationBundle);
         break;
       case WSCommandType.message:
         final messageBundle = Web3MQRequestMessage.fromBuffer(eventBuffer);
-        // if message is sent to user,
-        // and from others, change the topic to the sender's id.
-        if (messageBundle.contentTopic.contains('user:') &&
-            messageBundle.comeFrom != _user?.userId) {
-          messageBundle.contentTopic = messageBundle.comeFrom;
-        }
-        final event = Event.fromChatMessage(messageBundle);
-        handler?.call(event);
+        _messageController.add(messageBundle);
         break;
       case WSCommandType.messageSendingStatusUpdate:
         final messageStatusBundle =
             Web3MQMessageStatusResp.fromBuffer(eventBuffer);
-        final event = Event.fromMessageUpdating(messageStatusBundle);
-        handler?.call(event);
+        _messageUpdateController.add(messageStatusBundle);
         break;
       default:
         break;

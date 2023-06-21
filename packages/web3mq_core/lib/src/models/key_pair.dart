@@ -12,6 +12,13 @@ class KeyPair {
   ///
   KeyPair(this.privateKey);
 
+  Future<List<int>> sign(List<int> raw) async {
+    final algorithm = Ed25519();
+    final keyPair = await _keyPairFromPrivateKey(privateKey);
+    final signature = await algorithm.sign(raw, keyPair: keyPair);
+    return signature.bytes;
+  }
+
   ///
   String get privateKeyHex {
     return _privateKeyHex ??= hex.encode(privateKey);

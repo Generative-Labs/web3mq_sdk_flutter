@@ -1,6 +1,7 @@
 name: web3mq_websocket
 description: A starting point for Dart libraries or applications.
 version: 0.1.0
+homepage: https://www.web3mq.com
 
 environment:
   sdk: ">=2.18.5 <4.0.0"
