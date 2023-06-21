@@ -772,10 +772,10 @@ class SyncResponse {
 }
 
 class FollowStatus {
-  static final String following = 'following';
-  static final String followEach = 'followEach';
-  static final String follower = 'follower';
-  static final String empty = '';
+  static const String following = 'following';
+  static const String followEach = 'followEach';
+  static const String follower = 'follower';
+  static const String empty = '';
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, createToJson: false)
