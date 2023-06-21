@@ -1,9 +1,10 @@
 name: web3mq_http
-description: A starting point for Dart libraries or applications.
-version: 1.0.0
+description: A Web3MQ JSON-RPC client based on the HTTP protocol.
+version: 0.1.0-dev.1
+homepage: https://www.web3mq.com
 
 environment:
-  sdk: ">=2.19.4 <3.0.0"
+  sdk: ">=2.19.4 <4.0.0"
 
 dependencies:
   path: ^1.8.0

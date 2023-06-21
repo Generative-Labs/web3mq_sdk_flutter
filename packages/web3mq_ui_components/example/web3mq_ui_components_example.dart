@@ -1,14 +1,3 @@
-# web3mq_ui_components
-
-## Features
-
-- Chats list
-- Followings list
-- Followers list
-
-## Usage
-
-```dart
 import 'package:flutter/material.dart';
 import 'package:web3mq/web3mq.dart';
 import 'package:web3mq_ui_components/web3mq_ui_components.dart';
@@ -50,5 +39,3 @@ class MyApp extends StatelessWidget {
         ));
   }
 }
-
-```

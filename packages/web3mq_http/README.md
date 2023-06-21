@@ -1,6 +1,6 @@
 # web3mq_http
 
-web3mq_http is an Web3MQ JSON-RPC client based on the HTTP protocol, using the http package to send requests and parse responses. It supports all standard Web3mq methods, including user registerion, chats and notification queries.
+web3mq_http is a Web3MQ JSON-RPC client based on the HTTP protocol, using the http package to send requests and parse responses. It supports all standard Web3mq methods, including user registerion, chats and notification queries.
 
 ## Installation
 
@@ -11,19 +11,7 @@ dependencies:
   web3mq_http: ^0.1.0-dev.1
 ```
 
-You should then run `flutter packages get`
-
-## Features
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
 ## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
 
 ```dart
   final service = Web3MQService('{apiKey}');

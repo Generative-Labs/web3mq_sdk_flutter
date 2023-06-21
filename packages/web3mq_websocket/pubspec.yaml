@@ -1,6 +1,6 @@
 name: web3mq_websocket
-description: A starting point for Dart libraries or applications.
-version: 0.1.0
+description: A lightware websocket tool to communicate with web3mq.
+version: 0.1.0-dev.1
 homepage: https://www.web3mq.com
 
 environment:
