@@ -38,20 +38,6 @@ class _ConnectWalletPageState extends State<ConnectWalletPage> {
     );
   }
 
-  // void _showAccountModal() {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AccountModal(
-  //         client: client,
-  //         onGenerateCredentialSuccess: (p0) {},
-  //         onRegisterSuccess: (p0) {},
-  //         onResetPasswordSuccess: (p0) {},
-  //       );
-  //     },
-  //   );
-  // }
-
   // connects wallet
   void _connectWallet() async {
     // _showAccountModal();

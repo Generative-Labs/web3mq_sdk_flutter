@@ -11,3 +11,4 @@ export 'src/models/models.dart';
 export 'src/persistence/persistence_client.dart';
 export 'src/utils/wallet_connector.dart';
 export 'src/ws/models/ws_models.dart';
+export 'src/error/error.dart';

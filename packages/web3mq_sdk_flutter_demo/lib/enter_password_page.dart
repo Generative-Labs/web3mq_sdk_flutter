@@ -42,17 +42,37 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _handleLoginButtonPressed() async {
-    // 登录按钮被按下的处理逻辑
-    final user = await client.userWithDIDAndPassword(
-        DID(_userInfo.didType, _userInfo.didValue),
-        _password,
-        const Duration(days: 7),
-        userId: widget.userInfo.userId);
-    if (!mounted) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LoginLoadingPage(user: user)),
-    );
+    try {
+      // 登录按钮被按下的处理逻辑
+      final user = await client.userWithDIDAndPassword(
+          DID(_userInfo.didType, _userInfo.didValue),
+          _password,
+          const Duration(days: 7),
+          userId: widget.userInfo.userId);
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginLoadingPage(user: user)),
+      );
+    } on Web3MQNetworkError catch (e) {
+      // show error dialog
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(e.message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      _passwordController.clear();
+    }
   }
 
   void _resetPassword() async {
@@ -117,8 +137,13 @@ class _LoginPageState extends State<LoginPage> {
           title: const Text('Enter password'),
           actions: [
             TextButton(
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              ),
               onPressed: _resetPassword,
-              child: const Text('Change password'),
+              child: const Text(
+                'Change password',
+              ),
             ),
           ],
         ),
