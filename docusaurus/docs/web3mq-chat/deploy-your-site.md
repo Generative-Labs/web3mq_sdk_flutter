@@ -2,30 +2,37 @@
 sidebar_position: 5
 ---
 
-# Deploy your site
+# Topic
 
-Docusaurus is a **static-site-generator** (also called **[Jamstack](https://jamstack.org/)**).
+## Subscribe
 
-It builds your site as simple **static HTML, JavaScript and CSS files**.
+Use the `subscribeTopic` method to subscribe to a topic by providing the `topicId`, and start receiving notifications from that topic.
 
-## Build your site
-
-Build your site **for production**:
-
-```bash
-npm run build
+```dart
+await client.subscribeTopic(topicId);
 ```
 
-The static files are generated in the `build` folder.
+## Create a Topic
 
-## Deploy your site
+Use the `createTopic` method to create a new topic with the given `topicName`.
 
-Test your production build locally:
-
-```bash
-npm run serve
+```dart
+final topic = await client.createTopic(topicName);
 ```
 
-The `build` folder is now served at [http://localhost:3000/](http://localhost:3000/).
+## Publish a Message
 
-You can now deploy the `build` folder **almost anywhere** easily, **for free** or very small cost (read the **[Deployment Guide](https://docusaurus.io/docs/deployment)**).
+Use the `publish` method to publish a new message to the topic identified by `topicId`. The topic must be created by the user themselves.
+
+```dart
+await client.publish(title, content, topicId);
+```
+
+## Get Subscribed Topics
+
+Use the `mySubscribeTopics` method to get a list of topics that the current user is subscribed to, with pagination support.
+
+```dart
+final topics = await client.mySubscribeTopics(pagination);
+
+```

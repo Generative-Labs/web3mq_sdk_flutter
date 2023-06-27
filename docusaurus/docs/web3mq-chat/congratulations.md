@@ -2,22 +2,40 @@
 sidebar_position: 6
 ---
 
-# Congratulations!
+# User
 
-You have just learned the **basics of Docusaurus** and made some changes to the **initial template**.
+## User info
 
-Docusaurus has **much more to offer**!
+Get information about a user specified by their DID.
 
-Have **5 more minutes**? Take a look at **[versioning](../tutorial-extras/manage-docs-versions.md)** and **[i18n](../tutorial-extras/translate-your-site.md)**.
+```dart
+final userInfo = await client.userInfo(did);
+```
 
-Anything **unclear** or **buggy** in this tutorial? [Please report it!](https://github.com/facebook/docusaurus/discussions/4610)
+## Register
 
-## What's next?
+Register user by did and password.
 
-- Read the [official documentation](https://docusaurus.io/)
-- Modify your site configuration with [`docusaurus.config.js`](https://docusaurus.io/docs/api/docusaurus-config)
-- Add navbar and footer items with [`themeConfig`](https://docusaurus.io/docs/api/themes/configuration)
-- Add a custom [Design and Layout](https://docusaurus.io/docs/styling-layout)
-- Add a [search bar](https://docusaurus.io/docs/search)
-- Find inspirations in the [Docusaurus showcase](https://docusaurus.io/showcase)
-- Get involved in the [Docusaurus Community](https://docusaurus.io/community/support)
+```dart
+final res = await client.register(did, password);
+```
+
+## Private Key
+
+Retrieve PrivateKey by did and password.
+
+```dart
+final privateKey = await client.retrievePrivateKey(did, password);
+```
+
+## Get connected user by DID and password
+
+```dart
+final user = await client.userWithDIDAndPassword(did, password);
+```
+
+## Get connected user by DID and privateKey
+
+```dart
+final user = await client.userWithDIDAndPrivateKey(did, privateKey);
+```
