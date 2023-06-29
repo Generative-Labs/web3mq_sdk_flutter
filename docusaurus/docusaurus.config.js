@@ -14,12 +14,12 @@ const config = {
   url: 'https://Generative-Labs.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/web3mq-sdk-dart/',
+  baseUrl: '/web3mq_sdk_flutter/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'Web3mq', // Usually your GitHub org/user name.
-  projectName: 'web3mq-sdk-dart', // Usually your repo name.
+  projectName: 'web3mq_sdk_flutter', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -39,7 +39,7 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: `https://github.com/Generative-Labs/web3mq-sdk-dart/tree/main/`,
+          editUrl: `https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/`,
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
