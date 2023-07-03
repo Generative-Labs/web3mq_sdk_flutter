@@ -34,6 +34,9 @@ class MessageType {
 
   ///
   static const String thread = 'Web3MQ/thread';
+
+  ///
+  static const String bridge = 'Web3MQ/bridge';
 }
 
 /// This message is for websocket.

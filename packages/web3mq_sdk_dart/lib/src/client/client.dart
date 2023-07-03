@@ -30,6 +30,7 @@ import '../api/responses.dart';
 import '../http/http_client.dart';
 import '../models/cyber_profile.dart';
 import '../models/pagination.dart';
+import '../utils/logger.dart';
 import '../utils/signer.dart';
 import '../utils/wallet_connector.dart';
 import 'client_state.dart';
@@ -41,20 +42,20 @@ part 'client_notification.dart';
 part 'client_topic.dart';
 part 'client_user.dart';
 
-/// Handler function used for logging records. Function requires a single
-/// [LogRecord] as the only parameter.
-typedef LogHandlerFunction = void Function(LogRecord record);
+// /// Handler function used for logging records. Function requires a single
+// /// [LogRecord] as the only parameter.
+// typedef LogHandlerFunction = void Function(LogRecord record);
 
-final _levelEmojiMapper = {
-  Level.INFO: 'ℹ️',
-  Level.WARNING: '⚠️',
-  Level.SEVERE: '🚨',
-};
+// final _levelEmojiMapper = {
+//   Level.INFO: 'ℹ️',
+//   Level.WARNING: '⚠️',
+//   Level.SEVERE: '🚨',
+// };
 
 class Web3MQClient {
   Web3MQClient(String apiKey,
       {this.logLevel = Level.ALL,
-      this.logHandlerFunction = Web3MQClient.defaultLogHandler,
+      this.logHandlerFunction = Web3MQLogger.defaultLogHandler,
       String? baseURL,
       Duration connectTimeout = const Duration(seconds: 15),
       Duration receiveTimeout = const Duration(seconds: 15),
@@ -207,17 +208,6 @@ class Web3MQClient {
   Logger detachedLogger(String name) => Logger.detached(name)
     ..level = logLevel
     ..onRecord.listen(logHandlerFunction);
-
-  /// Default log handler function for the [Web3MQClient] logger.
-  static void defaultLogHandler(LogRecord record) {
-    print(
-      '${record.time} '
-      '${_levelEmojiMapper[record.level] ?? record.level.name} '
-      '${record.loggerName} ${record.message} ',
-    );
-    if (record.error != null) print(record.error);
-    if (record.stackTrace != null) print(record.stackTrace);
-  }
 
   /// Connects the current user, this triggers a connection to the API.
   /// It returns a [Future] that resolves when the connection is setup.

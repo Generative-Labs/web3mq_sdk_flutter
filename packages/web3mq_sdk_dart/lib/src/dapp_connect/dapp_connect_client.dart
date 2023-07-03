@@ -11,6 +11,7 @@ import 'package:web3mq/src/dapp_connect/utils/id_generator.dart';
 import 'package:web3mq/src/utils/private_key_utils.dart';
 import 'package:web3mq/web3mq.dart';
 
+import '../utils/logger.dart';
 import '../ws/websocket.dart';
 import 'error/error.dart';
 import 'model/export.dart';
