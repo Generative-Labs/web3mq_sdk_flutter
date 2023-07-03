@@ -14,6 +14,12 @@ import 'demo_app_wallet_connector.dart';
 /// eKsEePNSVXTaBLRy
 final client = Web3MQClient("eKsEePNSVXTaBLRy", baseURL: DevEndpoint.sg1);
 
+final dappConnectClient = DappConnectClient(
+    'eKsEePNSVXTaBLRy',
+    baseURL: DevEndpoint.jp1,
+    AppMetadata('Dapp', 'for dart dapp test', 'web3mq.com',
+        const ['https://url'], 'web3mqdemo://'));
+
 User? _currentUser;
 
 void main() async {
@@ -21,6 +27,7 @@ void main() async {
   client.persistenceClient = Web3MQPersistenceClient();
   client.walletConnector = DemoAppWalletConnector();
   _currentUser = await CacheHelper.loadUser();
+  dappConnectClient.connectUser();
   runApp(MyApp(client: client));
 }
 

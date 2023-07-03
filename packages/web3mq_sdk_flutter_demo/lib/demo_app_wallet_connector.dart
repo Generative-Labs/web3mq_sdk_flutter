@@ -1,48 +1,106 @@
-import 'dart:convert';
-import 'dart:typed_data';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:web3mq/web3mq.dart';
+import 'package:web3mq_sdk_flutter_demo/create_password_page.dart';
+import 'package:web3mq_sdk_flutter_demo/enter_password_page.dart';
 
-import 'package:eth_sig_util/eth_sig_util.dart';
-import 'package:eth_sig_util/util/utils.dart';
-import 'package:web3dart/web3dart.dart';
-import 'package:web3mq/web3mq.dart' as web3mq;
+import 'main.dart';
 
-class DemoAppWalletConnector implements web3mq.WalletConnector {
-  final _wallet = _DemoAppWallet();
+class ConnectWalletPage extends StatefulWidget {
+  const ConnectWalletPage({super.key, required this.title});
 
-  @override
-  Future<web3mq.Wallet> connectWallet() async {
-    return Future.value(_wallet);
-  }
+  final String title;
 
   @override
-  Future<String> personalSign(String message, String address,
-      {String? password}) async {
-    final messageData = utf8.encode(message);
-    final concat = Uint8List.fromList(messageData);
-    String signature = EthSigUtil.signPersonalMessage(
-        privateKey: _wallet.privateKey, message: concat);
-    return Future.value(signature);
-  }
+  State<ConnectWalletPage> createState() => _ConnectWalletPageState();
 }
 
-//
-class _DemoAppWallet implements web3mq.Wallet {
-  // 1: 15fa042adf5f16dcc9f77da7bfdb896b96c73d610e1827e31a9dd0d3121ee142
-  // 2: 86b0933ddbb781976548cf80ef9bbd33db86976ffffa8965867c3e88b4edce83
-  // 3：7433efd5bcfc33bbea057e530f0b3e86fcdab2474f233b827e48994bdb9c9fcf
-  // 4: 18b5afba7ecd83dfe42e20edc6c3d65a9351051cbd2a0e5c573b1fdf13380c2f
-  // 5: 登录测试： d4714eebd6684709c6891f9ef962962175415ed78b78fb9b86a9a330b80cf541
-  // 6. 登录测试5 e1ac9db61281f7b762f3da696e3f018898af12a1872fd3707c0c20c06bbbf45b
-  // 7. 登录测试6 6e229b5c5c3383c55f4e70e26df560b92e90f8da78da88fbc8a2701b1899f3d7
-  // 8. 注册测试1: dc768d88e468c198d09e69ee671d781db3e49735c24e9f25c73a69bab133740f
-  // groupid: group:c1e927670455e77fd474c44040b24ab60fadd170
-
-  final String privateKey =
-      "dc768d88e468c198d09e69ee671d781db3e49735c24e9f25c73a69bab133740f";
+class _ConnectWalletPageState extends State<ConnectWalletPage> {
+  String? address;
 
   @override
-  List<String> get accounts => ["eip155:1:$address"];
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: [
+          // add a item to test the url lanuch
+          IconButton(
+            onPressed: () {
+              testUriLanuch();
+            },
+            icon: const Icon(Icons.launch),
+          ),
+        ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(address ?? "address"),
+            TextButton(
+              onPressed: _connectWallet,
+              child: const Text("Connect wallet"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-  String get address =>
-      EthPrivateKey(Uint8List.fromList(hexToBytes(privateKey))).address.hex;
+  void testUriLanuch() {
+    const url =
+        'topic=%22bridge%3A6b0dd80c68422333aeed075c69b97e8a42efd8b6%22&proposer=%7B%22publicKey%22%3A%22ced0843d82baef4a11d8da36edf6a93eea4aae2b7bb1baa88cfb6b83e6b600df%22%2C%22appMetadata%22%3A%7B%22name%22%3A%22Dapp%22%2C%22description%22%3A%22for+dart+dapp+test%22%2C%22url%22%3A%22url%22%2C%22icons%22%3A%5B%22%22%5D%2C%22redirect%22%3Anull%7D%7D&request=%7B%22id%22%3A%225151686130597461000%22%2C%22method%22%3A%22provider_authorization%22%2C%22params%22%3A%7B%22requiredNamespaces%22%3A%7B%7D%2C%22sessionProperties%22%3A%7B%22expiry%22%3A%222023-06-14T18%3A36%3A37.461192%22%7D%7D%7D';
+    final uri = Uri.parse('web3mq://?$url');
+    canLaunchUrl(uri).then((value) {
+      print('debug:canLaunchUrl:$value');
+    });
+  }
+
+  // connects wallet
+  void _connectWallet() async {
+    // _showAccountModal();
+    final wallet = await client.walletConnector?.connectWallet();
+    final accountString = wallet?.accounts.first;
+    if (null == accountString) return;
+    final account = Account.from(accountString);
+
+    final theAddress = account.address;
+    setState(() {
+      address = theAddress;
+    });
+    final did = DID("eth", theAddress);
+    try {
+      final userInfo = await client.userInfo(did.type, did.value);
+      if (null != userInfo) {
+        _pushToLoginPage(userInfo);
+        return;
+      }
+    } catch (e) {
+      // should go to create an user.
+    }
+    _pushToRegisterPage(did);
+  }
+
+  void _pushToLoginPage(UserInfo userInfo) {
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              LoginPage(title: "Enter password", userInfo: userInfo)),
+    );
+  }
+
+  void _pushToRegisterPage(DID did) {
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CreateUserPage(
+                title: "Create password",
+                did: did,
+              )),
+    );
+  }
 }

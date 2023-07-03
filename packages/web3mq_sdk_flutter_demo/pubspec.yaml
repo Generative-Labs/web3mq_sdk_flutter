@@ -48,6 +48,9 @@ dependencies:
   # The Web3MQ SDK
   web3mq: ^0.1.1-dev.1
 
+  #
+  url_launcher: ^6.1.11
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

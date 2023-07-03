@@ -12,3 +12,4 @@ export 'src/persistence/persistence_client.dart';
 export 'src/utils/wallet_connector.dart';
 export 'src/ws/models/ws_models.dart';
 export 'src/error/error.dart';
+export 'src/dapp_connect/dapp_connect_client.dart';
