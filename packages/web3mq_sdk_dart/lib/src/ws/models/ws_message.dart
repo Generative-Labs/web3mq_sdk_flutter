@@ -39,6 +39,15 @@ class MessageType {
   static const String bridge = 'Web3MQ/bridge';
 }
 
+///
+class CipherSuit {
+  /// NONE
+  static const String none = 'NONE';
+
+  /// X25519/AES-GCM_SHA384
+  static const String x25519 = 'X25519/AES-GCM_SHA384';
+}
+
 /// This message is for websocket.
 class WSMessage extends Web3MQWebSocketMessage with Web3MQBufferConvertible {
   /// The message ID.
