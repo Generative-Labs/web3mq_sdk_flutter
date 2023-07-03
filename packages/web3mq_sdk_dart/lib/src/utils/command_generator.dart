@@ -9,4 +9,12 @@ class WebSocketMessageGenerator {
     return ConnectRequestMessage(
         result.nodeId, result.userId, result.timestamp, result.signature);
   }
+
+  ///
+  static Future<BridgeConnectRequestMessage> bridgeConnectMessage(
+      String dappId, Signer signer) async {
+    final result = await signer.signatureForConnectRequest();
+    return BridgeConnectRequestMessage(result.nodeId, dappId, result.userId,
+        result.timestamp, result.signature);
+  }
 }

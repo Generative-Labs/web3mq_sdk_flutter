@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:cryptography/cryptography.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:protobuf/protobuf.dart';
+import 'package:web3mq_core/models.dart' as core;
 import 'package:web3mq_websocket/src/models/pb/message.pb.dart';
 import 'package:web3mq_websocket/src/models/ws_message.dart';
 
 import '../message_id_generator.dart';
-import '../private_key_utils.dart';
 import 'buffer_convertible.dart';
 
 enum PayloadType {
@@ -38,7 +37,7 @@ class ChatMessage extends Web3MQWebSocketMessage with Web3MQBufferConvertible {
 /// A message factory
 class MessageFactory {
   static Future<ChatMessage> _from(List<int> value, PayloadType payloadType,
-      String topic, String senderUserId, String privateKey, String? nodeId,
+      String topic, String senderUserId, Uint8List privateKey, String? nodeId,
       {bool needStore = true,
       String cipherSuite = "NONE",
       String? messageType,
@@ -59,21 +58,18 @@ class MessageFactory {
     message.payload = value;
     message.messageType = messageType ??
         (threadId != null ? MessageType.thread : MessageType.common);
-    final ed25519 = Ed25519();
     final content = "$messageId$senderUserId$topic$nodeId$timestamp";
-    final keyPair = await KeyPairUtils.keyPairFromPrivateKeyHex(privateKey);
-    final signature =
-        await ed25519.sign(utf8.encode(content), keyPair: keyPair);
-    message.fromSign = base64Encode(signature.bytes);
+    final keyPair = core.KeyPair(privateKey);
+    final signature = await keyPair.sign(utf8.encode(content));
+    message.fromSign = base64Encode(signature);
     message.timestamp = Int64(timestamp);
-    final publicKey = await keyPair.extractPublicKey();
-    message.validatePubKey = base64Encode(publicKey.bytes);
+    message.validatePubKey = await keyPair.publicKeyBase64;
     return ChatMessage(message);
   }
 
   /// Generate a [ChatMessage]
   static Future<ChatMessage> fromText(String text, String topic,
-      String senderUserId, String privateKey, String nodeId,
+      String senderUserId, Uint8List privateKey, String nodeId,
       {bool needStore = true,
       String cipherSuite = "NONE",
       String? messageType,
@@ -91,7 +87,7 @@ class MessageFactory {
 
   /// Generate a [ChatMessage]
   static Future<ChatMessage> fromBytes(List<int> bytes, String topic,
-          String senderUserId, String privateKey, String? nodeId,
+          String senderUserId, Uint8List privateKey, String? nodeId,
           {bool needStore = true,
           String cipherSuite = "NONE",
           String? messageType,
