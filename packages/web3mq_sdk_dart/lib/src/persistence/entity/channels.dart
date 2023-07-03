@@ -40,5 +40,5 @@ class Channels extends Table {
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 
   @override
-  Set<Column> get primaryKey => {topic};
+  Set<Column> get primaryKey => {id};
 }

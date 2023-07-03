@@ -32,7 +32,7 @@ extension ClientChat on Web3MQClient {
     List<ChannelState> states = [];
     for (final channel in channels) {
       final aState =
-          await persistenceClient.getChannelStateByTopic(channel.topic);
+          await persistenceClient.getChannelStateByChannelId(channel.channelId);
       if (aState != null) {
         states.add(aState.copyWith(channel: channel));
       } else {

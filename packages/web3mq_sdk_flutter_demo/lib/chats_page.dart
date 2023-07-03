@@ -38,7 +38,7 @@ class _ChatsPageState extends State<ChatsPage> {
 
   void _createNewChatIfNeeded(List<ChannelState> list) {
     for (final channel in list) {
-      if (!_channels.contains(channel)) {
+      if (!_channels.any((c) => c.channel.topic == channel.channel.topic)) {
         _createChat(channel);
       }
     }

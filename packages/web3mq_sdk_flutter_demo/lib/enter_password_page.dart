@@ -18,6 +18,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late final UserInfo _userInfo;
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +44,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _handleLoginButtonPressed() async {
+    // show loading
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       // 登录按钮被按下的处理逻辑
       final user = await client.userWithDIDAndPassword(
@@ -72,6 +79,10 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
       _passwordController.clear();
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -169,9 +180,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 32.0),
                 ElevatedButton(
-                  onPressed:
-                      _isButtonDisabled ? null : _handleLoginButtonPressed,
-                  child: const Text('Login'),
+                  onPressed: _isLoading ? null : _handleLoginButtonPressed,
+                  child: _isLoading
+                      ? const CircularProgressIndicator()
+                      : const Text('Login'),
                 ),
               ],
             ),

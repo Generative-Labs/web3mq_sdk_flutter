@@ -36,20 +36,21 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     // load local message by client
-    // client.queryLocalMessagesByTopic(widget.topicId).then((value) {
-    //   final result = value ?? [];
+    client.queryLocalMessagesByTopic(widget.topicId).then((value) {
+      final result = value ?? [];
+      _onMessagesUpdate(result);
+      _markAllMessagesRead(result);
+    });
+
+    // fetches messages from server
+    // client
+    //     .queryMessagesByTopic(
+    //         widget.topicId, TimestampPagination(timestampBefore: 0, limit: 20))
+    //     .then((value) {
+    //   final result = value.result;
     //   _onMessagesUpdate(result);
     //   _markAllMessagesRead(result);
     // });
-
-    // fetches messages from server
-    client
-        .queryMessagesByTopic(
-            widget.topicId, TimestampPagination(timestampBefore: 0, limit: 20))
-        .then((value) {
-      final result = value.result;
-      _onMessagesUpdate(result);
-    });
 
     // client.leaveGroup('group:4f900a7eeb0cccdfd1b52f4adc6bc436e8f1ad98');
 

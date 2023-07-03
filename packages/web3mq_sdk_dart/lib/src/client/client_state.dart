@@ -195,7 +195,9 @@ class ClientState {
   }
 
   void updateStateByMessagesIfNeeded(List<Message> messages) async {
+    final userId = currentUser?.userId;
     if (messages.isEmpty) return;
+    if (userId == null) return;
 
     messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
@@ -203,7 +205,7 @@ class ClientState {
     Map<String, ChannelState> channelMap = {};
     List<ChannelState> channelStates = [];
     for (final message in messages) {
-      final channelId = message.topic;
+      final channelId = message.channelIdByCurrentUserId(userId);
       ChannelState channelState;
       if (channels.containsKey(channelId)) {
         channelState = channels[channelId]!;
@@ -225,7 +227,7 @@ class ClientState {
           }
         }
       } else {
-        final channelModel = _createChannelModelByMessage(message);
+        final channelModel = _createChannelModelByMessage(message, channelId);
         channelState = ChannelState(channel: channelModel, messages: [message]);
       }
       channelMap[channelId] = channelState;
@@ -239,16 +241,6 @@ class ClientState {
     _client.persistenceClient?.updateChannelStates(channelStates);
   }
 
-  // int _getMessageInsertionIndex(
-  //     List<Message> messages, Message messageToInsert) {
-  //   for (int i = 0; i < messages.length; i++) {
-  //     if (messages[i].timestamp > messageToInsert.timestamp) {
-  //       return i;
-  //     }
-  //   }
-  //   return messages.length;
-  // }
-
   String _channelTypeByTopic(String topic) {
     return topic.contains('user')
         ? 'user'
@@ -257,8 +249,7 @@ class ClientState {
             : 'topic';
   }
 
-  ChannelModel _createChannelModelByMessage(Message message) {
-    final channelId = message.topic;
+  ChannelModel _createChannelModelByMessage(Message message, String channelId) {
     final channelType = _channelTypeByTopic(message.topic);
     final channelName = channelId;
 
@@ -266,7 +257,7 @@ class ClientState {
     final unreadCount = _shouldCountMessageAsUnread(message) ? 1 : 0;
 
     return ChannelModel(
-        channelId,
+        message.topic,
         channelType,
         channelId,
         channelType,

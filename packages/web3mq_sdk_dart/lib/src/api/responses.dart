@@ -646,6 +646,14 @@ class Message {
   @JsonKey(includeIfNull: false, toJson: Serializer.readOnly)
   DateTime get updatedAt => _updatedAt ?? DateTime.now();
 
+  String channelIdByCurrentUserId(String userId) {
+    if (topic.contains('user:') && from != userId) {
+      return from;
+    } else {
+      return topic;
+    }
+  }
+
   ///
   Message(
       this.topic,

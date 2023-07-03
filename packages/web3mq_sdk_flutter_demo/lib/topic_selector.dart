@@ -20,7 +20,9 @@ class _TopicSelectorState extends State<TopicSelector> {
   void initState() {
     super.initState();
     if (!mounted) return;
-    _selectedTopicId = widget.topics.first.topicId;
+    if (widget.topics.isNotEmpty) {
+      _selectedTopicId = widget.topics.first.topicId;
+    }
   }
 
   @override

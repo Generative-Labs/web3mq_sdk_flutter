@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:web3mq/web3mq.dart';
 import 'package:web3mq_sdk_flutter_demo/create_password_page.dart';
 import 'package:web3mq_sdk_flutter_demo/enter_password_page.dart';
@@ -22,6 +23,15 @@ class _ConnectWalletPageState extends State<ConnectWalletPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          // add a item to test the url lanuch
+          IconButton(
+            onPressed: () {
+              testUriLanuch();
+            },
+            icon: const Icon(Icons.launch),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -37,6 +47,29 @@ class _ConnectWalletPageState extends State<ConnectWalletPage> {
       ),
     );
   }
+
+  void testUriLanuch() {
+    const url =
+        'topic=%22bridge%3A6b0dd80c68422333aeed075c69b97e8a42efd8b6%22&proposer=%7B%22publicKey%22%3A%22ced0843d82baef4a11d8da36edf6a93eea4aae2b7bb1baa88cfb6b83e6b600df%22%2C%22appMetadata%22%3A%7B%22name%22%3A%22Dapp%22%2C%22description%22%3A%22for+dart+dapp+test%22%2C%22url%22%3A%22url%22%2C%22icons%22%3A%5B%22%22%5D%2C%22redirect%22%3Anull%7D%7D&request=%7B%22id%22%3A%225151686130597461000%22%2C%22method%22%3A%22provider_authorization%22%2C%22params%22%3A%7B%22requiredNamespaces%22%3A%7B%7D%2C%22sessionProperties%22%3A%7B%22expiry%22%3A%222023-06-14T18%3A36%3A37.461192%22%7D%7D%7D';
+    final uri = Uri.parse('web3mq://?$url');
+    canLaunchUrl(uri).then((value) {
+      print('debug:canLaunchUrl:$value');
+    });
+  }
+
+  // void _showAccountModal() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AccountModal(
+  //         client: client,
+  //         onGenerateCredentialSuccess: (p0) {},
+  //         onRegisterSuccess: (p0) {},
+  //         onResetPasswordSuccess: (p0) {},
+  //       );
+  //     },
+  //   );
+  // }
 
   // connects wallet
   void _connectWallet() async {

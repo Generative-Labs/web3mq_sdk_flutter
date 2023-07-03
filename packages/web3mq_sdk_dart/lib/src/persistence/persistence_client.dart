@@ -230,7 +230,7 @@ class Web3MQPersistenceClient extends PersistenceClient {
         final channels = await db!.channelQueryDao.getChannels();
 
         List<ChannelState> channelStates = (await Future.wait(
-          channels.map((e) => getChannelStateByTopic(e.topic)),
+          channels.map((e) => getChannelStateByChannelId(e.channelId)),
         ))
             .where((state) => state != null)
             .map((state) => state!)

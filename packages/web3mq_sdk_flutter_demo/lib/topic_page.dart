@@ -95,62 +95,11 @@ class _TopicPageState extends State<TopicPage> {
 
   Future<void> _createAndSubscribeTopic(String topicName) async {
     final topic = await client.createTopic(topicName);
-    client.subscribeTopic(topic.topicId);
+    await client.subscribeTopic(topic.topicId);
     _showSnackBar("Create topic success!");
   }
 
   String? _selectTopicId;
-
-  void _onShowPublishMessageToTopicDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          key: UniqueKey(),
-          title: const Text('Publish message'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextField(
-                decoration: const InputDecoration(hintText: 'title'),
-                controller: _titleController,
-              ),
-              TextField(
-                decoration: const InputDecoration(hintText: 'content'),
-                controller: _contentController,
-              ),
-              TopicSelector(
-                key: UniqueKey(),
-                topics: _topics,
-                onTopicSelected: (String topicId) {
-                  _selectTopicId = topicId;
-                },
-              )
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Create'),
-              onPressed: () {
-                if (null != _selectTopicId) {
-                  _onPublishMessage(_titleController.text,
-                      _contentController.text, _selectTopicId!);
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   void _onPublishMessage(String title, String content, String topicId) async {
     try {
@@ -191,6 +140,58 @@ class _TopicPageState extends State<TopicPage> {
               child: const Text('Create'),
               onPressed: () {
                 _createAndSubscribeTopic(_topicNameController.text);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _onShowPublishMessageToTopicDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          key: UniqueKey(),
+          title: const Text('Publish message'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  decoration: const InputDecoration(hintText: 'title'),
+                  controller: _titleController,
+                ),
+                TextField(
+                  decoration: const InputDecoration(hintText: 'content'),
+                  controller: _contentController,
+                ),
+                TopicSelector(
+                  key: UniqueKey(),
+                  topics: _topics,
+                  onTopicSelected: (String topicId) {
+                    _selectTopicId = topicId;
+                  },
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Create'),
+              onPressed: () {
+                if (null != _selectTopicId) {
+                  _onPublishMessage(_titleController.text,
+                      _contentController.text, _selectTopicId!);
+                }
                 Navigator.of(context).pop();
               },
             ),
