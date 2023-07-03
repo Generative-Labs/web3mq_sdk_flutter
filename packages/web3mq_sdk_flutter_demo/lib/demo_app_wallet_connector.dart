@@ -35,7 +35,6 @@ class _DemoAppWallet implements web3mq.Wallet {
   // 6. 登录测试5 e1ac9db61281f7b762f3da696e3f018898af12a1872fd3707c0c20c06bbbf45b
   // 7. 登录测试6 6e229b5c5c3383c55f4e70e26df560b92e90f8da78da88fbc8a2701b1899f3d7
   // 8. 注册测试1: dc768d88e468c198d09e69ee671d781db3e49735c24e9f25c73a69bab133740f
-
   // groupid: group:c1e927670455e77fd474c44040b24ab60fadd170
 
   final String privateKey =

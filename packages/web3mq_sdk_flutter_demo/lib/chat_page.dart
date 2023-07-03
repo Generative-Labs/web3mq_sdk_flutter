@@ -36,11 +36,11 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     // load local message by client
-    client.queryLocalMessagesByTopic(widget.topicId).then((value) {
-      final result = value ?? [];
-      _onMessagesUpdate(result);
-      _markAllMessagesRead(result);
-    });
+    // client.queryLocalMessagesByTopic(widget.topicId).then((value) {
+    //   final result = value ?? [];
+    //   _onMessagesUpdate(result);
+    //   _markAllMessagesRead(result);
+    // });
 
     // fetches messages from server
     client
@@ -197,7 +197,10 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
         actions: [
           Visibility(
             visible: null == widget.threadId,
-            child: IconButton(
+            child: TextButton(
+                style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white)),
                 onPressed: () {
                   // push to ThreadListPage
                   Navigator.push(
@@ -208,7 +211,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                             )),
                   );
                 },
-                icon: const Icon(Icons.folder)),
+                child: const Text('Threads')),
           )
         ],
       ),
@@ -297,12 +300,14 @@ class ChatMessageCell extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FittedBox(
-                  fit: BoxFit.scaleDown,
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width / 2,
+                  ),
                   child: Text(
                     username,
                     maxLines: 1,
-                    overflow: TextOverflow.clip,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,

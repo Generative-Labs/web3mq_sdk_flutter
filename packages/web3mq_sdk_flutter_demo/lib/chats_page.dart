@@ -30,9 +30,26 @@ class _ChatsPageState extends State<ChatsPage> {
 
   void _onChannelListUpdate(List<ChannelState> list) {
     if (!mounted) return;
+    _createNewChatIfNeeded(list);
     setState(() {
       _channels = list;
     });
+  }
+
+  void _createNewChatIfNeeded(List<ChannelState> list) {
+    for (final channel in list) {
+      if (!_channels.contains(channel)) {
+        _createChat(channel);
+      }
+    }
+  }
+
+  void _createChat(ChannelState channelState) {
+    client.addChannel(
+        channelState.channel.topic,
+        channelState.channel.topicType,
+        channelState.channel.channelId,
+        channelState.channel.channelType);
   }
 
   void _listenChannels() {
