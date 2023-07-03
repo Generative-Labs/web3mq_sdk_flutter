@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:convert/convert.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:fixnum/fixnum.dart';
+import 'package:web3mq/src/dapp_connect/model/user.dart';
 
 import '../error/error.dart';
 import '../ws/models/user.dart';
@@ -33,6 +34,19 @@ class Signer implements Web3MQSigner {
 
   ///
   Future<void> updateUser(User? user) async {
+    final finalUser = user;
+    if (finalUser == null) {
+      keyPair = null;
+      userId = null;
+    } else {
+      keyPair =
+          await Ed25519().newKeyPairFromSeed(hex.decode(finalUser.sessionKey));
+      userId = finalUser.userId;
+    }
+  }
+
+  ///
+  Future<void> updateBridgeUser(DappConnectUser? user) async {
     final finalUser = user;
     if (finalUser == null) {
       keyPair = null;
