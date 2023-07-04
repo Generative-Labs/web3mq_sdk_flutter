@@ -34,7 +34,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.client});
 
-  /// Instance of [Client] we created earlier.
+  /// Instance of [Web3MQClient] we created earlier.
   final Web3MQClient client;
 
   // This widget is the root of your application.

@@ -19,7 +19,6 @@ class _NotificationListPageState extends State<NotificationListPage> {
   void initState() {
     super.initState();
     if (!mounted) return;
-
     _getNotifications();
     _listenClientNotifications();
   }
@@ -36,9 +35,17 @@ class _NotificationListPageState extends State<NotificationListPage> {
     client.notificationStream.listen((event) {
       final items = event
           .map((e) => NotificationQueryResponse.fromNotificationMessage(e));
-      _notifications.addAll(items);
+      _addNotifications(items);
       _onNotificationListUpdate();
     });
+  }
+
+  void _addNotifications(Iterable<NotificationQueryResponse> list) {
+    for (var item in list) {
+      if (!_notifications.contains(item)) {
+        _notifications.add(item);
+      }
+    }
   }
 
   Future<void> _getNotifications() async {
@@ -58,8 +65,7 @@ class _NotificationListPageState extends State<NotificationListPage> {
       _isLoading = false;
       _page++;
     });
-
-    _notifications.addAll(response.result);
+    _addNotifications(response.result);
     _onNotificationListUpdate();
   }
 
@@ -74,26 +80,27 @@ class _NotificationListPageState extends State<NotificationListPage> {
         appBar: AppBar(
           title: const Text("Notitfications"),
         ),
-        body: NotificationListener<ScrollNotification>(
-            onNotification: (scrollInfo) {
-              if (!_isLoading &&
-                  scrollInfo.metrics.pixels ==
-                      scrollInfo.metrics.maxScrollExtent) {
-                _getNotifications();
-              }
-              return true;
-            },
-            child: ListView.builder(
-              itemCount: _notifications.length,
-              itemBuilder: (context, index) {
-                final item = _notifications[index];
-                return ListTile(
-                  title: Text(item.payload.title),
-                  subtitle: Text(item.payload.content),
-                  trailing: Text(item.payload.timestamp.toIso8601String()),
-                );
-              },
-            )) // This trailing comma makes auto-formatting nicer for build methods.
+        body: ListView.builder(
+          itemCount: _notifications.length,
+          itemBuilder: (context, index) {
+            final item = _notifications[index];
+            return ListTile(
+              title: Text(item.payload.title),
+              subtitle: Text(item.payload.content),
+              trailing: Text(item.payload.timestamp.toIso8601String()),
+            );
+          },
+        )
+        //  NotificationListener<ScrollNotification>(
+        //     onNotification: (scrollInfo) {
+        //       if (!_isLoading &&
+        //           scrollInfo.metrics.pixels ==
+        //               scrollInfo.metrics.maxScrollExtent) {
+        //         _getNotifications();
+        //       }
+        //       return true;
+        //     },
+        //     child: ) // This trailing comma makes auto-formatting nicer for build methods.
         );
   }
 }

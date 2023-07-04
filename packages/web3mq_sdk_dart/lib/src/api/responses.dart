@@ -151,23 +151,23 @@ class NotificationPayload {
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, createToJson: false)
-class NotificationQueryResponse {
-  String cipherSuite;
+class NotificationQueryResponse extends Equatable {
+  final String cipherSuite;
 
-  String from;
+  final String from;
 
-  String fromSign;
+  final String fromSign;
 
   @JsonKey(name: "messageid")
-  String messageId;
+  final String messageId;
 
-  NotificationPayload payload;
+  final NotificationPayload payload;
 
-  String payloadType;
+  final String payloadType;
 
-  String status;
+  final String status;
 
-  String topic;
+  final String topic;
 
   /// Create a new instance from a json
   static NotificationQueryResponse fromJson(Map<String, dynamic> json) =>
@@ -190,6 +190,9 @@ class NotificationQueryResponse {
         (item.read ?? false) ? "read" : "received",
         item.topicId);
   }
+
+  @override
+  List<Object?> get props => [messageId, topic];
 }
 
 ///
