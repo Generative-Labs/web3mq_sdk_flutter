@@ -249,6 +249,23 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
   }
 
   /// Sends text message to the given topic.
+  Future<void> sendBinary(Uint8List bytes, String topic,
+      {String? threadId,
+      String cipherSuite = 'NONE',
+      bool needStore = true,
+      Map<String, String>? extraData}) async {
+    final user = _user;
+    final nodeId = _nodeId;
+    if (user == null || nodeId == null) {
+      throw Web3MQWebSocketError(
+          "Send message error: you should be connected first");
+    }
+    final message = await MessageFactory.fromBytes(
+        bytes, topic, user.userId, user.privateKey, nodeId);
+    send(message);
+  }
+
+  /// Sends text message to the given topic.
   Future<void> sendText(String text, String topic,
       {String? threadId,
       String cipherSuite = 'NONE',
