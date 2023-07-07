@@ -13,10 +13,9 @@ import 'package:web3mq/web3mq.dart';
 
 import '../utils/logger.dart';
 import '../ws/websocket.dart';
-import 'error/error.dart';
-import 'model/export.dart';
 
 export 'model/export.dart';
+export 'error/error.dart';
 
 ///
 abstract class DappConnectClientProtocol {
@@ -60,7 +59,7 @@ abstract class DappConnectClientProtocol {
   Future<void> sendErrorResponse(Request request, int code, String message);
 
   ///
-  Future<void> sendRequest(
+  Future<Response> sendRequest(
       String topic, String method, Map<String, dynamic> params);
 
   ///
@@ -340,11 +339,12 @@ class DappConnectClient extends DappConnectClientProtocol {
   }
 
   @override
-  Future<void> sendRequest(
+  Future<Response> sendRequest(
       String topic, String method, Map<String, dynamic> params) async {
     final requestId = _idGenerator.next();
     final rpcRequest = RPCRequest.from(requestId, method, params);
     _sendRequest(rpcRequest, topic);
+    return await _waitingForResponse(requestId);
   }
 
   @override

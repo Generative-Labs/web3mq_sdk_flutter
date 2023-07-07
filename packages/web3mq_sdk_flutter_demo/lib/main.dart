@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:web3mq/web3mq.dart';
 import 'package:web3mq/web3mq.dart';
 import 'package:web3mq_sdk_flutter_demo/home_page.dart';
 
@@ -28,6 +31,7 @@ void main() async {
   client.walletConnector = DemoAppWalletConnector();
   _currentUser = await CacheHelper.loadUser();
   dappConnectClient.connectUser();
+
   runApp(MyApp(client: client));
 }
 
