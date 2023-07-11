@@ -70,7 +70,11 @@ class _TestsPageState extends State<TestsPage> {
   }
 
   void _connectWebsocket() async {
-    await dappConnectClient.connectUser();
+    try {
+      await dappConnectClient.connectUser();
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _sendRequest() async {

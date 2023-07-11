@@ -236,7 +236,7 @@ class Web3MQWebSocket with TimerHelper implements WebSocketAbs {
       () async {
         final uri = _buildUri();
         try {
-          _initAndSubscribeToWebSocketChannel(uri);
+          await _initAndSubscribeToWebSocketChannel(uri);
         } catch (e, stk) {
           _onConnectionError(e, stk);
         }

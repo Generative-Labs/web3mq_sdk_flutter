@@ -29,7 +29,6 @@ void main() async {
   client.walletConnector = DemoAppWalletConnector();
   _currentUser = await CacheHelper.loadUser();
   // dappConnectClient.connectUser();
-
   runApp(MyApp(client: client));
 }
 
