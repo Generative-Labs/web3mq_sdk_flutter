@@ -62,10 +62,14 @@ class _TestsPageState extends State<TestsPage> {
       });
     } on DappConnectError {
       // handle timeout error
-      _currentSession = 'timeout';
+      setState(() {
+        _currentSession = 'timeout';
+      });
     } on RPCError catch (e) {
       // handle rpc error
-      _currentSession = '${e.code}, ${e.message}';
+      setState(() {
+        _currentSession = '${e.code}, ${e.message}';
+      });
     }
   }
 
@@ -91,10 +95,14 @@ class _TestsPageState extends State<TestsPage> {
       });
     } on DappConnectError {
       // handle timeout error
-      _signature = 'timeout';
+      setState(() {
+        _signature = 'timeout';
+      });
     } on RPCError catch (e) {
       // handle rpc error
-      _signature = '${e.code}, ${e.message}';
+      setState(() {
+        _signature = '${e.code}, ${e.message}';
+      });
     }
   }
 

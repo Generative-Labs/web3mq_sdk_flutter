@@ -146,6 +146,8 @@ class DappConnectClient extends DappConnectClientProtocol {
 
   final _newResponseController = BehaviorSubject<Response>();
 
+  Duration requestTimeoutInterval = const Duration(minutes: 3);
+
   void handleEvent(Event event) {
     switch (event.type) {
       case EventType.notificationMessageNew:
@@ -565,7 +567,7 @@ class DappConnectClient extends DappConnectClientProtocol {
     final completer = Completer<Response>();
     StreamSubscription<Response>? subscription;
     subscription = responseStream
-        .timeout(Duration(minutes: 3), onTimeout: (sink) {
+        .timeout(requestTimeoutInterval, onTimeout: (sink) {
           sink.addError(DappConnectError.timeout);
         })
         .where((response) => response.id == requestId)
