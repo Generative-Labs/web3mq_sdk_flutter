@@ -1,8 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:web3mq/src/dapp_connect/dapp_connect_client.dart';
-import 'package:web3mq/src/dapp_connect/model/rpc_response.dart';
-
-import 'rpc_error.dart';
 
 part 'response.g.dart';
 

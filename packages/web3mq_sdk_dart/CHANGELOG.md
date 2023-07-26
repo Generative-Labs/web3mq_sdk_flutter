@@ -21,3 +21,7 @@
 ## 0.1.1
 
 - fix some bugs.
+
+## 0.1.2
+
+- fix the parser issue of `DappConnect`.

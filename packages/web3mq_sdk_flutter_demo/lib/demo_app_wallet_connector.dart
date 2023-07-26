@@ -61,4 +61,3 @@ class _DemoAppWallet implements web3mq.Wallet {
 //   String get address =>
 //       EthPrivateKey(Uint8List.fromList(hexToBytes(privateKey))).address.hex;
 // }
-
