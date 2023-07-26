@@ -7,18 +7,23 @@ import 'package:web3mq/src/dapp_connect/model/rpc_error.dart';
 part 'rpc_response.g.dart';
 
 // Map<String, dynamic>?
-List<int> _fromBytes(dynamic result) {
-  if (null == result) {
-    return [];
-  }
-  if (result is! String) {
-    result = jsonEncode(result);
-  }
-  return utf8.encode(result);
-}
+// Uint8List _fromBytes(dynamic result) {
+//   if (result is Uint8List) {
+//     return result;
+//   } else if (result is List<int>) {
+//     return Uint8List.fromList(result);
+//   } else if (result is Map) {
+//     String jsonStr = json.encode(result);
+//     return Uint8List.fromList(utf8.encode(jsonStr));
+//   } else if (result is String) {
+//     return Uint8List.fromList(utf8.encode(result));
+//   } else {
+//     return Uint8List.fromList([]);
+//   }
+// }
 
 ///
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RPCResponse extends Equatable {
   ///
   final String id;
@@ -30,16 +35,21 @@ class RPCResponse extends Equatable {
   final String? method;
 
   ///
-  @JsonKey(includeIfNull: false, fromJson: _fromBytes)
-  final List<int>? result;
+  @JsonKey(includeIfNull: false)
+  final dynamic result;
 
   ///
   @JsonKey(includeIfNull: false)
   final RPCError? error;
 
+  /// A valid response has either a result or an error, but not both.
+  bool get isInvalid {
+    return error == null && result == null;
+  }
+
   ///
-  RPCResponse(this.id, this.method, this.result, this.error,
-      {this.jsonrpc = '2.0'});
+  RPCResponse(this.id, this.method,
+      {this.jsonrpc = '2.0', this.result, this.error});
 
   /// Create a new instance from a json
   factory RPCResponse.fromJson(Map<String, dynamic> json) =>

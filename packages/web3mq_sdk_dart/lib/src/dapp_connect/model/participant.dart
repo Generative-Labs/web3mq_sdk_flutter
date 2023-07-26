@@ -4,7 +4,7 @@ import 'package:web3mq/src/dapp_connect/model/app_metadata.dart';
 part 'participant.g.dart';
 
 ///
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, includeIfNull: false, anyMap: true)
 class Participant {
   ///
   final String publicKey;

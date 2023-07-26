@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:web3mq/src/dapp_connect/model/app_metadata.dart';
@@ -8,7 +9,7 @@ import 'package:web3mq/src/dapp_connect/model/session.dart';
 part 'session_proposal_result.g.dart';
 
 ///
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SessionProposalResult {
   ///
   final Map<String, SessionNamespace> sessionNamespaces;
@@ -36,7 +37,7 @@ class SessionProposalResult {
   }
 
   /// Converts to bytes
-  List<int> toBytes() {
-    return utf8.encode(jsonEncode(toJson()));
+  Uint8List toBytes() {
+    return Uint8List.fromList(utf8.encode(jsonEncode(toJson())));
   }
 }

@@ -50,7 +50,7 @@ class RPCRequest extends Equatable {
 }
 
 ///
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false, anyMap: true)
 class SessionProposalRPCRequest {
   ///
   final String id;
@@ -62,8 +62,7 @@ class SessionProposalRPCRequest {
   final String method;
 
   ///
-  @JsonKey(includeIfNull: false)
-  final SessionProposalContent params;
+  final SessionProposalContent? params;
 
   ///
   SessionProposalRPCRequest(this.id, this.method, this.params,

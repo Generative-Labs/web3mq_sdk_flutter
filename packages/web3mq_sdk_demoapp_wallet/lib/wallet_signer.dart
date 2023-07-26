@@ -7,7 +7,7 @@ import 'package:web3dart/web3dart.dart';
 import 'package:web3mq/web3mq.dart' as web3mq;
 
 class DemoAppWalletConnector extends web3mq.WalletConnector {
-  final _DemoAppWallet _wallet = _DemoAppWallet();
+  final DemoAppWallet _wallet = DemoAppWallet();
 
   @override
   Future<web3mq.Wallet> connectWallet() {
@@ -26,7 +26,7 @@ class DemoAppWalletConnector extends web3mq.WalletConnector {
 }
 
 //
-class _DemoAppWallet implements web3mq.Wallet {
+class DemoAppWallet implements web3mq.Wallet {
   // 1: 15fa042adf5f16dcc9f77da7bfdb896b96c73d610e1827e31a9dd0d3121ee142
   // 2: 86b0933ddbb781976548cf80ef9bbd33db86976ffffa8965867c3e88b4edce83
   // 3：7433efd5bcfc33bbea057e530f0b3e86fcdab2474f233b827e48994bdb9c9fcf

@@ -33,6 +33,7 @@ dependencies:
   shared_preferences: ^2.1.0
   url_launcher: ^6.1.11
   adaptive_number: ^1.0.0
+  http_parser: ^4.0.2
 
 dev_dependencies:
   lints: ^2.0.0

@@ -7,7 +7,7 @@ import 'rpc_request.dart';
 part 'uri.g.dart';
 
 ///
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false, anyMap: true)
 class DappConnectURI {
   final String topic;
 
@@ -34,4 +34,15 @@ class DappConnectURI {
 
   /// Serialize to json
   Map<String, dynamic> toJson() => _$DappConnectURIToJson(this);
+
+  /// Create a new instance from a url
+  factory DappConnectURI.fromUrl(String url) {
+    final json = FormDataConverter.convertFormDataStringToMap(url);
+    print('debug:json: $json');
+    print("debug:proposer:${json['proposer']}");
+    if (json['proposer'] is Map<String, dynamic>) {
+      print("debug:true");
+    }
+    return DappConnectURI.fromJson(json);
+  }
 }

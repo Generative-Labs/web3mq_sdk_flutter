@@ -6,13 +6,14 @@ part of 'participant.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Participant _$ParticipantFromJson(Map<String, dynamic> json) => Participant(
+Participant _$ParticipantFromJson(Map json) => Participant(
       json['publicKey'] as String,
-      AppMetadata.fromJson(json['appMetadata'] as Map<String, dynamic>),
+      AppMetadata.fromJson(
+          Map<String, dynamic>.from(json['appMetadata'] as Map)),
     );
 
 Map<String, dynamic> _$ParticipantToJson(Participant instance) =>
     <String, dynamic>{
       'publicKey': instance.publicKey,
-      'appMetadata': instance.appMetadata,
+      'appMetadata': instance.appMetadata.toJson(),
     };

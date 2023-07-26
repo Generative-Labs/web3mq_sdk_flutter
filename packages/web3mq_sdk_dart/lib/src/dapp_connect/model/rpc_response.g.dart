@@ -9,18 +9,17 @@ part of 'rpc_response.dart';
 RPCResponse _$RPCResponseFromJson(Map<String, dynamic> json) => RPCResponse(
       json['id'] as String,
       json['method'] as String?,
-      _fromBytes(json['result']),
-      json['error'] == null
+      jsonrpc: json['jsonrpc'] as String? ?? '2.0',
+      result: json['result'],
+      error: json['error'] == null
           ? null
           : RPCError.fromJson(json['error'] as Map<String, dynamic>),
-      jsonrpc: json['jsonrpc'] as String? ?? '2.0',
     );
 
 Map<String, dynamic> _$RPCResponseToJson(RPCResponse instance) {
   final val = <String, dynamic>{
     'id': instance.id,
     'jsonrpc': instance.jsonrpc,
-    'method': instance.method,
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -29,7 +28,8 @@ Map<String, dynamic> _$RPCResponseToJson(RPCResponse instance) {
     }
   }
 
+  writeNotNull('method', instance.method);
   writeNotNull('result', instance.result);
-  writeNotNull('error', instance.error);
+  writeNotNull('error', instance.error?.toJson());
   return val;
 }

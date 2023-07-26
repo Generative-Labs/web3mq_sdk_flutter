@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:web3mq/web3mq.dart';
-import 'package:web3mq_sdk_flutter_demo/home_page.dart';
 import 'package:web3mq_sdk_flutter_demo/tests_page.dart';
 
 import 'cache.dart';
-import 'connect_wallet_page.dart';
 import 'demo_app_wallet_connector.dart';
 
 // group:ab0710a42f94b4613d02cb5bd165aa69843d9ed5”

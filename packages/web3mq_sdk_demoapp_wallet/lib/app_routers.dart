@@ -8,9 +8,8 @@ class AppRoutes {
   static const String scan = '/scan';
 
   static final Map<String, WidgetBuilder> routes = {
-    home: (context) => const MyHomePage(title: 'Home Page'),
+    home: (context) => const MyHomePage(),
     scan: (context) => ScanPage(
-          title: 'Scan QR Code',
           onScanResult: (List<String> results) {},
         ),
   };
