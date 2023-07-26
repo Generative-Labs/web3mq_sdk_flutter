@@ -10,10 +10,10 @@ part 'session.g.dart';
 ///
 @JsonSerializable()
 class Session {
-  ///
+  /// The userId of the session proposer.
   final String topic;
 
-  ///
+  /// The userId of the paring side.
   final String pairingTopic;
 
   ///
@@ -106,13 +106,14 @@ class SessionProposal extends Equatable {
 }
 
 ///
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false, anyMap: true)
 class SessionProposalContent extends Equatable {
   ///
-  final Map<String, ProposalNamespace> requiredNamespaces;
+  @JsonKey(includeIfNull: false)
+  final Map<String, ProposalNamespace>? requiredNamespaces;
 
   ///
-  final SessionProperties sessionProperties;
+  final SessionProperties? sessionProperties;
 
   SessionProposalContent(this.requiredNamespaces, this.sessionProperties);
 

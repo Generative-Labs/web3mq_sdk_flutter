@@ -6,12 +6,11 @@ part of 'uri.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-DappConnectURI _$DappConnectURIFromJson(Map<String, dynamic> json) =>
-    DappConnectURI(
+DappConnectURI _$DappConnectURIFromJson(Map json) => DappConnectURI(
       json['topic'] as String,
-      Participant.fromJson(json['proposer'] as Map<String, dynamic>),
+      Participant.fromJson(Map<String, dynamic>.from(json['proposer'] as Map)),
       SessionProposalRPCRequest.fromJson(
-          json['request'] as Map<String, dynamic>),
+          Map<String, dynamic>.from(json['request'] as Map)),
     );
 
 Map<String, dynamic> _$DappConnectURIToJson(DappConnectURI instance) =>

@@ -1,12 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:web3mq/web3mq.dart';
-import 'package:web3mq/web3mq.dart';
-import 'package:web3mq_sdk_flutter_demo/home_page.dart';
+import 'package:web3mq_sdk_flutter_demo/tests_page.dart';
 
 import 'cache.dart';
-import 'connect_wallet_page.dart';
 import 'demo_app_wallet_connector.dart';
 
 // group:ab0710a42f94b4613d02cb5bd165aa69843d9ed5”
@@ -19,7 +15,7 @@ final client = Web3MQClient("eKsEePNSVXTaBLRy", baseURL: DevEndpoint.sg1);
 
 final dappConnectClient = DappConnectClient(
     'eKsEePNSVXTaBLRy',
-    baseURL: DevEndpoint.jp1,
+    baseURL: DevEndpoint.sg1,
     AppMetadata('Dapp', 'for dart dapp test', 'web3mq.com',
         const ['https://url'], 'web3mqdemo://'));
 
@@ -30,8 +26,7 @@ void main() async {
   client.persistenceClient = Web3MQPersistenceClient();
   client.walletConnector = DemoAppWalletConnector();
   _currentUser = await CacheHelper.loadUser();
-  dappConnectClient.connectUser();
-
+  // dappConnectClient.connectUser();
   runApp(MyApp(client: client));
 }
 
@@ -50,9 +45,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: _currentUser != null
-          ? HomePage(user: _currentUser!)
-          : const ConnectWalletPage(title: 'Web3MQ SDK Demo App'),
+      home: const TestsPage(),
+      // _currentUser != null
+      // ? HomePage(user: _currentUser!)
+      // : const ConnectWalletPage(title: 'Web3MQ SDK Demo App'),
     );
   }
 }

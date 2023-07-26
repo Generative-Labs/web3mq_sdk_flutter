@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -52,8 +53,7 @@ abstract class DappConnectClientProtocol {
   Future<void> rejectSessionProposal(String proposalId);
 
   ///
-  Future<void> sendSuccessResponse(
-      Request request, Map<String, dynamic> result);
+  Future<void> sendSuccessResponse(Request request, dynamic result);
 
   ///
   Future<void> sendErrorResponse(Request request, int code, String message);
@@ -146,6 +146,8 @@ class DappConnectClient extends DappConnectClientProtocol {
 
   final _newResponseController = BehaviorSubject<Response>();
 
+  Duration requestTimeoutInterval = const Duration(minutes: 3);
+
   void handleEvent(Event event) {
     switch (event.type) {
       case EventType.notificationMessageNew:
@@ -153,6 +155,7 @@ class DappConnectClient extends DappConnectClientProtocol {
       case EventType.connectionChanged:
         break;
       case EventType.messageNew:
+        print('debug:messageNew: ${event.message}');
         final wsMessage = event.message;
         if (null == wsMessage) return;
         final message = Message.fromWSMessage(wsMessage);
@@ -192,6 +195,8 @@ class DappConnectClient extends DappConnectClientProtocol {
   late final Serializer _serializer;
 
   late final Storage _storage;
+
+  String get endpoint => _ws.baseUrl;
 
   Future<Session> connectWallet(
       Map<String, ProposalNamespace> requiredNamespaces) async {
@@ -260,8 +265,10 @@ class DappConnectClient extends DappConnectClientProtocol {
 
     final result = SessionProposalResult(
         sessionNamespace, sessionProperties, _appMetadata);
-    final response = RPCResponse(proposalId,
-        RequestMethod.providerAuthorization, result.toBytes(), null);
+
+    final response = RPCResponse(
+        proposalId, RequestMethod.providerAuthorization,
+        result: result);
 
     _sendPayloadContentBytes(response.toBytes(), proposal.pairingTopic,
         proposal.proposer.publicKey, privateKeyHex);
@@ -277,7 +284,7 @@ class DappConnectClient extends DappConnectClientProtocol {
         sessionNamespace);
     _storage.setSession(session);
 
-    // TODO: redirect to dapp
+    await _backToDapp(proposal.proposer.appMetadata.redirect);
   }
 
   @override
@@ -286,20 +293,21 @@ class DappConnectClient extends DappConnectClientProtocol {
     if (proposal == null) {
       throw DappConnectError.proposalNotFound();
     }
+
     final theUser = currentUser;
     if (null == theUser) {
       throw DappConnectError.currentUserNotFound();
     }
 
     final response = RPCResponse(
-        proposalId,
-        RequestMethod.providerAuthorization,
-        null,
-        RPCError(code: 5000, message: 'User disapproved requested methods'));
+        proposalId, RequestMethod.providerAuthorization,
+        error: RPCError(
+            code: 5000, message: 'User disapproved requested methods'));
 
     _sendPayloadContentBytes(response.toBytes(), proposal.pairingTopic,
         proposal.proposer.publicKey, theUser.sessionKey);
-    // TODO: redirect to dapp
+
+    await _backToDapp(proposal.proposer.appMetadata.redirect);
   }
 
   @override
@@ -326,8 +334,12 @@ class DappConnectClient extends DappConnectClientProtocol {
   void pairURI(DappConnectURI uri) {
     final request = uri.request;
     final proposal = request.params;
-    final sessionProposal = SessionProposal(request.id, uri.topic, uri.proposer,
-        proposal.requiredNamespaces, proposal.sessionProperties);
+    final sessionProposal = SessionProposal(
+        request.id,
+        uri.topic,
+        uri.proposer,
+        proposal?.requiredNamespaces ?? {},
+        proposal?.sessionProperties ?? SessionProperties.fromDefault());
     _storage.setSessionProposal(sessionProposal);
     _sessionProposalController.add(sessionProposal);
   }
@@ -343,7 +355,8 @@ class DappConnectClient extends DappConnectClientProtocol {
       String topic, String method, Map<String, dynamic> params) async {
     final requestId = _idGenerator.next();
     final rpcRequest = RPCRequest.from(requestId, method, params);
-    _sendRequest(rpcRequest, topic);
+    await _sendRequest(rpcRequest, topic);
+    await _jumpToWalletIfNeeded();
     return await _waitingForResponse(requestId);
   }
 
@@ -351,22 +364,19 @@ class DappConnectClient extends DappConnectClientProtocol {
   Future<void> sendErrorResponse(
       Request request, int code, String message) async {
     final response = RPCResponse(
-        request.id,
-        RequestMethod.providerAuthorization,
-        null,
-        RPCError(code: code, message: message));
+        request.id, RequestMethod.providerAuthorization,
+        error: RPCError(code: code, message: message));
     await _sendResponse(response, request);
+    _backToDapp(request.sender?.appMetadata.redirect);
   }
 
   @override
-  Future<void> sendSuccessResponse(
-      Request request, Map<String, dynamic> result) async {
-    // convert result to List<int>
-    final messageJson = jsonEncode(result);
-    final messageBytes = utf8.encode(messageJson);
+  Future<void> sendSuccessResponse(Request request, dynamic result) async {
     final response = RPCResponse(
-        request.id, RequestMethod.providerAuthorization, messageBytes, null);
+        request.id, RequestMethod.providerAuthorization,
+        result: result);
     await _sendResponse(response, request);
+    _backToDapp(request.sender?.appMetadata.redirect);
   }
 
   Future<String> personalSign(String message, String address, String topic,
@@ -384,7 +394,7 @@ class DappConnectClient extends DappConnectClientProtocol {
     final request = RPCRequest(requestId, RequestMethod.personalSign, params);
     await _sendPayloadContentBytes(request.toBytes(), topic,
         session.peerParticipant.publicKey, theUser.sessionKey);
-    await _jumpToWallet();
+    await _jumpToWalletIfNeeded();
     final response = await _waitingForResponse(requestId);
     final result = response.result;
     if (null != result) {
@@ -394,9 +404,29 @@ class DappConnectClient extends DappConnectClientProtocol {
     }
   }
 
-  Future<void> _jumpToWallet() async {
+  Future<void> _jumpToWalletIfNeeded() async {
+    if (kIsWeb) {
+      return;
+    }
     final uri = Uri.parse('web3mq://');
-    await _openURLIfCould(uri);
+    try {
+      await _openURLIfCould(uri);
+    } catch (e) {
+      logger.warning('openURLIfCould Error: $e');
+    }
+  }
+
+  Future<void> _backToDapp(String? url) async {
+    // direct
+    if (null == url) {
+      // back to redirect
+      if (!kIsWeb) {
+        // TODO: back to previeous app
+      }
+    } else {
+      final uri = Uri.parse(url);
+      await _openURLIfCould(uri);
+    }
   }
 
   @override
@@ -518,40 +548,19 @@ class DappConnectClient extends DappConnectClientProtocol {
     _ws.disconnect();
   }
 
-  void _onReceiveMessage(DappConnectMessage message) async {
-    final privateKey = await _keyStorage.privateKeyHex;
-    final bytes = await _serializer.decrypt(
-        message.payload.content, message.payload.publicKey, privateKey);
-    final json = _bytesToMap(bytes);
-    try {
-      final rpcResponse = RPCResponse.fromJson(json);
-      final response = Response.fromRpcResponse(
-          rpcResponse, message.fromTopic, message.payload.publicKey);
-      _onReceiveResponse(response);
-    } catch (e) {
-      try {
-        final rpcRequest = RPCRequest.fromJson(json);
-        final request = Request.fromRpcRequest(
-            rpcRequest, message.fromTopic, message.payload.publicKey);
-        _onReceiveRequest(request);
-      } catch (e) {
-        logger.warning('Error: $e');
-        logger.warning('Unknown message type: $json');
-      }
-    }
-  }
-
   Map<String, dynamic> _bytesToMap(List<int> bytes) {
     final jsonString = utf8.decode(bytes);
     return jsonDecode(jsonString);
   }
 
   void _onReceiveRequest(Request request) {
+    print('debug:_onReceiveRequest: ${request.params}');
     _newRequestController.add(request);
     _storage.setRecord(Record.fromRequest(request));
   }
 
   void _onReceiveResponse(Response response) {
+    print('debug:_onReceiveResponse: ${response.result}');
     _newResponseController.add(response);
     _storage.getRecord(response.topic).then((value) {
       if (null != value) {
@@ -559,25 +568,6 @@ class DappConnectClient extends DappConnectClientProtocol {
         _storage.setRecord(fianlRecord);
       }
     });
-  }
-
-  Future<Response> _waitingForResponse(String requestId) async {
-    final completer = Completer<Response>();
-    StreamSubscription<Response>? subscription;
-    subscription = responseStream
-        .timeout(Duration(minutes: 3), onTimeout: (sink) {
-          sink.addError(DappConnectError.timeout);
-        })
-        .where((response) => response.id == requestId)
-        .take(1)
-        .listen((response) {
-          subscription?.cancel();
-          completer.complete(response);
-        }, onError: (error) {
-          subscription?.cancel();
-          completer.completeError(error);
-        }, cancelOnError: true);
-    return completer.future;
   }
 
   Future<void> _sendResponse(RPCResponse response, Request request) async {
@@ -626,6 +616,45 @@ class DappConnectClient extends DappConnectClientProtocol {
         payload, topic, theUser.userId, privateKeyHex);
   }
 
+  void _onReceiveMessage(DappConnectMessage message) async {
+    print('debug:onReceiveMessage: ${message.payload}');
+    final privateKey = await _keyStorage.privateKeyHex;
+    final bytes = await _serializer.decrypt(
+        message.payload.content, message.payload.publicKey, privateKey);
+    final json = _bytesToMap(bytes);
+
+    try {
+      final rpcResponse = RPCResponse.fromJson(json);
+      if (rpcResponse.isInvalid) {
+        throw Error();
+      }
+      final session = await _storage.getSession(message.fromTopic);
+      final response = Response.fromRpcResponse(
+        rpcResponse,
+        message.fromTopic,
+        message.payload.publicKey,
+        session?.peerParticipant,
+      );
+      _onReceiveResponse(response);
+      return;
+    } catch (e) {
+      logger.warning('Error: $e');
+      logger.warning('Unknown message type: $json');
+    }
+
+    try {
+      final rpcRequest = RPCRequest.fromJson(json);
+      final session = await _storage.getSession(message.fromTopic);
+      final request = Request.fromRpcRequest(rpcRequest, message.fromTopic,
+          message.payload.publicKey, session?.peerParticipant);
+      _onReceiveRequest(request);
+      return;
+    } catch (e) {
+      logger.warning('Error: $e');
+      logger.warning('Unknown message type: $json');
+    }
+  }
+
   Future<void> _waitingForConnected() async {
     final completer = Completer<void>();
     StreamSubscription<ConnectionStatus>? subscription;
@@ -642,9 +671,27 @@ class DappConnectClient extends DappConnectClientProtocol {
     await completer.future;
   }
 
+  Future<Response> _waitingForResponse(String requestId) async {
+    final completer = Completer<Response>();
+    StreamSubscription<Response>? subscription;
+    subscription = responseStream
+        .timeout(requestTimeoutInterval, onTimeout: (sink) {
+          sink.addError(DappConnectError.timeout);
+        })
+        .where((response) => response.id == requestId)
+        .take(1)
+        .listen((response) {
+          subscription?.cancel();
+          completer.complete(response);
+        }, onError: (error) {
+          subscription?.cancel();
+          completer.completeError(error);
+        }, cancelOnError: true);
+    return completer.future;
+  }
+
   Future<void> _sendDappConnectMessageByPayload(MesasgePayload payload,
       String topic, String userId, String privateKeyHex) async {
-    print("debug:_sendDappConnectMessage:$payload");
     final wsMessage =
         await _convertToChatMessage(payload, topic, userId, privateKeyHex);
     _ws.send(wsMessage);

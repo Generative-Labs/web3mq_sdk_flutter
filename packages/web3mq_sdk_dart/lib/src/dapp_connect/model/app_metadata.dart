@@ -3,20 +3,31 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'app_metadata.g.dart';
 
+List<String>? _nullableListFromJson(dynamic json) {
+  if (json == null) {
+    return null;
+  }
+  if (json is List<String>) {
+    return json;
+  }
+  return [];
+}
+
 ///
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false, anyMap: true)
 class AppMetadata extends Equatable {
   ///
-  final String name;
+  final String? name;
 
   ///
-  final String description;
+  final String? description;
 
   ///
-  final String url;
+  final String? url;
 
   ///
-  final List<String> icons;
+  @JsonKey(fromJson: _nullableListFromJson)
+  final List<String>? icons;
 
   ///
   final String? redirect;
@@ -34,3 +45,21 @@ class AppMetadata extends Equatable {
   /// Serialize to json
   Map<String, dynamic> toJson() => _$AppMetadataToJson(this);
 }
+
+// class IconsConverter implements JsonConverter<List<dynamic>?, dynamic> {
+//   const IconsConverter();
+
+//   @override
+//   List<dynamic>? fromJson(dynamic json) {
+//     if (json == null) {
+//       return null;
+//     }
+//     if (json is List<dynamic>) {
+//       return json;
+//     }
+//     return [json];
+//   }
+
+//   @override
+//   dynamic toJson(List<dynamic>? object) => object;
+// }

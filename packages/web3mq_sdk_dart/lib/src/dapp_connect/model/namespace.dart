@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'namespace.g.dart';
 
 ///
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SessionNamespace extends Equatable {
   ///
   final Set<String> accounts;

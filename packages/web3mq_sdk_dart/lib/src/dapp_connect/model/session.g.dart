@@ -60,21 +60,30 @@ Map<String, dynamic> _$SessionProposalToJson(SessionProposal instance) =>
       'sessionProperties': instance.sessionProperties.toJson(),
     };
 
-SessionProposalContent _$SessionProposalContentFromJson(
-        Map<String, dynamic> json) =>
+SessionProposalContent _$SessionProposalContentFromJson(Map json) =>
     SessionProposalContent(
-      (json['requiredNamespaces'] as Map<String, dynamic>).map(
-        (k, e) =>
-            MapEntry(k, ProposalNamespace.fromJson(e as Map<String, dynamic>)),
+      (json['requiredNamespaces'] as Map?)?.map(
+        (k, e) => MapEntry(k as String,
+            ProposalNamespace.fromJson(Map<String, dynamic>.from(e as Map))),
       ),
-      SessionProperties.fromJson(
-          json['sessionProperties'] as Map<String, dynamic>),
+      json['sessionProperties'] == null
+          ? null
+          : SessionProperties.fromJson(
+              Map<String, dynamic>.from(json['sessionProperties'] as Map)),
     );
 
 Map<String, dynamic> _$SessionProposalContentToJson(
-        SessionProposalContent instance) =>
-    <String, dynamic>{
-      'requiredNamespaces':
-          instance.requiredNamespaces.map((k, e) => MapEntry(k, e.toJson())),
-      'sessionProperties': instance.sessionProperties.toJson(),
-    };
+    SessionProposalContent instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('requiredNamespaces',
+      instance.requiredNamespaces?.map((k, e) => MapEntry(k, e.toJson())));
+  writeNotNull('sessionProperties', instance.sessionProperties?.toJson());
+  return val;
+}

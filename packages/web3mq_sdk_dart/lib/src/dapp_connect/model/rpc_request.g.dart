@@ -36,20 +36,31 @@ Map<String, dynamic> _$RPCRequestToJson(RPCRequest instance) {
   return val;
 }
 
-SessionProposalRPCRequest _$SessionProposalRPCRequestFromJson(
-        Map<String, dynamic> json) =>
+SessionProposalRPCRequest _$SessionProposalRPCRequestFromJson(Map json) =>
     SessionProposalRPCRequest(
       json['id'] as String,
       json['method'] as String,
-      SessionProposalContent.fromJson(json['params'] as Map<String, dynamic>),
+      json['params'] == null
+          ? null
+          : SessionProposalContent.fromJson(
+              Map<String, dynamic>.from(json['params'] as Map)),
       jsonrpc: json['jsonrpc'] as String? ?? '2.0',
     );
 
 Map<String, dynamic> _$SessionProposalRPCRequestToJson(
-        SessionProposalRPCRequest instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'jsonrpc': instance.jsonrpc,
-      'method': instance.method,
-      'params': instance.params.toJson(),
-    };
+    SessionProposalRPCRequest instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'jsonrpc': instance.jsonrpc,
+    'method': instance.method,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('params', instance.params?.toJson());
+  return val;
+}

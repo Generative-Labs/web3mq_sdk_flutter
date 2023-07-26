@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:web3mq/src/dapp_connect/model/rpc_request.dart';
+import 'package:web3mq/src/dapp_connect/dapp_connect_client.dart';
 
 part 'request.g.dart';
 
@@ -31,7 +31,11 @@ class Request {
   final String publicKey;
 
   ///
-  Request(this.id, this.method, this.params, this.topic, this.publicKey);
+  final Participant? sender;
+
+  ///
+  Request(this.id, this.method, this.params, this.topic, this.publicKey,
+      this.sender);
 
   /// Create a new instance from a json
   factory Request.fromJson(Map<String, dynamic> json) =>
@@ -41,14 +45,9 @@ class Request {
   Map<String, dynamic> toJson() => _$RequestToJson(this);
 
   ///
-  factory Request.fromRpcRequest(
-      RPCRequest request, String topic, String publicKeyHex) {
-    return Request(
-      request.id,
-      request.method,
-      request.params,
-      topic,
-      publicKeyHex,
-    );
+  factory Request.fromRpcRequest(RPCRequest request, String topic,
+      String publicKeyHex, Participant? sender) {
+    return Request(request.id, request.method, request.params, topic,
+        publicKeyHex, sender);
   }
 }

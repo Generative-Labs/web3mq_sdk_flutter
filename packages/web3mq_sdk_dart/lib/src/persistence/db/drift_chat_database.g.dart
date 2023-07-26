@@ -544,7 +544,7 @@ class $ChannelsTable extends Channels
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {topic};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ChannelEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     return ChannelEntity.fromData(data,

@@ -189,6 +189,7 @@ class DappConnectKeyStorage extends KeyStorage {
       final createdOne = await KeyPairUtils.generatePrivateKey();
       _privateKeyStreamController.add(createdOne);
       _privateKey = createdOne;
+      savePrivateKey(createdOne);
       return createdOne;
     }
   }
