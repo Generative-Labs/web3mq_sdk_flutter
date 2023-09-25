@@ -13,8 +13,8 @@ final client = Web3MQClient("eKsEePNSVXTaBLRy", baseURL: DevEndpoint.sg1);
 final dappConnectClient = DappConnectClient(
     'eKsEePNSVXTaBLRy',
     baseURL: DevEndpoint.sg1,
-    AppMetadata('Dapp', 'for dart dapp test', 'web3mq.com',
-        const ['https://url'], 'web3mqdemo://'));
+    AppMetadata('Dapp', 'for dapp testing', 'web3mq.com', const ['https://url'],
+        'web3mqdemo://'));
 
 User? _currentUser;
 
@@ -24,14 +24,13 @@ void main() async {
   // which handles the `personal_sign` request by it self.
   //
   // If you want to use a different wallet to handle signatures, you can use
-  // the `DemoAppWalletConnector`, which will launch other wallets on your device
+  // the `DemoAppWalletConnector`, which will launch other wallet on your device
   // that support the *DappConnect protocol* via Deep Link.
   // You can also customize your own implementation by implementing the
   // `WalletConnector` interface, such as changing it to call MetaMask.
   //
   client.walletConnector = InnerWalletConnector();
   _currentUser = await CacheHelper.loadUser();
-  dappConnectClient.connectUser();
   runApp(MyApp(client: client));
 }
 

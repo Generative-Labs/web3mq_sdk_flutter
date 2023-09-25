@@ -2,6 +2,11 @@ import 'package:web3mq_dapp_connect/dapp_connect.dart';
 import 'package:web3mq_sdk_flutter_demo/main.dart';
 
 class DemoAppWalletConnector implements WalletConnector {
+  // connect the client when initailized.
+  DemoAppWalletConnector() {
+    dappConnectClient.connectUser();
+  }
+
   @override
   Future<Wallet> connectWallet() async {
     final session = await dappConnectClient.connectWallet({
