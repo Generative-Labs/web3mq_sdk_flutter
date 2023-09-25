@@ -1,4 +1,3 @@
-
 # web3mq_websocket
 
 A lightware websocket tool to communicate with web3mq.
@@ -21,7 +20,8 @@ dependencies:
 ## Usage
 
 ```dart
-  final websocket = Web3MQWebSocketManager(baseUrl: 'endpoint');
+  final websocket = Web3MQWebSocketManager(
+      baseUrl: 'endpoint', reconnectionMonitorInterval: 20);
 
   // lisnten the new message stream.
   websocket.messageStream.listen((event) {});
@@ -36,7 +36,9 @@ dependencies:
   websocket.messageUpdateStream.listen((event) {});
 
   // replace with your own user
-  final user = User('userId', DID('type', 'value'), Uint8List.fromList([]));
-  await websocket.connect(user);
+  await websocket.connect(WebSocketUser('userId', 'sessionKey'));
   websocket.sendText('text', 'topic');
+
+  websocket.sendText('text', 'topic',
+      threadId: '', cipherSuite: '', needStore: false, extraData: {});
 ```

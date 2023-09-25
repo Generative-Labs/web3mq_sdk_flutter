@@ -4,22 +4,26 @@ This monorepo contains multiple web3mq tools based on the [Dart](<https://dart.d
 
 ## Packages
 
-### [web3mq_sdk_dart](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_sdk_dart)
+### [web3mq_chat](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_chat)
 
 Provides a modern way of implementing Web3MQ APIs.
 
-### [web3mq_websocket](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/develop/packages/web3mq_websocket)
+### [web3mq_websocket](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_websocket)
 
 A lightware websocket tool to communicate with web3mq.
 
-### [web3mq_http](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/develop/packages/web3mq_http)
+### [web3mq_http](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_http)
 
 A Web3MQ JSON-RPC client based on the HTTP protocol.
 
-### [web3mq_ui_components](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/develop/packages/web3mq_ui_components)
+### [web3mq_ui_components](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_ui_components)
 
 An ui components package for web3mq.
 
-### [DemoApp](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/develop/packages/web3mq_sdk_flutter_demo)
+### [DemoDapp](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_sdk_flutter_demo)
 
-We provide a sample apps created using the Web3MQ SDKs.
+We provide a sample dapp created using the `web3mq_chat` and `web3mq_dapp_connect`.
+
+### [DemoWalletApp](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_sdk_demoapp_wallet)
+
+We provide a sample wallet app created using the `web3mq_dapp_connect`.

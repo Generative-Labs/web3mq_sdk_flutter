@@ -1,4 +1,3 @@
-
 # Quick Start
 
 ## REQUIREMENTS
@@ -23,7 +22,8 @@ There is a detailed Flutter example project in the `example` folder. You can dir
 
 ## Setup API Client
 
-First you need to instantiate a chat client. The chat client will manage API call, event handling and manage the web socket connection to Web3mq servers. You should only create the client once and re-use it across your application.
+First you need to instantiate a chat client. The chat client will manage API call, event handling and manage the web
+socket connection to Web3mq servers. You should only create the client once and re-use it across your application.
 
 ```dart
 final client = Web3MQClient("api-key");
@@ -35,7 +35,8 @@ By default, the chat client will write all messages with level Warn or Error to 
 
 ### Change Logging Level
 
-During development, you might want to enable more logging information, you can change the default log level when constructing the client.
+During development, you might want to enable more logging information, you can change the default log level when
+constructing the client.
 
 ```dart
 final client = Web3MQClient("api-key", logLevel: Level.INFO);
@@ -43,7 +44,8 @@ final client = Web3MQClient("api-key", logLevel: Level.INFO);
 
 ### Custom Logger
 
-You can handle the log messages directly instead of have them written to `stdout`, this is very convenient if you use an error tracking tool or if you want to centralize your logs into one facility.
+You can handle the log messages directly instead of have them written to `stdout`, this is very convenient if you use an
+error tracking tool or if you want to centralize your logs into one facility.
 
 ```dart
 myLogHandlerFunction = (LogRecord record) {
@@ -55,7 +57,8 @@ final client = Web3MQClient("api-key", logHandlerFunction: myLogHandlerFunction)
 
 ### Wallet Connector
 
-Some methods that SDK provides require wallet signature,  you should setup the `WalletConnector` before calling those methods.
+Some methods that SDK provides require wallet signature, you should setup the `WalletConnector` before calling those
+methods.
 
 ```dart
 client.walletConnector = walletConnector;
@@ -81,7 +84,8 @@ abstract class Wallet {
 
 ### Offline storage
 
-To add data persistence you can extend the class `PersistenceClient` and pass an instance to the `ChatClient`. `Web3MQPersistenceClient` is a default implementation.
+To add data persistence you can extend the class`PersistenceClient`and pass an instance to
+the`ChatClient`. `Web3MQPersistenceClient` is a default implementation.
 
 ```dart
 client.persistenceClient = Web3MQPersistenceClient();
@@ -91,7 +95,8 @@ client.persistenceClient = Web3MQPersistenceClient();
 
 For any first-time user of Web3MQ's network, you'll need to register on Web3MQ's network.
 
-This method needs wallet signature, make sure you have setup `WalletConnector` already. `RegisterResponse` contains your `PrivateKey` and `UserId`.
+This method needs wallet signature, make sure you have setup `WalletConnector` already. `RegisterResponse` contains
+your `PrivateKey` and `UserId`.
 
 ```dart
 // Keep your private key in a safe place!
@@ -228,7 +233,8 @@ client.queryMessagesByTopic('topicId', pagination)
 
 ### Create Thread
 
-To create a thread, call the **`createThreadByMessage`** method with the ID of the original message, the ID of the topic, and the name of the thread:
+To create a thread, call the **`createThreadByMessage`** method with the ID of the original message, the ID of the
+topic, and the name of the thread:
 
 ```dart
 client.createThreadByMessage(messageId, 'topicId', 'threadName')

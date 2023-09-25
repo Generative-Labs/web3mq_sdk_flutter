@@ -1,6 +1,7 @@
 # web3mq_http
 
-web3mq_http is a Web3MQ JSON-RPC client based on the HTTP protocol, using the http package to send requests and parse responses. It supports all standard Web3mq methods, including user registerion, chats and notification queries.
+web3mq_http is a Web3MQ JSON-RPC client based on the HTTP protocol, using the http package to send requests and parse
+responses. It supports all standard Web3mq methods, including user registerion, chats and notification queries.
 
 ## Installation
 

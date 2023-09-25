@@ -2,9 +2,11 @@ name: web3mq_ui_components
 description: An ui components package for web3mq.
 version: 0.1.0-dev.1
 homepage: https://www.web3mq.com
+repository: https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_ui_component
+issue_tracker: https://github.com/Generative-Labs/web3mq_sdk_flutter/issues
 
 environment:
-  sdk: ">=2.18.5 <4.0.0"
+  sdk: ">=2.19.4 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -12,7 +14,7 @@ dependencies:
     sdk: flutter
 
   # The Web3MQ SDK
-  web3mq: ^0.1.1
+  web3mq: ^0.1.3-dev.1
 
   #
   cached_network_image: ^3.2.3

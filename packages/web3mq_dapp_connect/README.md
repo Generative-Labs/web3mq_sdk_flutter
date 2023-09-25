@@ -1,4 +1,4 @@
-# QuickStart  
+# QuickStart
 
 ## REQUIREMENTS
 
@@ -18,7 +18,8 @@ You should then run `flutter packages get`
 
 ## Initial the SDK
 
-For an API-key, see detail:  [https://docs.web3mq.com/docs/Web3MQ-API/dapp/create_dapp/](https://docs.web3mq.com/docs/Web3MQ-API/dapp/create_dapp/)  
+For an API-key, see
+detail:  [https://docs.web3mq.com/docs/Web3MQ-API/dapp/create_dapp/](https://docs.web3mq.com/docs/Web3MQ-API/dapp/create_dapp/)
 
 ```dart
 final client = DappConnectClient(
@@ -30,14 +31,18 @@ await client.connectUser();
 ```
 
 :::tip
- You can customize the `baseURL`, which is set to `DevEndpoint.jp1` by default, or use `UtilsApi().findTheLowestLatencyEndpoint()` to get the endpoint with the lowest latency and assign it to `baseURL`.
+You can customize the `baseURL`, which is set to `DevEndpoint.jp1` by default, or
+use `UtilsApi().findTheLowestLatencyEndpoint()` to get the endpoint with the lowest latency and assign it to `baseURL`.
 :::
 
 ## Session management
 
-Session is a object which contains the information of a connection between dapp and wallet. It contains a `topic` which is a unique identifier of a session. You can use it to send request to wallet.
+Session is a object which contains the information of a connection between dapp and wallet. It contains a `topic` which
+is a unique identifier of a session. You can use it to send request to wallet.
 
-Session management is enabled by default. It means that the SDK will automatically cache every infomation on session such as requests and response. You can get the session list by calling `client.sessions`. You can clear all the sessions by calling `client.cleanup()`, or just remove a session by calling `client.deleteSession(topic)`.
+Session management is enabled by default. It means that the SDK will automatically cache every infomation on session
+such as requests and response. You can get the session list by calling `client.sessions`. You can clear all the sessions
+by calling `client.cleanup()`, or just remove a session by calling `client.deleteSession(topic)`.
 
 ## For Wallet
 
@@ -111,7 +116,9 @@ Before you can send request to the wallet, you need to offer a `SessionProposal`
   }
 ```
 
-Above code will generates a `SessionProposal` (which supports CAIPs ) and send it to a wallet via deepLink. If wallet approved the proposal, the function returns with a `Session` object, otherwise throws  `RPCError` which contains a error code and message. If wallet side did nothing for 3 minutes, the function throws a `TimeoutError`.
+Above code will generates a `SessionProposal` (which supports CAIPs ) and send it to a wallet via deepLink. If wallet
+approved the proposal, the function returns with a `Session` object, otherwise throws  `RPCError` which contains a error
+code and message. If wallet side did nothing for 3 minutes, the function throws a `TimeoutError`.
 
 ### Session List
 

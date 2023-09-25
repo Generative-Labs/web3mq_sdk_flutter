@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:mutex/mutex.dart';
-import 'package:web3mq_core/logger.dart';
-import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 import '../../web3mq.dart';
 import '../client/persistence_client.dart';

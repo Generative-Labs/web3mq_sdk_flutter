@@ -16,8 +16,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (!mounted) return;
   }
 
-  void _handleLogout() {
-  }
+  void _handleLogout() {}
 
   @override
   Widget build(BuildContext context) {

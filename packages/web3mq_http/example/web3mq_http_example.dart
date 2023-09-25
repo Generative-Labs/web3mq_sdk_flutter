@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:web3mq_core/models.dart';
 import 'package:web3mq_http/src/model/pagination.dart';
 import 'package:web3mq_http/web3mq_http.dart';

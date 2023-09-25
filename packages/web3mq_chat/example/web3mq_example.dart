@@ -1,7 +1,4 @@
-import 'dart:typed_data';
-
 import 'package:web3mq/web3mq.dart';
-import 'package:web3mq_core/models.dart';
 
 Future<void> main() async {
   final client = Web3MQClient('api-key');
