@@ -8,6 +8,10 @@ This monorepo contains multiple web3mq tools based on the [Dart](<https://dart.d
 
 Provides a modern way of implementing Web3MQ APIs.
 
+### [web3mq_dapp_connect](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_dapp_connect)
+
+An implementing of `DappConnect`.
+
 ### [web3mq_websocket](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_websocket)
 
 A lightware websocket tool to communicate with web3mq.
