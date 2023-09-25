@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web3mq_dapp_connect/dapp_connect.dart';
+import 'package:web3mq_dapp_connect/web3mq_dapp_connect.dart';
 
 ///
 class RequestModal extends StatelessWidget {

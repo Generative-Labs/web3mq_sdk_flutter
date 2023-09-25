@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:logging/logging.dart';
+import 'package:web3mq_core/logger.dart';
 import 'package:web3mq_core/models.dart';
 import 'package:web3mq_http/src/client/web3mq_dio_error.dart';
 

@@ -401,7 +401,7 @@ class UserModel {
   /// The avatar url of this user
   final String? avatarUrl;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeToJson: false, includeFromJson: false)
   String get name {
     if (null != nickname && nickname!.isNotEmpty) {
       return nickname!;

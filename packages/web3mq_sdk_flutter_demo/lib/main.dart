@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web3mq/web3mq.dart';
-import 'package:web3mq_dapp_connect/dapp_connect.dart';
+import 'package:web3mq_dapp_connect/web3mq_dapp_connect.dart';
 import 'package:web3mq_sdk_flutter_demo/inner_wallet_connector.dart';
 
 import 'cache.dart';

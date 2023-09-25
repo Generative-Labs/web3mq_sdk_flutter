@@ -1,5 +1,5 @@
-import 'package:logging/logging.dart';
 import 'package:web3mq_core/models.dart';
+import 'package:web3mq_core/logger.dart';
 
 import '../../web3mq_http.dart';
 

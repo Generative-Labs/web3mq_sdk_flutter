@@ -7,7 +7,6 @@ export 'response.dart';
 export 'rpc_error.dart';
 export 'rpc_request.dart';
 export 'rpc_response.dart';
-export 'rpc_result.dart';
 export 'session.dart';
 export 'session_proposal_result.dart';
 export 'uri.dart';

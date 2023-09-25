@@ -1,4 +1,4 @@
-import 'package:web3mq_dapp_connect/dapp_connect.dart';
+import 'package:web3mq_dapp_connect/web3mq_dapp_connect.dart';
 import 'package:web3mq_sdk_flutter_demo/main.dart';
 
 class DemoAppWalletConnector implements WalletConnector {

@@ -4,7 +4,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 import 'package:web3mq/web3mq.dart';
 
-import 'package:web3mq_websocket/web3mq_websocket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web3mq_websocket/src/models/pb/connect.pb.dart';
 import 'package:web3mq_websocket/src/models/buffer_convertible.dart';

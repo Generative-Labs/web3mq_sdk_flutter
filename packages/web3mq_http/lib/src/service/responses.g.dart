@@ -339,12 +339,6 @@ ThreadListResponse _$ThreadListResponseFromJson(Map<String, dynamic> json) =>
       json['total_count'] as int,
     );
 
-Map<String, dynamic> _$ThreadListResponseToJson(ThreadListResponse instance) =>
-    <String, dynamic>{
-      'thread_list': instance.threadList,
-      'total_count': instance.count,
-    };
-
 ThreadMessageListResponse _$ThreadMessageListResponseFromJson(
         Map<String, dynamic> json) =>
     ThreadMessageListResponse(
