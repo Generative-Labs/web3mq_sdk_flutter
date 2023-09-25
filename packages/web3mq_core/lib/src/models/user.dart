@@ -16,10 +16,10 @@ class User {
   final DID did;
 
   ///
-  final Uint8List privateKey;
+  final String sessionKey;
 
   ///
-  User(this.userId, this.did, this.privateKey);
+  User(this.userId, this.did, this.sessionKey);
 
   ///
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

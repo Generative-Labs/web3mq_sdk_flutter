@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
-import 'package:web3mq/src/models/endpoint.dart';
+import 'package:web3mq_core/models.dart';
 
 class UtilsApi {
   final dio = Dio();

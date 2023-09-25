@@ -25,3 +25,7 @@
 ## 0.1.2
 
 - fix the parser issue of `DappConnect`.
+
+## 0.1.3-dev.1
+
+- adopt `web3mq_dapp_connect`.

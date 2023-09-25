@@ -17,7 +17,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _handleLogout() {
-    // TODO: Implement logout logic
   }
 
   @override

@@ -97,8 +97,9 @@ extension ClientChat on Web3MQClient {
     if (user == null || nodeId == null) {
       throw Web3MQError("Send message error: you should be connected first");
     }
+    final keyPair = KeyPair.fromPrivateKeyHex(user.sessionKey);
     final chatMessage = await MessageFactory.fromText(
-        text, topic, user.userId, user.sessionKey, nodeId,
+        text, topic, user.userId, keyPair.privateKey, nodeId,
         threadId: threadId,
         needStore: needStore,
         cipherSuite: cipherSuite,

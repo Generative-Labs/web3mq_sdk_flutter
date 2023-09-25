@@ -5,22 +5,22 @@ import 'dart:typed_data';
 
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:web3mq_core/models.dart';
 import 'package:web3mq_websocket/src/message_signer.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web3mq_core/models.dart';
 
 import 'channel_sender.dart';
 import 'command_generator.dart';
 import 'error/error.dart';
 import 'models/buffer_convertible.dart';
-import 'models/connection_status.dart';
 import 'models/event.dart';
 import 'models/message_factory.dart';
 import 'models/pb/connect.pb.dart';
 import 'models/pb/message.pb.dart';
 import 'models/ping_message.dart';
+import 'models/user.dart';
 import 'timer_helper.dart';
 
 typedef WebSocketChannelProvider = WebSocketChannel Function(
@@ -28,22 +28,32 @@ typedef WebSocketChannelProvider = WebSocketChannel Function(
   Iterable<String>? protocols,
 });
 
-abstract class Web3MQWeb3Socket {
+enum ConnectMode {
+  normal,
+
+  bridge,
+}
+
+abstract class Web3MQWebSocket {
   /// Connects to the `web3mq` server.
-  Future<Event> connect(User user);
+  Future<Event> connect(WebSocketUser user,
+      {ConnectMode mode = ConnectMode.normal});
 
   /// Disconnect from the `web3mq` server.
   void disconnect();
 
   /// This notifies of connection status changes
   Stream<ConnectionStatus> get connectionStatusStream;
+
+  void send(Web3MQBufferConvertible message);
 }
 
-class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
+class Web3MQWebSocketManager with TimerHelper implements Web3MQWebSocket {
   /// Creates a new websocket manager
   ///
   /// To connect the WS call [connect].
   Web3MQWebSocketManager({
+    this.appKey,
     required this.baseUrl,
     this.reconnectionMonitorInterval = 10,
     this.healthCheckInterval = 20,
@@ -53,6 +63,9 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
     this.webSocketChannelProvider,
   })  : _logger = logger,
         _signer = signer ?? Web3MQEd25519MessageSigner();
+
+  ///
+  final String? appKey;
 
   /// Websocket base Url
   final String baseUrl;
@@ -122,7 +135,7 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
   WebSocketChannel? _channel;
 
   /// The message sender.
-  User? _user;
+  WebSocketUser? _user;
 
   DateTime? _lastEventAt;
 
@@ -140,15 +153,19 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
   ///
   Completer<Event>? connectionCompleter;
 
+  ConnectMode _connectMode = ConnectMode.normal;
+
   /// Connect the WS using the parameters passed in the constructor.
   @override
-  Future<Event> connect(User user) async {
+  Future<Event> connect(WebSocketUser user,
+      {ConnectMode mode = ConnectMode.normal}) async {
     if (_connectRequestInProgress) {
       throw const Web3MQWebSocketError('''
         You've called connect twice,
         can only attempt 1 connection at the time,
         ''');
     }
+    _connectMode = mode;
     _connectRequestInProgress = true;
     _manuallyClosed = false;
 
@@ -157,8 +174,9 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
     connectionCompleter = Completer<Event>();
 
     try {
+      final keyPair = KeyPair.fromPrivateKeyHex(user.sessionKey);
       await _initAndSubscribeToWebSocketChannel(
-          _buildUri(), user.userId, user.privateKey);
+          _buildUri(), user.userId, keyPair.privateKey);
     } catch (e, stk) {
       _onConnectionError(e, stk);
     }
@@ -208,8 +226,9 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
       () async {
         final uri = _buildUri();
         try {
+          final keyPair = KeyPair.fromPrivateKeyHex(user.sessionKey);
           _initAndSubscribeToWebSocketChannel(
-              uri, user.userId, user.privateKey);
+              uri, user.userId, keyPair.privateKey);
         } catch (e, stk) {
           _onConnectionError(e, stk);
         }
@@ -234,9 +253,13 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
         _channel = IOWebSocketChannel(webSocket);
       }
       _subscribeToWebSocketChannel();
-      // sends connect command.
-      send(await WebSocketMessageGenerator.connectCommandMessage(
-          userId, privateKey, _signer));
+      if (_connectMode == ConnectMode.bridge && appKey != null) {
+        send(await WebSocketMessageGenerator.bridgeCommandMessage(
+            appKey!, userId, privateKey, _signer));
+      } else {
+        send(await WebSocketMessageGenerator.connectCommandMessage(
+            userId, privateKey, _signer));
+      }
     } catch (error) {
       _logger?.warning('Connect Failed with ${error.toString()}');
       throw Web3MQWebSocketError.fromAnyMessage(error.toString());
@@ -244,6 +267,7 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
   }
 
   ///　Sends message.
+  @override
   void send(Web3MQBufferConvertible message) {
     _channel?.send(message);
   }
@@ -260,8 +284,9 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
       throw Web3MQWebSocketError(
           "Send message error: you should be connected first");
     }
+    final keyPair = KeyPair.fromPrivateKeyHex(user.sessionKey);
     final message = await MessageFactory.fromBytes(
-        bytes, topic, user.userId, user.privateKey, nodeId);
+        bytes, topic, user.userId, keyPair.privateKey, nodeId);
     send(message);
   }
 
@@ -277,8 +302,9 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWeb3Socket {
       throw Web3MQWebSocketError(
           "Send message error: you should be connected first");
     }
+    final keyPair = KeyPair.fromPrivateKeyHex(user.sessionKey);
     final chatMessage = await MessageFactory.fromText(
-        text, topic, user.userId, user.privateKey, nodeId,
+        text, topic, user.userId, keyPair.privateKey, nodeId,
         threadId: threadId,
         needStore: needStore,
         cipherSuite: cipherSuite,

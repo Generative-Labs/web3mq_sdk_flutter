@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:web3mq/web3mq.dart';
 import 'package:web3mq_sdk_flutter_demo/thread_list_page.dart';
-
 import 'main.dart';
 
 class ChatPage extends StatefulWidget {

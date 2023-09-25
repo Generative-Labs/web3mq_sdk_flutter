@@ -7,10 +7,8 @@ import 'package:web3mq/src/api/user_api.dart';
 import 'package:web3mq/src/api/web3mq_service.dart';
 import 'package:web3mq/src/client/client_state.dart';
 import 'package:web3mq/src/error/error.dart';
-import 'package:web3mq/src/ws/models/connection_status.dart';
-import 'package:web3mq/src/ws/models/event.dart';
-import 'package:web3mq/src/ws/models/user.dart';
-import 'package:web3mq/src/ws/websocket.dart';
+import 'package:web3mq_core/models.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 import 'mocks.dart';
 
@@ -40,7 +38,7 @@ class FakeClientState extends Fake implements ClientState {
 
 class FakeEvent extends Fake implements Event {}
 
-class FakeWebSocket extends Fake implements Web3MQWebSocket {
+class FakeWebSocket extends Fake implements Web3MQWebSocketManager {
   BehaviorSubject<ConnectionStatus>? _connectionStatusController;
 
   BehaviorSubject<ConnectionStatus> get connectionStatusController =>
@@ -62,7 +60,8 @@ class FakeWebSocket extends Fake implements Web3MQWebSocket {
   Completer<Event>? connectionCompleter;
 
   @override
-  Future<Event> connect(User user) async {
+  Future<Event> connect(WebSocketUser user,
+      {ConnectMode mode = ConnectMode.normal}) async {
     connectionStatus = ConnectionStatus.connecting;
     final event = Event(EventType.connectionChanged);
     connectionCompleter = Completer()..complete(event);
@@ -79,7 +78,8 @@ class FakeWebSocket extends Fake implements Web3MQWebSocket {
   }
 }
 
-class FakeWebSocketWithConnectionError extends Fake implements Web3MQWebSocket {
+class FakeWebSocketWithConnectionError extends Fake
+    implements Web3MQWebSocketManager {
   BehaviorSubject<ConnectionStatus>? _connectionStatusController;
 
   BehaviorSubject<ConnectionStatus> get connectionStatusController =>
@@ -101,7 +101,8 @@ class FakeWebSocketWithConnectionError extends Fake implements Web3MQWebSocket {
   Completer<Event>? connectionCompleter;
 
   @override
-  Future<Event> connect(User user) async {
+  Future<Event> connect(WebSocketUser user,
+      {ConnectMode mode = ConnectMode.normal}) async {
     connectionStatus = ConnectionStatus.connecting;
     const error = Web3MQWebSocketError('Error Connecting');
     connectionCompleter = Completer()..completeError(error);

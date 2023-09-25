@@ -12,6 +12,24 @@ class KeyPair {
   ///
   KeyPair(this.privateKey);
 
+  /// Generate a new key pair.
+  static Future<KeyPair> generate() async {
+    final keypair = await Ed25519().newKeyPair();
+    final privateKey = await keypair.extractPrivateKeyBytes();
+    return KeyPair(Uint8List.fromList(privateKey));
+  }
+
+  /// Generate a new key pair from a private key.
+  factory KeyPair.fromPrivateKey(Uint8List privateKey) {
+    return KeyPair(privateKey);
+  }
+
+  /// Generate a new key pair from a private key hex string.
+  factory KeyPair.fromPrivateKeyHex(String privateKeyHex) {
+    final privateKey = hex.decode(privateKeyHex);
+    return KeyPair(Uint8List.fromList(privateKey));
+  }
+
   Future<List<int>> sign(List<int> raw) async {
     final algorithm = Ed25519();
     final keyPair = await _keyPairFromPrivateKey(privateKey);

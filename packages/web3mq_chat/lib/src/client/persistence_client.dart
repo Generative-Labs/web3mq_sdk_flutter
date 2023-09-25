@@ -1,4 +1,4 @@
-import 'package:web3mq/src/ws/models/event.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 import '../api/responses.dart';
 import '../models/channel_state.dart';

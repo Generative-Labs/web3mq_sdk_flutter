@@ -2,14 +2,12 @@ import 'dart:async';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
-import 'package:web3mq/src/error/error.dart';
-import 'package:web3mq/src/utils/signer.dart';
-import 'package:web3mq/src/ws/models/buffer_convertible.dart';
-import 'package:web3mq/src/ws/models/connection_status.dart';
-import 'package:web3mq/src/ws/models/pb/connect.pb.dart';
-import 'package:web3mq/src/ws/models/user.dart';
-import 'package:web3mq/src/ws/websocket.dart';
+import 'package:web3mq/web3mq.dart';
+
+import 'package:web3mq_websocket/web3mq_websocket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web3mq_websocket/src/models/pb/connect.pb.dart';
+import 'package:web3mq_websocket/src/models/buffer_convertible.dart';
 
 import 'mocks.dart';
 
@@ -17,11 +15,10 @@ void main() {
   group('A group of websocket tests', () {
     late WebSocketChannel webSocketChannel;
     late WebSocketSink webSocketSink;
-    late Web3MQWebSocket webSocket;
-    late Signer signer;
+    late Web3MQWebSocketManager webSocket;
 
     setUp(() async {
-      signer = MockSigner();
+      // signer = MockSigner();
 
       webSocketChannel = MockWebSocketChannel();
 
@@ -31,10 +28,9 @@ void main() {
       }) =>
           webSocketChannel;
 
-      webSocket = Web3MQWebSocket(
-        apiKey: 'api-key',
+      webSocket = Web3MQWebSocketManager(
+        appKey: 'api-key',
         baseUrl: "base-url",
-        signer: signer,
         webSocketChannelProvider: channelProvider,
       );
 
@@ -61,7 +57,7 @@ void main() {
     });
 
     test('`connect` successfully with the provided user', () async {
-      final user = User("test-user", DID("type", "value"), "test-private-key");
+      final user = WebSocketUser("test-user", "test-private-key");
       const nodeId = 'test-node-id';
 
       final timer = Timer(const Duration(milliseconds: 300), () {
@@ -85,7 +81,7 @@ void main() {
 
     test('`connect`, `disconnect` and `connect` again without waiting',
         () async {
-      final user = User("test-user", DID("type", "value"), "test-private-key");
+      final user = WebSocketUser("test-user", "test-private-key");
       const nodeId = 'test-node-id';
 
       // Sends connect event to web-socket stream
@@ -109,8 +105,7 @@ void main() {
       'should `reconnect` automatically '
       'if `onMessage` throws error after getting connected',
       () async {
-        final user =
-            User("test-user", DID("type", "value"), "test-private-key");
+        final user = WebSocketUser("test-user", "test-private-key");
         const nodeId = 'test-node-id';
         // Sends connect event to web-socket stream
         final timer = Timer(const Duration(milliseconds: 300), () {

@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3mq/web3mq.dart';
+import 'package:web3mq_dapp_connect/dapp_connect.dart';
 
 class CacheHelper {
   static const String _userIdKey = "_userIdKey";

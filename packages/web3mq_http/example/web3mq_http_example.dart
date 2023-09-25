@@ -11,7 +11,7 @@ void main() async {
   // we strongly recommend that you use the web3mq package.
   // Once you have the login credential User, you can use the service like above
 
-  final aUser = User('userId', DID('type', 'value'), Uint8List.fromList([]));
+  final aUser = User('userId', DID('type', 'value'), 'session key');
   await service.connectUser(aUser);
 
   // fetch chats:

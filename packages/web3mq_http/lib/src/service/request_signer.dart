@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cryptography/cryptography.dart';
+import 'package:cryptography/cryptography.dart' as cry;
 import 'package:web3mq_core/models.dart';
 
 ///
@@ -56,12 +56,14 @@ class Web3MQRequestSigner implements RequestSigner {
     if (null == currentUser) {
       throw Web3MQError("User is not connected");
     }
-    final algorithm = Ed25519();
-    final keyPair = await algorithm.newKeyPairFromSeed(currentUser.privateKey);
+    final keyPair = KeyPair.fromPrivateKeyHex(currentUser.sessionKey);
+    final algorithm = cry.Ed25519();
+    final aNewkeyPair = await algorithm.newKeyPairFromSeed(keyPair.privateKey);
     DateTime time = DateTime.now();
     String raw =
         "${currentUser.userId}$parameter${time.millisecondsSinceEpoch}";
-    final signature = await algorithm.sign(utf8.encode(raw), keyPair: keyPair);
+    final signature =
+        await algorithm.sign(utf8.encode(raw), keyPair: aNewkeyPair);
     return Web3MQRequestSinedResult(
         base64Encode(signature.bytes), currentUser.userId, time);
   }

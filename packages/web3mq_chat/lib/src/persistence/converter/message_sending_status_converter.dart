@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
-
-import '../../ws/models/ws_message.dart';
+import 'package:web3mq_core/models.dart';
 
 /// Maps a [MessageSendingStatus] into a [int] understood
 /// by the sqlite backend.

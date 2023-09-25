@@ -39,35 +39,6 @@ class _HomePageState extends State<HomePage> {
       switch (event) {
         case ConnectionStatus.connected:
           _onChangeTitle("Connected");
-
-          // client
-          //     .createGroup('TestGroup3', null)
-          //     .then((value) => print(value.groupId));
-
-          // client
-          //     .leaveGroup('group:014768775382fef4acfe21e9c20e7ee19fbbda73')
-          //     .then((value) => null);
-
-          // client
-          //     .joinGroup('group:014768775382fef4acfe21e9c20e7ee19fbbda73')
-          //     .then((value) {});
-
-          // final address = client.state.currentUser?.did.value;
-          // final didType = client.state.currentUser?.did.type;
-
-          // client
-          //     .userWithDIDAndPassword(
-          //         client.state.currentUser!.did, '123123', const Duration(days: 7))
-          //     .then((value) => print('debug: user: ${value.toJson()}'));
-
-          // if (null != address && null != didType) {
-          //   client.userInfo(didType, address).then((value) {
-          //     print('debug:userInfo: ${value?.userId}');
-          //   }).catchError((e) {
-          //     print('debug:error:$e');
-          //   });
-          // }
-
           break;
         case ConnectionStatus.connecting:
           _onChangeTitle("Connecting");

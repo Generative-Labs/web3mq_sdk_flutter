@@ -1,4 +1,5 @@
-import '../../ws/models/event.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
+
 import '../db/drift_chat_database.dart';
 
 /// Useful mapping functions for [ConnectionEventEntity]

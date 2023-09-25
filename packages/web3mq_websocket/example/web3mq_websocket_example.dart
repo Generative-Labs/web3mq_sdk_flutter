@@ -1,7 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:web3mq_core/models.dart';
-import 'package:web3mq_websocket/src/websocket.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 void main() async {
   final websocket = Web3MQWebSocketManager(
@@ -20,8 +17,7 @@ void main() async {
   websocket.messageUpdateStream.listen((event) {});
 
   // replace with your own user
-  final user = User('userId', DID('type', 'value'), Uint8List.fromList([]));
-  await websocket.connect(user);
+  await websocket.connect(WebSocketUser('userId', 'sessionKey'));
   websocket.sendText('text', 'topic');
 
   websocket.sendText('text', 'topic',

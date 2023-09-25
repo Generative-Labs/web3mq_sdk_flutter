@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
+import 'package:web3mq_core/models.dart';
 
-import '../../ws/models/ws_message.dart';
 import '../converter/converter.dart';
 import '../dao/dao.dart';
 import '../entity/entity.dart';

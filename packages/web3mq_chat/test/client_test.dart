@@ -2,8 +2,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 import 'package:web3mq/src/client/client.dart';
 import 'package:web3mq/src/error/error.dart';
-import 'package:web3mq/src/ws/models/connection_status.dart';
-import 'package:web3mq/src/ws/models/user.dart';
+
+import 'package:web3mq_core/models.dart';
 
 import 'fakes.dart';
 import 'mocks.dart';
@@ -48,14 +48,14 @@ void main() {
   });
 
   group('Fake web-socket connection functions failure', () {
-    const apiKey = 'test-api-key';
+    const appKey = 'test-api-key';
     late final service = FakeService();
 
     late Web3MQClient client;
 
     setUp(() {
       final ws = FakeWebSocketWithConnectionError();
-      client = Web3MQClient(apiKey,
+      client = Web3MQClient(appKey,
           apiService: service, ws: ws, signer: MockSigner());
     });
 
@@ -100,32 +100,6 @@ void main() {
 
     test('Register an user', () async {
       client.walletConnector = MockWalletConnector();
-
-      // when(() => service.user.getGuestUser(any(that: isSameUserAs(user))))
-      //     .thenAnswer(
-      //       (_) async => ConnectGuestUserResponse()
-      //     ..user = user
-      //     ..accessToken = token,
-      // );
-
-      // when(() => service.user.getGuestUser(any(that: isSameUserAs(user))))
-      //     .thenAnswer(
-      //       (_) async => ConnectGuestUserResponse()
-      //     ..user = user
-      //     ..accessToken = token,
-      // );
-
-      // when(() => client.get(path, queryParameters: {
-      //   'payload': jsonEncode({
-      //     'presence': presence,
-      //     'sort': sort,
-      //     'filter_conditions': filter,
-      //     ...pagination.toJson(),
-      //   }),
-      // })).thenAnswer((_) async => successResponse(path, data: {
-      //   'users': [...users.map((it) => it.toJson())]
-      // }));
-
       final registerResult = await client.register(did, "password");
       expect(registerResult.did, did);
       // expect(registerResult.privateKey, isNotNull);

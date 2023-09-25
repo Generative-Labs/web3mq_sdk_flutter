@@ -1,7 +1,5 @@
-import 'package:web3mq_websocket/src/models/pb/message.pb.dart';
+import 'package:web3mq_core/models.dart';
 import 'package:web3mq_websocket/src/models/ws_models.dart';
-
-import 'notification.dart';
 
 class EventType {
   /// Indicates any type of events

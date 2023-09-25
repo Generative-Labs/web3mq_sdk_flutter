@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:web3mq/src/api/responses.dart';
 import 'package:web3mq/src/models/channel_state.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
+import 'package:web3mq_core/models.dart';
 
 import '../utils/signer.dart';
-import '../ws/models/pb/message.pb.dart';
-import '../ws/models/ws_models.dart';
+
 import 'client.dart';
 
 class ClientState {
@@ -296,7 +297,8 @@ class ClientState {
     if (null == user) {
       Web3MQClient.additionalHeaders = {};
     } else {
-      final publicHex = await user.publicKey;
+      final keyPair = KeyPair.fromPrivateKeyHex((user.sessionKey));
+      final publicHex = await keyPair.publicKeyHex;
       Web3MQClient.additionalHeaders = {
         "api-version": 2,
         "web3mq-request-pubkey": publicHex,

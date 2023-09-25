@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:mutex/mutex.dart';
+import 'package:web3mq_core/logger.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 import '../../web3mq.dart';
 import '../client/persistence_client.dart';
@@ -53,7 +55,8 @@ class Web3MQPersistenceClient extends PersistenceClient {
   bool get _debugIsConnected {
     assert(() {
       if (db == null) {
-        throw StateError('''
+        throw StateError(
+            '''
         $runtimeType hasn't been connected yet or used after `disconnect` 
         was called. Consider calling `connect` to create a connection. 
           ''');

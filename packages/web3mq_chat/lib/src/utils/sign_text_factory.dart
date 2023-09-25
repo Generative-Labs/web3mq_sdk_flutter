@@ -4,8 +4,7 @@ import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'package:pointycastle/api.dart';
 import 'package:web3mq/src/api/user_api.dart';
-
-import '../ws/models/user.dart';
+import 'package:web3mq_core/models.dart';
 
 ///
 class SignTextFactory {

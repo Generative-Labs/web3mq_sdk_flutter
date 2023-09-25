@@ -1,6 +1,6 @@
 name: web3mq_core
 description: a foundation package for web3mq flutter monorepo.
-version: 0.1.0-dev.1
+version: 0.1.0-dev.2
 homepage: https://www.web3mq.com
 
 environment:
@@ -11,6 +11,7 @@ dependencies:
   convert: ^3.1.1
   equatable: ^2.0.5
   cryptography: ^2.0.5
+  logging: ^1.1.0
 
 dev_dependencies:
   lints: ^2.0.0

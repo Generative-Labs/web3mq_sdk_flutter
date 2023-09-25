@@ -9,6 +9,6 @@ export 'src/api/responses.dart';
 export 'src/client/client.dart';
 export 'src/models/models.dart';
 export 'src/persistence/persistence_client.dart';
-export 'src/utils/wallet_connector.dart';
-export 'src/ws/models/ws_models.dart';
 export 'src/error/error.dart';
+export 'package:web3mq_core/web3mq_core.dart';
+export 'package:web3mq_websocket/web3mq_websocket.dart';

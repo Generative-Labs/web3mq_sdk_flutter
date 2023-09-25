@@ -12,7 +12,7 @@ Add this to your package's `pubspec.yaml` file, use the `latestversion`
 
 ```yaml
 dependencies:
-  web3mq: 0.1.2
+  web3mq: 0.1.3-dev.1
 ```
 
 You should then run `flutter packages get`

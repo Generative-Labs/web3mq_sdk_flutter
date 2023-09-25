@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:web3mq/web3mq.dart';
-import 'package:web3mq_sdk_flutter_demo/tests_page.dart';
+import 'package:web3mq_dapp_connect/dapp_connect.dart';
+import 'package:web3mq_sdk_flutter_demo/inner_wallet_connector.dart';
 
 import 'cache.dart';
-import 'demo_app_wallet_connector.dart';
-
-// group:ab0710a42f94b4613d02cb5bd165aa69843d9ed5”
-// testnet: https://testnet-ap-singapore-1.web3mq.com
-// dev: 'https://dev-us-west-2.web3mq.com'
+import 'connect_wallet_page.dart';
+import 'home_page.dart';
 
 /// A `Web3MQ` shared client.
-/// eKsEePNSVXTaBLRy
 final client = Web3MQClient("eKsEePNSVXTaBLRy", baseURL: DevEndpoint.sg1);
 
 final dappConnectClient = DappConnectClient(
@@ -23,10 +20,18 @@ User? _currentUser;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  client.persistenceClient = Web3MQPersistenceClient();
-  client.walletConnector = DemoAppWalletConnector();
+  // The `InnerWalletConnector` is a wallet connector for the demo app,
+  // which handles the `personal_sign` request by it self.
+  //
+  // If you want to use a different wallet to handle signatures, you can use
+  // the `DemoAppWalletConnector`, which will launch other wallets on your device
+  // that support the *DappConnect protocol* via Deep Link.
+  // You can also customize your own implementation by implementing the
+  // `WalletConnector` interface, such as changing it to call MetaMask.
+  //
+  client.walletConnector = InnerWalletConnector();
   _currentUser = await CacheHelper.loadUser();
-  // dappConnectClient.connectUser();
+  dappConnectClient.connectUser();
   runApp(MyApp(client: client));
 }
 
@@ -45,10 +50,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const TestsPage(),
-      // _currentUser != null
-      // ? HomePage(user: _currentUser!)
-      // : const ConnectWalletPage(title: 'Web3MQ SDK Demo App'),
+      home: _currentUser != null
+          ? HomePage(user: _currentUser!)
+          : const ConnectWalletPage(title: 'Web3MQ SDK Demo App'),
     );
   }
 }

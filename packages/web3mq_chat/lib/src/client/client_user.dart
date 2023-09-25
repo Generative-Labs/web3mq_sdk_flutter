@@ -76,11 +76,11 @@ extension UserExtension on Web3MQClient {
       {String? userId}) async {
     final theUserId = userId ?? await _getOrGenerateUserId(did.type, did.value);
     final mainPrivateKeyBytes = hex.decode(privateKey);
-    final keyPair = await Ed25519().newKeyPairFromSeed(mainPrivateKeyBytes);
+    final keyPair = await cry.Ed25519().newKeyPairFromSeed(mainPrivateKeyBytes);
     final mainPublicKey = await keyPair.extractPublicKey();
     final mainPublicKeyHex = hex.encode(mainPublicKey.bytes);
 
-    final tempKeyPair = await Ed25519().newKeyPair();
+    final tempKeyPair = await cry.Ed25519().newKeyPair();
     final tempPublicKey = await tempKeyPair.extractPublicKey();
     final tempPublicKeyHex = hex.encode(tempPublicKey.bytes);
 
@@ -97,8 +97,8 @@ extension UserExtension on Web3MQClient {
         sha224.process(Uint8List.fromList(signatureRawBytes));
     final signatureContent = hex.encode(signatureContentHash);
 
-    final signatureObject =
-        await Ed25519().sign(utf8.encode(signatureContent), keyPair: keyPair);
+    final signatureObject = await cry.Ed25519()
+        .sign(utf8.encode(signatureContent), keyPair: keyPair);
     final signature = base64Encode(signatureObject.bytes);
 
     final response = await _service.user.login(
@@ -135,17 +135,19 @@ extension UserExtension on Web3MQClient {
     }
 
     final privateKey = await storage.getSigningKeyByAddress(address);
-    final keyPair = await Ed25519().newKeyPairFromSeed(hex.decode(privateKey));
+    final keyPair =
+        await cry.Ed25519().newKeyPairFromSeed(hex.decode(privateKey));
     final publicKey = await keyPair.extractPublicKey();
     final publicKeyHex = hex.encode(publicKey.bytes);
 
-    final acknowledgement = '''
+    final acknowledgement =
+        '''
 I authorize CyberConnect from this device using signing key:
 ''';
 
     final message = '$acknowledgement$publicKeyHex';
     final signature =
-        await Ed25519().sign(utf8.encode(message), keyPair: keyPair);
+        await cry.Ed25519().sign(utf8.encode(message), keyPair: keyPair);
     final signatureHex = hex.encode(signature.bytes);
 
     final status = await _cyberService!.connection
@@ -161,7 +163,8 @@ I authorize CyberConnect from this device using signing key:
 
   Future<String> generateUserIdByDid(DID did) async {
     final bytes = utf8.encode('${did.type}:${did.value}');
-    final sha224Bytes = await Sha224().hash(bytes).then((value) => value.bytes);
+    final sha224Bytes =
+        await cry.Sha224().hash(bytes).then((value) => value.bytes);
     return "user:${hex.encode(sha224Bytes)}";
   }
 
@@ -179,7 +182,7 @@ I authorize CyberConnect from this device using signing key:
     final privateKeyHex = await retrievePrivateKey(did, password);
 
     final keyPair =
-        await Ed25519().newKeyPairFromSeed(hex.decode(privateKeyHex));
+        await cry.Ed25519().newKeyPairFromSeed(hex.decode(privateKeyHex));
     final publicKey = await keyPair.extractPublicKey();
     final publicKeyHex = hex.encode(publicKey.bytes);
     final theUserId = userId ?? await _getOrGenerateUserId(didType, didValue);
@@ -262,7 +265,7 @@ I authorize CyberConnect from this device using signing key:
   }
 
   Future<String> _getPrivateKeyBySignature(String signature) async {
-    final hashed = await Sha256().hash(utf8.encode(signature));
+    final hashed = await cry.Sha256().hash(utf8.encode(signature));
     return hex.encode(hashed.bytes);
   }
 

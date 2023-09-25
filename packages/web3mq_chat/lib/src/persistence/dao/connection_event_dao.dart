@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:web3mq/src/persistence/entity/connection_events.dart';
 import 'package:web3mq/src/persistence/mapper/event_mapper.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
 
-import '../../ws/models/event.dart';
 import '../db/drift_chat_database.dart';
 
 part 'connection_event_dao.g.dart';

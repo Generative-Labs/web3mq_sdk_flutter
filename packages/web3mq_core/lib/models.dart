@@ -4,3 +4,6 @@ export 'src/models/error.dart';
 export 'src/models/message_sending_status.dart';
 export 'src/models/user.dart';
 export 'src/models/key_pair.dart';
+export 'src/models/accounts.dart';
+export 'src/models/connection_status.dart';
+export 'src/models/wallet_connector.dart';

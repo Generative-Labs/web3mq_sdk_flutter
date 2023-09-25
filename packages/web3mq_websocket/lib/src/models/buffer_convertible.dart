@@ -13,7 +13,9 @@ enum WSCommandType {
   messageSendingStatusUpdate(code: 21),
   messageStatusUpdate(code: 22),
   ping(code: 128),
-  pong(code: 129);
+  pong(code: 129),
+  bridgeConnectRequest(code: 100),
+  bridgeConnectResponse(code: 101);
 
   const WSCommandType({
     required this.code,
@@ -39,6 +41,10 @@ enum WSCommandType {
         return WSCommandType.ping;
       case 129:
         return WSCommandType.pong;
+      case 100:
+        return WSCommandType.bridgeConnectRequest;
+      case 101:
+        return WSCommandType.bridgeConnectResponse;
       default:
         throw Web3MQError("Invalid command code");
     }

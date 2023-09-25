@@ -4,3 +4,4 @@
 library web3mq_core;
 
 export 'models.dart';
+export 'logger.dart';

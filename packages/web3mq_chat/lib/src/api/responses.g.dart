@@ -207,33 +207,6 @@ Map<String, dynamic> _$MemberToJson(Member instance) => <String, dynamic>{
       'updatedAt': readonly(instance.updatedAt),
     };
 
-Notification _$NotificationFromJson(Map<String, dynamic> json) => Notification(
-      json['messageId'] as String,
-      (json['payload'] as List<dynamic>).map((e) => e as int).toList(),
-      json['payloadType'] as String,
-      json['comeFrom'] as String,
-      json['fromSign'] as String,
-      json['cipherSuite'] as String,
-      json['timestamp'] as int,
-      json['read'] as bool?,
-      json['readTimestamp'] as int?,
-      json['contentTopic'] as String,
-    );
-
-Map<String, dynamic> _$NotificationToJson(Notification instance) =>
-    <String, dynamic>{
-      'messageId': instance.id,
-      'payload': instance.payload,
-      'payloadType': instance.payloadType,
-      'comeFrom': instance.userId,
-      'fromSign': instance.signature,
-      'contentTopic': instance.topicId,
-      'cipherSuite': instance.cipherSuite,
-      'timestamp': instance.timestamp,
-      'read': instance.read,
-      'readTimestamp': instance.readTimestamp,
-    };
-
 MessageStatus _$MessageStatusFromJson(Map<String, dynamic> json) =>
     MessageStatus(
       json['status'] as String?,

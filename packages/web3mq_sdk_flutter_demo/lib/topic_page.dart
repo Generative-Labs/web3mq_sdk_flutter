@@ -97,6 +97,7 @@ class _TopicPageState extends State<TopicPage> {
     final topic = await client.createTopic(topicName);
     await client.subscribeTopic(topic.topicId);
     _showSnackBar("Create topic success!");
+    await _loadSubscribeTopics();
   }
 
   String? _selectTopicId;

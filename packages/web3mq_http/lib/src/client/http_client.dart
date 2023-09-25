@@ -49,7 +49,7 @@ class Web3MQHttpClient {
   }
 
   Future<void> connectUser(User user) async {
-    final keyPair = KeyPair(user.privateKey);
+    final keyPair = KeyPair.fromPrivateKeyHex(user.sessionKey);
     final publicKeyHex = await keyPair.publicKeyHex;
     _additionalHeadersInterceptor.additionalHeaders = {
       "api-version": 2,

@@ -6,18 +6,6 @@ import 'package:web3mq_websocket/src/models/pb/message.pb.dart';
 
 import 'buffer_convertible.dart';
 
-/// Enum defining the status of a sending message.
-enum MessageSendingStatus {
-  /// Message is being sent
-  sending,
-
-  /// Message failed to send
-  failed,
-
-  /// Message correctly sent
-  sent,
-}
-
 ///
 class WSPayloadType {
   /// `text/plain; charset=utf-8`
@@ -34,6 +22,18 @@ class MessageType {
 
   ///
   static const String thread = 'Web3MQ/thread';
+
+  ///
+  static const String bridge = 'Web3MQ/bridge';
+}
+
+///
+class CipherSuit {
+  /// NONE
+  static const String none = 'NONE';
+
+  /// X25519/AES-GCM_SHA384
+  static const String x25519 = 'X25519/AES-GCM_SHA384';
 }
 
 /// This message is for websocket.

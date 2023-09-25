@@ -2,25 +2,10 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
-import 'package:equatable/equatable.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web3mq_core/models.dart';
 
 import '../api/responses.dart';
-
-/// Base error class.
-class Web3MQError with EquatableMixin implements Exception {
-  ///
-  const Web3MQError(this.message);
-
-  /// Error message
-  final String message;
-
-  @override
-  List<Object?> get props => [message];
-
-  @override
-  String toString() => 'Web3MQError(message: $message)';
-}
 
 /// Error when contacts request failed.
 class Web3MQContactsError extends Web3MQError {

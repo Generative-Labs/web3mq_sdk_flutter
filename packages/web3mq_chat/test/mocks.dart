@@ -1,15 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:fixnum/fixnum.dart';
-import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:web3mq/src/api/notification_api.dart';
 import 'package:web3mq/src/api/user_api.dart';
 import 'package:web3mq/src/client/client.dart';
 import 'package:web3mq/src/http/http_client.dart';
 import 'package:web3mq/src/utils/signer.dart';
-import 'package:web3mq/src/utils/wallet_connector.dart';
-import 'package:web3mq/src/ws/models/user.dart';
-import 'package:web3mq/src/ws/websocket.dart';
+import 'package:web3mq_core/src/models/wallet_connector.dart';
+import 'package:web3mq_core/logger.dart';
+
+import 'package:web3mq_core/models.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class MockDio extends Mock implements Dio {
@@ -37,7 +38,7 @@ class MockUserApi extends Mock implements UserApi {}
 
 class MockClient extends Mock implements Web3MQClient {}
 
-class MockWebSocket extends Mock implements Web3MQWebSocket {}
+class MockWebSocket extends Mock implements Web3MQWebSocketManager {}
 
 class MockWebSocketChannel extends Mock implements WebSocketChannel {}
 

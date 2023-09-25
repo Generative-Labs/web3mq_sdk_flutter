@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:uni_links/uni_links.dart';
-import 'package:web3mq/web3mq.dart';
+import 'package:web3mq_dapp_connect/dapp_connect.dart';
 import 'package:web3mq_sdk_demoapp_wallet/request_modal.dart';
 import 'package:web3mq_sdk_demoapp_wallet/scan_page.dart';
 

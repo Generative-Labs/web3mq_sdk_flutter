@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:web3mq/src/models/cyber_user_follow_status.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
+import 'package:web3mq_core/models.dart';
 
 import '../models/channel_state.dart';
 import '../models/cyber_profile.dart';
 import '../utils/serializer.dart';
-import '../ws/models/pb/message.pb.dart';
-import '../ws/models/ws_message.dart';
 
 part 'responses.g.dart';
 
@@ -489,80 +489,6 @@ class Member extends Equatable {
 
   /// Create a new instance from a json
   factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);
-}
-
-@JsonSerializable()
-class Notification {
-  @JsonKey(name: "messageId")
-  final String id;
-
-  ///
-  final List<int> payload;
-
-  /// The type of [payload].
-  ///
-  /// When payload is encode from json object, it should be [WSPayloadType.json],
-  /// as payload is encode from text, it should be [WSPayloadType.plainText].
-  final String payloadType;
-
-  /// User id who send this message.
-  @JsonKey(name: "comeFrom")
-  final String userId;
-
-  ///
-  @JsonKey(name: "fromSign")
-  final String signature;
-
-  @JsonKey(name: "contentTopic")
-  final String topicId;
-
-  ///
-  final String cipherSuite;
-
-  ///
-  final int timestamp;
-
-  ///
-  final bool? read;
-
-  ///
-  final int? readTimestamp;
-
-  Notification(
-      this.id,
-      this.payload,
-      this.payloadType,
-      this.userId,
-      this.signature,
-      this.cipherSuite,
-      this.timestamp,
-      this.read,
-      this.readTimestamp,
-      this.topicId);
-
-  /// Create a new instance from a json
-  static Notification fromJson(Map<String, dynamic> json) =>
-      _$NotificationFromJson(json);
-
-  /// Serialize to json
-  Map<String, dynamic> toJson() => _$NotificationToJson(this);
-
-  factory Notification.fromMessageItem(MessageItem item) {
-    final map = {
-      "messageId": item.messageId,
-      "version": item.version,
-      "payload": item.payload,
-      "payloadType": item.payloadType,
-      "comeFrom": item.comeFrom,
-      "fromSign": item.fromSign,
-      "contentTopic": item.contentTopic,
-      "cipherSuite": item.cipherSuite,
-      "timestamp": item.timestamp.toInt(),
-      "read": item.read,
-      "readTimestamp": item.readTimestamp.toInt()
-    };
-    return fromJson(map);
-  }
 }
 
 ///

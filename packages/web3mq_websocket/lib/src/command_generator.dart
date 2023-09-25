@@ -35,4 +35,14 @@ class WebSocketMessageGenerator {
     final signature = await signer.sign(raw, privateKey);
     return ConnectRequestMessage(nodeId, userId, ts, signature);
   }
+
+  ///
+  static Future<BridgeConnectRequestMessage> bridgeCommandMessage(String appKey,
+      String userId, Uint8List privateKey, MessageSinger signer) async {
+    final nodeId = "nodeId";
+    final ts = Int64(DateTime.now().millisecondsSinceEpoch);
+    final raw = "$nodeId$userId$ts";
+    final signature = await signer.sign(raw, privateKey);
+    return BridgeConnectRequestMessage(nodeId, appKey, userId, ts, signature);
+  }
 }

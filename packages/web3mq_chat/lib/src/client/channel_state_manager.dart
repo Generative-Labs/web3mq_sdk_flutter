@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:web3mq/src/ws/models/pb/message.pb.dart';
 import 'package:web3mq/web3mq.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
+import 'package:web3mq_core/models.dart';
 
 /// The [ChannelStateManager] class is responsible for managing the state
 /// associated with a specific channel, such as messages, unread message count,

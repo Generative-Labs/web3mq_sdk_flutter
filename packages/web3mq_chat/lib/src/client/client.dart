@@ -3,35 +3,31 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:convert/convert.dart';
-import 'package:cryptography/cryptography.dart';
+import 'package:cryptography/cryptography.dart' as cry;
 import 'package:intl/intl.dart';
 import 'package:pointycastle/api.dart' as pointycastle;
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/rxdart.dart' as rx;
 import 'package:web3mq/src/api/contacts.api.dart';
 import 'package:web3mq/src/api/cyber_service.dart';
 import 'package:web3mq/src/api/requests.dart';
-import 'package:web3mq/src/api/responses.dart' as web3mq;
 import 'package:web3mq/src/api/user_api.dart';
 import 'package:web3mq/src/api/web3mq_service.dart';
 import 'package:web3mq/src/client/persistence_client.dart';
 import 'package:web3mq/src/error/error.dart';
-import 'package:web3mq/src/models/accounts.dart';
 import 'package:web3mq/src/models/channel_state.dart';
 import 'package:web3mq/src/models/cyber_user_follow_status.dart';
 import 'package:web3mq/src/utils/cyber_signing_key_storage.dart';
 import 'package:web3mq/src/utils/sign_text_factory.dart';
 import 'package:web3mq/src/utils/utils.dart';
-import 'package:web3mq/src/ws/models/pb/message.pb.dart';
-import 'package:web3mq/src/ws/models/ws_models.dart';
-import 'package:web3mq/src/ws/websocket.dart';
+
+import 'package:web3mq_core/web3mq_core.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 import '../api/responses.dart';
 import '../http/http_client.dart';
 import '../models/cyber_profile.dart';
 import '../models/pagination.dart';
-import '../utils/logger.dart';
 import '../utils/signer.dart';
-import '../utils/wallet_connector.dart';
 import 'client_state.dart';
 
 part 'client_chat.dart';
@@ -40,16 +36,6 @@ part 'client_group.dart';
 part 'client_notification.dart';
 part 'client_topic.dart';
 part 'client_user.dart';
-
-// /// Handler function used for logging records. Function requires a single
-// /// [LogRecord] as the only parameter.
-// typedef LogHandlerFunction = void Function(LogRecord record);
-
-// final _levelEmojiMapper = {
-//   Level.INFO: 'ℹ️',
-//   Level.WARNING: '⚠️',
-//   Level.SEVERE: '🚨',
-// };
 
 class Web3MQClient {
   Web3MQClient(String apiKey,
@@ -60,7 +46,7 @@ class Web3MQClient {
       Duration receiveTimeout = const Duration(seconds: 15),
       Web3MQService? apiService,
       CyberService? cyberService,
-      Web3MQWebSocket? ws,
+      Web3MQWebSocketManager? ws,
       Signer? signer,
       WalletConnector? wc}) {
     logger.info('Initiating new Client');
@@ -80,10 +66,8 @@ class Web3MQClient {
     _cyberService = cyberService;
 
     _ws = ws ??
-        Web3MQWebSocket(
-          apiKey: apiKey,
+        Web3MQWebSocketManager(
           baseUrl: options.baseUrl,
-          handler: handleEvent,
           logger: detachedLogger('🔌'),
         );
 
@@ -100,7 +84,7 @@ class Web3MQClient {
 
   /// By default the Chat client will write all messages with level Warn or
   /// Error to stdout.
-  late final Web3MQWebSocket _ws;
+  late final Web3MQWebSocketManager _ws;
 
   ///
   late final Web3MQService _service;
@@ -135,7 +119,7 @@ class Web3MQClient {
     _originalPersistenceClient = value;
   }
 
-  final _eventController = BehaviorSubject<Event>();
+  final _eventController = rx.BehaviorSubject<Event>();
 
   /// Stream of [Event] coming from [_ws] connection
   /// Listen to this or use the [on] method to filter specific event types
@@ -166,13 +150,13 @@ class Web3MQClient {
     _eventController.add(event);
   }
 
-  final _notificationController = BehaviorSubject<List<web3mq.Notification>>();
+  final _notificationController = rx.BehaviorSubject<List<Notification>>();
 
   ///
-  Stream<List<web3mq.Notification>> get notificationStream =>
+  Stream<List<Notification>> get notificationStream =>
       _notificationController.stream;
 
-  final _newMessageController = BehaviorSubject<Message>();
+  final _newMessageController = rx.BehaviorSubject<Message>();
 
   /// Stream of new messages.
   Stream<Message> get newMessageStream => _newMessageController.stream;
@@ -180,7 +164,7 @@ class Web3MQClient {
   StreamSubscription<ConnectionStatus>? _connectionStatusSubscription;
 
   final _wsConnectionStatusController =
-      BehaviorSubject.seeded(ConnectionStatus.disconnected);
+      rx.BehaviorSubject.seeded(ConnectionStatus.disconnected);
 
   set _wsConnectionStatus(ConnectionStatus status) =>
       _wsConnectionStatusController.add(status);
@@ -280,7 +264,7 @@ class Web3MQClient {
         _ws.connectionStatusStream.skip(1).listen(_connectionStatusHandler);
 
     try {
-      await _ws.connect(user);
+      await _ws.connect(WebSocketUser(user.userId, user.sessionKey));
 
       // Start listening to events
       state.subscribeToEvents();
