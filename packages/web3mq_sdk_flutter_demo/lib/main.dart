@@ -8,11 +8,11 @@ import 'connect_wallet_page.dart';
 import 'home_page.dart';
 
 /// A `Web3MQ` shared client.
-final client = Web3MQClient("eKsEePNSVXTaBLRy", baseURL: DevEndpoint.sg1);
+final client = Web3MQClient("eKsEePNSVXTaBLRy", baseURL: DevEndpoint.jp1);
 
 final dappConnectClient = DappConnectClient(
     'eKsEePNSVXTaBLRy',
-    baseURL: DevEndpoint.sg1,
+    baseURL: DevEndpoint.jp1,
     AppMetadata('Dapp', 'for dapp testing', 'web3mq.com', const ['https://url'],
         'web3mqdemo://'));
 

@@ -43,35 +43,12 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
 
     // fetches messages from server
     client
-        .queryMessagesByTopic(
-            widget.topicId, TimestampPagination(timestampBefore: 0, limit: 20))
+        .queryMessagesByTopic(widget.topicId, TimestampPagination(limit: 20))
         .then((value) {
       final result = value.result;
       _onMessagesUpdate(result);
       _markAllMessagesRead(result);
     });
-
-    // client.leaveGroup('group:4f900a7eeb0cccdfd1b52f4adc6bc436e8f1ad98');
-
-    // client.groups().then((value) => print(value));
-
-    // client
-    //     .groupInfo('group:e52492d0e3c8f67ba3b5c7f589db7f656e4c814c')
-    //     .then((value) => print(value));
-
-    // client.groups().then((value) => print(value));
-
-    // client
-    //     .createGroup('test-group-02', null, permission: GroupPermission.public)
-    //     .then((value) => print(value));
-
-    // // load messages by remote
-    // client
-    //     .queryMessagesByTopic(
-    //         widget.topicId, const Pagination(page: 1, size: 100),
-    //         threadId: widget.threadId)
-    //     .then((value) => _onMessagesUpdate(value.result.reversed.toList()));
-    // mark all messags read
 
     _listenMessages();
     _listenMessageUpdated();

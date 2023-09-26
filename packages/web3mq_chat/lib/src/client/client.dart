@@ -163,6 +163,12 @@ class Web3MQClient {
 
   StreamSubscription<ConnectionStatus>? _connectionStatusSubscription;
 
+  StreamSubscription<Web3MQRequestMessage>? _messageSubscription;
+
+  StreamSubscription<Web3MQMessageStatusResp>? _messageUpdateSubscription;
+
+  StreamSubscription<Web3MQMessageListResponse>? _notificationSubscription;
+
   final _wsConnectionStatusController =
       rx.BehaviorSubject.seeded(ConnectionStatus.disconnected);
 
@@ -263,6 +269,14 @@ class Web3MQClient {
     _connectionStatusSubscription =
         _ws.connectionStatusStream.skip(1).listen(_connectionStatusHandler);
 
+    _messageSubscription = _ws.messageStream.listen(_newMessageHandler);
+
+    _messageUpdateSubscription =
+        _ws.messageUpdateStream.listen(_messageUpdateHandler);
+
+    _notificationSubscription =
+        _ws.notificationStream.listen(_notificationHandler);
+
     try {
       await _ws.connect(WebSocketUser(user.userId, user.sessionKey));
 
@@ -291,10 +305,38 @@ class Web3MQClient {
     _connectionStatusSubscription?.cancel();
     _connectionStatusSubscription = null;
 
+    _messageSubscription?.cancel();
+    _messageSubscription = null;
+
+    _messageUpdateSubscription?.cancel();
+    _messageUpdateSubscription = null;
+
+    _notificationSubscription?.cancel();
+    _notificationSubscription = null;
+
     // Stop listening to events
     state.cancelEventSubscription();
 
     _ws.disconnect();
+  }
+
+  void _newMessageHandler(Web3MQRequestMessage message) {
+    if (message.contentTopic.contains('user:') &&
+        message.comeFrom != state.currentUser?.userId) {
+      message.contentTopic = message.comeFrom;
+    }
+    final event = Event.fromChatMessage(message);
+    handleEvent(event);
+  }
+
+  void _messageUpdateHandler(Web3MQMessageStatusResp message) {
+    final event = Event.fromMessageUpdating(message);
+    handleEvent(event);
+  }
+
+  void _notificationHandler(Web3MQMessageListResponse message) {
+    final event = Event.fromNotification(message);
+    handleEvent(event);
   }
 
   void _connectionStatusHandler(ConnectionStatus status) async {

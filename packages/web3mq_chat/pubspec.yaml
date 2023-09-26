@@ -1,7 +1,7 @@
 name: web3mq
 description: Provides a modern way of implementing Web3MQ APIs. Web3MQ is the fastest and most scalable social Layer 1 & messaging network.
 
-version: 0.1.3-dev.1
+version: 0.1.3-dev.2
 homepage: https://www.web3mq.com
 repository: https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_chat
 issue_tracker: https://github.com/Generative-Labs/web3mq_sdk_flutter/issues
@@ -36,7 +36,7 @@ dependencies:
   adaptive_number: ^1.0.0
   http_parser: ^4.0.2
   web3mq_core: ^0.1.0-dev.2
-  web3mq_websocket: ^0.1.0-dev.1
+  web3mq_websocket: ^0.1.0-dev.2
 
 dev_dependencies:
   lints: ^2.0.0

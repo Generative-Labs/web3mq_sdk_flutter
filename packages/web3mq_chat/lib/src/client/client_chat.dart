@@ -22,17 +22,10 @@ extension ClientChat on Web3MQClient {
     final page = await _service.chat.queryChannels(paginationParams);
     final channels = page.result;
 
-    final persistenceClient = _persistenceClient;
-    if (null == persistenceClient) {
-      return channels
-          .map((e) => ChannelState(channel: e, messages: []))
-          .toList();
-    }
-
     List<ChannelState> states = [];
     for (final channel in channels) {
-      final aState =
-          await persistenceClient.getChannelStateByChannelId(channel.channelId);
+      final aState = await _persistenceClient
+          ?.getChannelStateByChannelId(channel.channelId);
       if (aState != null) {
         states.add(aState.copyWith(channel: channel));
       } else {
@@ -42,10 +35,16 @@ extension ClientChat on Web3MQClient {
 
     final updateData = _mapChannelStateToChannelModel(states, state.channels);
     persistenceClient
-        .updateChannelQueries(channels.map((e) => e.topic).toList());
-    persistenceClient.updateChannels(channels);
+        ?.updateChannelQueries(channels.map((e) => e.topic).toList());
+    persistenceClient?.updateChannels(channels);
     state.addChannels(updateData.key);
-    return updateData.value;
+    if (null == _persistenceClient) {
+      return channels
+          .map((e) => ChannelState(channel: e, messages: []))
+          .toList();
+    } else {
+      return updateData.value;
+    }
   }
 
   /// Fetches the list of channel states from local database or server

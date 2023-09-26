@@ -30,26 +30,10 @@ class _ChatsPageState extends State<ChatsPage> {
 
   void _onChannelListUpdate(List<ChannelState> list) {
     if (!mounted) return;
-    _createNewChatIfNeeded(list);
+    print("debug:_onChannelListUpdate:${list.length}");
     setState(() {
       _channels = list;
     });
-  }
-
-  void _createNewChatIfNeeded(List<ChannelState> list) {
-    for (final channel in list) {
-      if (!_channels.any((c) => c.channel.topic == channel.channel.topic)) {
-        _createChat(channel);
-      }
-    }
-  }
-
-  void _createChat(ChannelState channelState) {
-    client.addChannel(
-        channelState.channel.topic,
-        channelState.channel.topicType,
-        channelState.channel.channelId,
-        channelState.channel.channelType);
   }
 
   void _listenChannels() {
@@ -70,6 +54,7 @@ class _ChatsPageState extends State<ChatsPage> {
     });
 
     client.fetchChannels().listen((event) {
+      print("debug:fetchChannels:${event.length}");
       setState(() {
         _isLoading = false;
         _page++;

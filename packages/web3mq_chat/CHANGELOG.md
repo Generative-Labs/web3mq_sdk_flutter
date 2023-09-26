@@ -31,3 +31,7 @@
 ## 0.1.3-dev.1
 
 - adopt `web3mq_dapp_connect`.
+
+## 0.1.3-dev.2
+
+- fix the issue of channel list.

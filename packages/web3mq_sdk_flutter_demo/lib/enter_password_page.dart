@@ -29,8 +29,6 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscureText = true;
   String _password = '';
 
-  bool get _isButtonDisabled => _password.isEmpty;
-
   void _toggleObscureText() {
     setState(() {
       _obscureText = !_obscureText;
