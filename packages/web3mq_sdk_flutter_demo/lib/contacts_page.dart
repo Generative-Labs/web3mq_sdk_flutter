@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web3mq/web3mq.dart';
 
+import 'chat_page.dart';
 import 'main.dart';
 
 ///
@@ -115,6 +116,18 @@ class _ContactsPageState extends State<ContactsPage>
     );
   }
 
+  void _onTapUser(FollowUser user) {
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ChatPage(
+                topicId: user.userId,
+                title: user.userId,
+              )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,6 +154,9 @@ class _ContactsPageState extends State<ContactsPage>
                 itemBuilder: (context, index) {
                   final user = followings[index];
                   return ListTile(
+                      onTap: () {
+                        _onTapUser(user);
+                      },
                       title: Text(user.userId),
                       subtitle: Text(user.followStatus),
                       trailing: TextButton(
@@ -161,6 +177,9 @@ class _ContactsPageState extends State<ContactsPage>
                 itemBuilder: (context, index) {
                   final user = followers[index];
                   return ListTile(
+                      onTap: () {
+                        _onTapUser(user);
+                      },
                       title: Text(user.userId),
                       subtitle: Text(user.followStatus),
                       trailing: TextButton(
