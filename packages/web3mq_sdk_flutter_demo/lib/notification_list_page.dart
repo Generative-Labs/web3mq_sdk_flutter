@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web3mq/web3mq.dart';
 
 import 'main.dart';
+import 'utils/global_alert.dart';
 
 class NotificationListPage extends StatefulWidget {
   const NotificationListPage({super.key});
@@ -74,6 +75,14 @@ class _NotificationListPageState extends State<NotificationListPage> {
         NotificationType.all, const Pagination(page: 1, size: 30));
   }
 
+  Future<void> agreeFriendRequest(String userId) async {
+    try {
+      await client.follow(userId, null);
+    } catch (e) {
+      GlobalAlertDialog.showAlertDialog(context, e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,20 +96,18 @@ class _NotificationListPageState extends State<NotificationListPage> {
             return ListTile(
               title: Text(item.payload.title),
               subtitle: Text(item.payload.content),
-              trailing: Text(item.payload.timestamp.toIso8601String()),
+              trailing: item.payload.type ==
+                      NotificationType.receivedFriendRequest.value
+                  ? ElevatedButton(
+                      onPressed: () async {
+                        // Handle the "Agree" button click event here
+                        await agreeFriendRequest(item.from);
+                      },
+                      child: const Text("Agree"),
+                    )
+                  : null,
             );
           },
-        )
-        //  NotificationListener<ScrollNotification>(
-        //     onNotification: (scrollInfo) {
-        //       if (!_isLoading &&
-        //           scrollInfo.metrics.pixels ==
-        //               scrollInfo.metrics.maxScrollExtent) {
-        //         _getNotifications();
-        //       }
-        //       return true;
-        //     },
-        //     child: ) // This trailing comma makes auto-formatting nicer for build methods.
-        );
+        ));
   }
 }

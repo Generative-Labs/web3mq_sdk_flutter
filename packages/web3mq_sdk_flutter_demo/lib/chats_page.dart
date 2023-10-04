@@ -176,7 +176,6 @@ class _ChatsPageState extends State<ChatsPage> {
                               )),
                     );
                   },
-                  leading: Text(item.channel.unreadMessageCount.toString()),
                   title: Text(item.channel.name),
                   subtitle: Text(item.lastMessage?.text ?? ''),
                   trailing: Text(item.lastMessage?.timestamp.toString() ?? ''),
