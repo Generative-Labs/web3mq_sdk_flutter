@@ -66,8 +66,19 @@ extension UserExtension on Web3MQClient {
     return _getPrivateKeyBySignature(signature);
   }
 
+  /// Generates a SessionKey with its `DID` and password, also with an duration for expired.
+  /// You can connect that user by `client.connectUser(user)`
+  Future<User> generateSessionKeyWithPassword(
+      DID did, String password, Duration expiredDuration,
+      {String? userId}) async {
+    final privateKey = await retrievePrivateKey(did, password);
+    return await generateSessionKey(did, privateKey, expiredDuration,
+        userId: userId);
+  }
+
   /// Gets a user with its `DID` and password, also with an duration for expired.
   /// You can connect that user by `client.connectUser(user)`
+  @Deprecated("Use [generateSessionKeyWithPassword] instead")
   Future<User> userWithDIDAndPassword(
       DID did, String password, Duration expiredDuration,
       {String? userId}) async {
@@ -76,9 +87,7 @@ extension UserExtension on Web3MQClient {
         userId: userId);
   }
 
-  /// Gets a user with its `DID` and privateKey, also with an duration for expired.
-  /// You can connect that user by `client.connectUser(user)`
-  Future<User> userWithDIDAndPrivateKey(
+  Future<User> generateSessionKey(
       DID did, String privateKey, Duration expiredDuration,
       {String? userId}) async {
     final theUserId = userId ?? await _getOrGenerateUserId(did.type, did.value);
@@ -123,6 +132,14 @@ extension UserExtension on Web3MQClient {
     return User(response.userId, DID(response.didType, response.didValue),
         hex.encode(await tempKeyPair.extractPrivateKeyBytes()));
   }
+
+  /// Gets a user with its `DID` and privateKey, also with an duration for expired.
+  /// You can connect that user by `client.connectUser(user)`
+  @Deprecated("Use [generateSessionKey] instead")
+  Future<User> userWithDIDAndPrivateKey(
+          DID did, String privateKey, Duration expiredDuration,
+          {String? userId}) =>
+      generateSessionKey(did, privateKey, expiredDuration);
 
   /// Register cyber signing key
   Future<String> registerCyberSigningKey() async {
