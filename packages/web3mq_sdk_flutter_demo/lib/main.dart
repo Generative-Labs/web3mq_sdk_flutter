@@ -7,11 +7,15 @@ import 'cache.dart';
 import 'connect_wallet_page.dart';
 import 'home_page.dart';
 
-/// A `Web3MQ` shared client.
-final client = Web3MQClient("eKsEePNSVXTaBLRy", baseURL: DevEndpoint.jp1);
+/// Note: replace the `apiKey` with your own.
+const apiKey = '';
 
+/// A `Web3MQ` shared client.
+final client = Web3MQClient(apiKey, baseURL: TestnetEndpoint.us1);
+
+/// A `DappConnect` shared client.
 final dappConnectClient = DappConnectClient(
-    'eKsEePNSVXTaBLRy',
+    apiKey,
     baseURL: DevEndpoint.jp1,
     AppMetadata('Dapp', 'for dapp testing', 'web3mq.com', const ['https://url'],
         'web3mqdemo://'));
