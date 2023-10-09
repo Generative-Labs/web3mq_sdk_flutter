@@ -35,3 +35,7 @@
 ## 0.1.3-dev.2
 
 - fix the issue of channel list.
+
+## 0.1.3-dev.3
+
+- export `UtilsApi.dart`.
