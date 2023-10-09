@@ -108,6 +108,34 @@ extension ClientChat on Web3MQClient {
     return Message.fromProtobufMessage(chatMessage.message);
   }
 
+  /// Queries messages by user ID and pagination.
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// final pagination = TimestampPagination(limit: 10);
+  /// final page = await queryMessagesByUserId('my-topic', pagination);
+  /// final messages = page.result;
+  /// ```
+  Future<Page<Message>> queryMessagesByUserId(
+          String topic, TimestampPagination pagination,
+          {String? threadId}) =>
+      queryMessagesByTopic(topic, pagination, threadId: threadId);
+
+  /// Queries messages by group ID and pagination.
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// final pagination = TimestampPagination(limit: 10);
+  /// final page = await queryMessagesByGroupId('group-id', pagination);
+  /// final messages = page.result;
+  /// ```
+  Future<Page<Message>> queryMessagesByGroupId(
+          String groupId, TimestampPagination pagination,
+          {String? threadId}) =>
+      queryMessagesByTopic(groupId, pagination, threadId: threadId);
+
   /// Query for messages in local storage
   Future<List<Message>?> queryLocalMessagesByTopic(String topic) async {
     return await _persistenceClient?.getMessagesByTopic(topic);
