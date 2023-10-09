@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _listenConnectionStatus() {
-    client.wsConnectionStatusStream.listen((event) {
+    client.connectionStatusStream.listen((event) {
       switch (event) {
         case ConnectionStatus.connected:
           _onChangeTitle("Connected");

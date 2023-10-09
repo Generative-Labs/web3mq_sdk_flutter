@@ -169,20 +169,25 @@ class Web3MQClient {
 
   StreamSubscription<Web3MQMessageListResponse>? _notificationSubscription;
 
-  final _wsConnectionStatusController =
+  final _connectionStatusController =
       rx.BehaviorSubject.seeded(ConnectionStatus.disconnected);
 
   set _wsConnectionStatus(ConnectionStatus status) =>
-      _wsConnectionStatusController.add(status);
+      _connectionStatusController.add(status);
 
   /// The current status value of the [_ws] connection
-  ConnectionStatus get wsConnectionStatus =>
-      _wsConnectionStatusController.value;
+  ConnectionStatus get wsConnectionStatus => _connectionStatusController.value;
 
   /// This notifies the connection status of the [_ws] connection.
   /// Listen to this to get notified when the [_ws] tries to reconnect.
+  Stream<ConnectionStatus> get connectionStatusStream =>
+      _connectionStatusController.stream.distinct();
+
+  /// This notifies the connection status of the [_ws] connection.
+  /// Listen to this to get notified when the [_ws] tries to reconnect.
+  @Deprecated('Use `connectionStatusStream` instead')
   Stream<ConnectionStatus> get wsConnectionStatusStream =>
-      _wsConnectionStatusController.stream.distinct();
+      _connectionStatusController.stream.distinct();
 
   final _queryChannelsStreams = <String, Future<List<ChannelState>>>{};
 
@@ -372,7 +377,7 @@ class Web3MQClient {
     await _eventController.close();
     await _notificationController.close();
     await _newMessageController.close();
-    await _wsConnectionStatusController.close();
+    await _connectionStatusController.close();
   }
 
   /// Stream of [Event] coming from [_ws] connection
