@@ -1,9 +1,25 @@
+
 # Quick Start
+
+## What we can learn from this tutorial
+
+- how to integrate the Web3MQ Flutter SDK into your own projects
+- how to initialize the Web3MQ client and configure it
+- how to join & create a group
+- how to send & receive messages specifically in a group
 
 ## REQUIREMENTS
 
 - Dart SDK:  “>=2.18.5 <4.0.0”
 - A Web3MQ API Key
+
+:::note
+
+While we are committed to building an open and collectively owned public good, our early stage testnet requires an API
+key in order to connect. This is to control capacity to make sure that each early partner and developer is able to build
+a great experience on top of Web3MQ. [Apply here](https://web3mq.com/apply).
+
+:::
 
 ## Add dependency
 
@@ -11,45 +27,62 @@ Add this to your package's `pubspec.yaml` file, use the `latestversion`
 
 ```yaml
 dependencies:
-  web3mq: 0.1.3-dev.1
+  web3mq: 0.1.3-dev.3
 ```
 
 You should then run `flutter packages get`
 
 ## Example Project
 
-There is a detailed Flutter example project in the `example` folder. You can directly run and play on it.
+You can find a complete example project here:
+<https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_sdk_flutter_demo>
 
 ## Setup API Client
 
-First you need to instantiate a chat client. The chat client will manage API call, event handling and manage the web
-socket connection to Web3mq servers. You should only create the client once and re-use it across your application.
+First you need to instantiate a chat client. The chat client will manage API call, event handling and manage the web socket connection to Web3mq servers. You should only create the client once and re-use it across your application. The simplest way to initialize the client is to pass your API key to the constructor. The API key should be applied from our team.
 
 ```dart
 final client = Web3MQClient("api-key");
 ```
 
+### Endpoint
+
+You can customize the `baseURL`, which is set to `TestnetEndpoint.sg1` by default, or use `UtilsApi.findTheLowestLatencyEndpoint()` to get the endpoint with the lowest latency and assign it to `baseURL`.
+
+```dart
+final endpoint = await UtilsApi.findTheLowestLatencyDevEndpoint();
+final client = Web3MQClient("api-key", baseURL: endpoint);
+```
+
+During this initial testing phase, we've hosted complete networks of Web3MQ nodes in different regions around the globe.
+Connect to these endpoints below, to access the Web3MQ Testnet.
+
+- <https://testnet-us-west-1-1.web3mq.com>
+- <https://testnet-us-west-1-2.web3mq.com>
+- <https://testnet-ap-jp-1.web3mq.com>
+- <https://testnet-ap-jp-2.web3mq.com>
+- <https://testnet-ap-singapore-1.web3mq.com>
+- <https://testnet-ap-singapore-2.web3mq.com>
+
 ### Logging
 
 By default, the chat client will write all messages with level Warn or Error to stdout.
 
-### Change Logging Level
+#### Change Logging Level
 
-During development, you might want to enable more logging information, you can change the default log level when
-constructing the client.
+During development, you might want to enable more logging information, you can change the default log level when constructing the client.
 
 ```dart
 final client = Web3MQClient("api-key", logLevel: Level.INFO);
 ```
 
-### Custom Logger
+#### Custom Logger
 
-You can handle the log messages directly instead of have them written to `stdout`, this is very convenient if you use an
-error tracking tool or if you want to centralize your logs into one facility.
+You can handle the log messages directly instead of have them written to `stdout`, this is very convenient if you use an error tracking tool or if you want to centralize your logs into one facility.
 
 ```dart
 myLogHandlerFunction = (LogRecord record) {
-// do something with the record (ie. send it to Sentry or Fabric)
+// do something with the record.
 }
 
 final client = Web3MQClient("api-key", logHandlerFunction: myLogHandlerFunction);
@@ -57,8 +90,7 @@ final client = Web3MQClient("api-key", logHandlerFunction: myLogHandlerFunction)
 
 ### Wallet Connector
 
-Some methods that SDK provides require wallet signature, you should setup the `WalletConnector` before calling those
-methods.
+Some methods that SDK provides require wallet signature,  you should setup the `WalletConnector` before calling those methods.
 
 ```dart
 client.walletConnector = walletConnector;
@@ -84,8 +116,7 @@ abstract class Wallet {
 
 ### Offline storage
 
-To add data persistence you can extend the class`PersistenceClient`and pass an instance to
-the`ChatClient`. `Web3MQPersistenceClient` is a default implementation.
+To add data persistence you can extend the class `PersistenceClient` and pass an instance to the `ChatClient`. `Web3MQPersistenceClient` is a default implementation.
 
 ```dart
 client.persistenceClient = Web3MQPersistenceClient();
@@ -95,8 +126,7 @@ client.persistenceClient = Web3MQPersistenceClient();
 
 For any first-time user of Web3MQ's network, you'll need to register on Web3MQ's network.
 
-This method needs wallet signature, make sure you have setup `WalletConnector` already. `RegisterResponse` contains
-your `PrivateKey` and `UserId`.
+This method needs wallet signature, make sure you have setup `WalletConnector` already. `RegisterResponse` contains your `PrivateKey` and `UserId`.
 
 ```dart
 // Keep your private key in a safe place!
@@ -114,31 +144,35 @@ final privateKeyHex = await client.retrievePrivateKey(did, password);
 
 ## Connect
 
-### Get a `User`
+After you have registered, let's continue to connect to Web3MQ's network.
 
-Get a user with DID and password, also with an duration for expired.
+### Session key
 
-```dart
-final user = await client.user(did, password, expiredDuration);
-```
+The SessionKey is a temporary key that is used to connect to Web3MQ's network.
 
-Or if you has the `PrivateKey` .
+To generate a session key with `DID` and `Password`:
 
 ```dart
-final user = await client.user(did, privateKeyHex, expiredDuration)
+final sessionKey = await client.userWithDIDAndPassword(did, password, expiredDuration);
 ```
 
-you could persist `user` for the connection next time.
-
-### Connect with a `User`
-
-Now you can connect to `Web3MQ` with the `User` which you may want to persist.
+or with `DID` and `PrivateKey`:
 
 ```dart
-await client.connectUser(user)
+final sessionKey = await client.userWithDIDAndPrivateKey(did, privateKeyHex, expiredDuration)
 ```
 
-listen the `wsConnectionStatusStream` to track connection status:
+you could persist `SessionKey` for the connection next time.
+
+### Connect with a `SessionKey`
+
+Now you can connect to Web3MQ with the `SessionKey`.
+
+```dart
+await client.connectUser(sessionKey)
+```
+
+listen the `wsConnectionStatusStream` to track connection status.
 
 ```dart
 client.wsConnectionStatusStream.listen((event) { 
@@ -146,104 +180,61 @@ client.wsConnectionStatusStream.listen((event) {
 });
 ```
 
-## Notifications
-
-### Subscribe
-
-Subscribe a topic with `topicId`, then you can receive notifications from that `topic`.
-
-```dart
-client.subscribeTopic(topicId);
-```
-
-### Receive
-
-You can use the following method to subscribe notifications from the web3mq server.
-
-```dart
-client.notificationStream.listen( (notifications) {
-  // handle the notifications.
-});
-```
-
-### Read Status
-
-You may need other side to know if you have read the notification.
-
-```dart
-client.markNotificationsRead(notificationsIds);
-```
-
-### Query
-
-You can query all historical notifications by types and pagination.
-
-```dart
-Page<Notification> res = await client.queryNotifications(type, pagination);
-```
-
 ## Chat
 
-### Channel List
+Let’s continue by joining a chat group and sending your first message. A group contains messages and a list of members who are permanently associated with the group. More docs about group see [Group](/docs/Web3MQ-SDK/Dart-SDK/Chat/group.md).
 
-To keep track of the list of channels, listen to the **`channelsStream`** event:
+### Create a chat group
 
-```dart
-client.state.channelsStream.listen((event) {
-  // handle the channel list 
-});
-```
-
-### Sending message
-
-To send a text message, call the **`sendText`** method with the message text and the ID of the topic:
+One way to join a group is to create your own group.
 
 ```dart
-client.sendText('hello, world!', topicId)
+final group = await client.createGroup('Group Name', 'avatar url',
+      permissions: GroupPermission.public);
 ```
 
-### Message sending status
+:::note
 
-To receive updates on the message sending status, listen to the **`messageUpdated`** event:
+Group chat permission currently only has group:join rule, which indicates the permission to join a group. group:join rule has GroupPermission.public and GroupPermission.invite values, and its value type is 'enum'
+
+- 1.`GroupPermission.invite`: Only the group owner can invite friends to join.
+- 2.`GroupPermission.public`: Everyone can join without restrictions.
+
+:::
+
+### Join a chat group
+
+If you prefer to join a existing group, you can use the **`joinGroup`** method with the group id:
 
 ```dart
-client.on(EventType.messageUpdated).listen((event) {
-  // handle the message status update 
-  final status = event.messageStatusResponse;
-}
+await client.joinGroup(groupId);
 ```
 
-### Receiving new messages
+### Send a message to a group
 
-To receive new messages, listen to the **`newMessageStream`** event:
+Now we have a group, let's send a message to the group:
+
+```dart
+final message = await client.sendText('hello, world!', group.groupId);
+```
+
+### Receive messages
+
+To receive new messages from the group, listen to the **`newMessageStream`** event:
 
 ```dart
 client.newMessageStream.listen((message) {
-  // handle the message.   
+  if (message.topic == group.groupId) {
+    // handle the message in the group
+  }
 }
 ```
 
 ### Query the message list
 
-To query the message list, call the **`queryMessagesByTopic`** method with the ID of the topic and a pagination object:
+If you want to view the historical messages:
 
 ```dart
-client.queryMessagesByTopic('topicId', pagination)
-```
-
-### Create Thread
-
-To create a thread, call the **`createThreadByMessage`** method with the ID of the original message, the ID of the
-topic, and the name of the thread:
-
-```dart
-client.createThreadByMessage(messageId, 'topicId', 'threadName')
-```
-
-### Thread List
-
-To query the list of threads by given topic.
-
-```dart
-final list = await client.threadListByTopic('topicId')
+final pagination = TimePagination(limit: 20, timestampBefore: DateTime.now().millisecondsSinceEpoch);
+final messages = await client.queryMessagesByTopic(group.groupId, pagination)
 ```
