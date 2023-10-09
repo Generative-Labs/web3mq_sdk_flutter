@@ -28,15 +28,22 @@ extension UserExtension on Web3MQClient {
       _service.user.updateProfile(avatarUrl);
 
   /// Registers a user.
-  Future<RegisterResult> register(DID did, String password,
+  @Deprecated("Use [createCredentials] instead")
+  Future<Credentials> register(DID did, String password,
           {String? domain, String? userId}) async =>
-      _doRegister(did, password,
+      _doCreateCredentials(did, password,
+          domain: domain, type: PasswordSettingType.register, userId: userId);
+
+  /// Create credentials.
+  Future<Credentials> createCredentials(DID did, String password,
+          {String? domain, String? userId}) async =>
+      _doCreateCredentials(did, password,
           domain: domain, type: PasswordSettingType.register, userId: userId);
 
   /// Resets password for a user.
-  Future<RegisterResult> resetPassword(DID did, String password,
+  Future<Credentials> resetPassword(DID did, String password,
           {String? domain, String? userId}) async =>
-      _doRegister(did, password,
+      _doCreateCredentials(did, password,
           domain: domain, type: PasswordSettingType.reset, userId: userId);
 
   /// Registers a user by proxy.
@@ -140,8 +147,7 @@ extension UserExtension on Web3MQClient {
     final publicKey = await keyPair.extractPublicKey();
     final publicKeyHex = hex.encode(publicKey.bytes);
 
-    final acknowledgement =
-        '''
+    final acknowledgement = '''
 I authorize CyberConnect from this device using signing key:
 ''';
 
@@ -169,7 +175,7 @@ I authorize CyberConnect from this device using signing key:
   }
 
   /// Gets your main private key.
-  Future<RegisterResult> _doRegister(DID did, String password,
+  Future<Credentials> _doCreateCredentials(DID did, String password,
       {String? domain,
       String? userId,
       PasswordSettingType type = PasswordSettingType.register}) async {
@@ -215,7 +221,7 @@ I authorize CyberConnect from this device using signing key:
         publicKeyHex, pubKeyType, signatureRaw, signature, currentDate, _apiKey,
         type: type);
 
-    return RegisterResult(response.userId,
+    return Credentials(response.userId,
         DID(response.didType, response.didValue), privateKeyHex);
   }
 
