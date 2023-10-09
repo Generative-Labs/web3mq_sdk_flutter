@@ -39,3 +39,7 @@
 ## 0.1.3-dev.3
 
 - export `UtilsApi.dart`.
+
+## 0.2.0-dev.1
+
+- rename and deprecate some apis for more readable.
