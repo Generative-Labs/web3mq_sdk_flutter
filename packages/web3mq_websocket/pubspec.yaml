@@ -9,7 +9,7 @@ environment:
   sdk: ">=2.19.4 <4.0.0"
 
 dependencies:
-  web3mq_core: ^0.1.0-dev.2
+  web3mq_core: ^0.1.0
   uuid: ^3.0.7
   protobuf: ^2.1.0
   web_socket_channel: ^2.0.0
