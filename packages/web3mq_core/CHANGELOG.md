@@ -7,3 +7,7 @@
 ## 0.1.0-dev.2
 
 - adopt for the `web3mq_dapp_connect` package.
+
+## 0.1.0-dev.3
+
+- add `Credentials` class.

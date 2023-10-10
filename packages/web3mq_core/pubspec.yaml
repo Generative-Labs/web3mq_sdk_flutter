@@ -1,6 +1,6 @@
 name: web3mq_core
 description: a foundation package for web3mq flutter monorepo.
-version: 0.1.0-dev.2
+version: 0.1.0-dev.3
 homepage: https://www.web3mq.com
 repository: https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_core
 issue_tracker: https://github.com/Generative-Labs/web3mq_sdk_flutter/issues
