@@ -16,17 +16,3 @@ class RegisterResult {
   RegisterResult(this.userId, this.did, this.privateKey);
 }
 
-///
-class Credentials {
-  ///
-  final String userId;
-
-  ///
-  final DID did;
-
-  /// Main private key
-  final String privateKey;
-
-  ///
-  Credentials(this.userId, this.did, this.privateKey);
-}

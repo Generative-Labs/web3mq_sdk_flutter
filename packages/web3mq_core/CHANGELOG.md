@@ -11,3 +11,7 @@
 ## 0.1.0-dev.3
 
 - add `Credentials` class.
+
+## 0.1.0
+
+- fix issues.
