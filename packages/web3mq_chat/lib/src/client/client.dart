@@ -27,6 +27,7 @@ import '../api/responses.dart';
 import '../http/http_client.dart';
 import '../models/cyber_profile.dart';
 import '../models/pagination.dart';
+import '../models/wallet_connector.dart';
 import '../utils/signer.dart';
 import 'client_state.dart';
 
@@ -144,6 +145,11 @@ class Web3MQClient {
             .copyWith(sendingStatus: MessageSendingStatus.sent);
         _newMessageController.add(message);
         break;
+      case EventType.messageUpdated:
+        final response = event.messageStatusResponse;
+        if (null == response) return;
+        _messageStatusUpdatingController.add(response);
+        break;
       default:
         break;
     }
@@ -158,8 +164,14 @@ class Web3MQClient {
 
   final _newMessageController = rx.BehaviorSubject<Message>();
 
+  final _messageStatusUpdatingController =
+      rx.BehaviorSubject<Web3MQMessageStatusResp>();
+
   /// Stream of new messages.
   Stream<Message> get newMessageStream => _newMessageController.stream;
+
+  Stream<Web3MQMessageStatusResp> get messageStatusUpdingStream =>
+      _messageStatusUpdatingController.stream;
 
   StreamSubscription<ConnectionStatus>? _connectionStatusSubscription;
 
@@ -377,6 +389,7 @@ class Web3MQClient {
     await _eventController.close();
     await _notificationController.close();
     await _newMessageController.close();
+    await _messageStatusUpdatingController.close();
     await _connectionStatusController.close();
   }
 

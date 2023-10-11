@@ -8,10 +8,12 @@ import 'connect_wallet_page.dart';
 import 'home_page.dart';
 
 /// Note: replace the `apiKey` with your own.
-const apiKey = '';
+const apiKey = 'eKsEePNSVXTaBLRy';
+
+final innerWalletConnector = InnerWalletConnector();
 
 /// A `Web3MQ` shared client.
-final client = Web3MQClient(apiKey, baseURL: TestnetEndpoint.us1);
+final client = Web3MQClient(apiKey, baseURL: DevEndpoint.us2);
 
 /// A `DappConnect` shared client.
 final dappConnectClient = DappConnectClient(
@@ -33,7 +35,7 @@ void main() async {
   // You can also customize your own implementation by implementing the
   // `WalletConnector` interface, such as changing it to call MetaMask.
   //
-  client.walletConnector = InnerWalletConnector();
+  client.walletConnector = innerWalletConnector;
   _currentUser = await CacheHelper.loadUser();
   runApp(MyApp(client: client));
 }

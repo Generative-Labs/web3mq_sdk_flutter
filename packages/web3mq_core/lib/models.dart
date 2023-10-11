@@ -6,5 +6,4 @@ export 'src/models/user.dart';
 export 'src/models/key_pair.dart';
 export 'src/models/accounts.dart';
 export 'src/models/connection_status.dart';
-export 'src/models/wallet_connector.dart';
 export 'src/models/credentials.dart';

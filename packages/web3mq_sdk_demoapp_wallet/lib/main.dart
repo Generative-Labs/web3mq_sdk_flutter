@@ -212,7 +212,8 @@ class _MyHomePageState extends State<MyHomePage> {
               sessionProposal.requiredNamespaces.values.firstOrNull?.methods;
           final events =
               sessionProposal.requiredNamespaces.values.firstOrNull?.events;
-          final defaultAccount = Account.from(DemoAppWallet().accounts.first);
+          final defaultAccount =
+              Account.from(DemoAppWalletConnector.wallet.accounts.first);
           final namespaces = {
             'eip155': SessionNamespace(
                 {defaultAccount.absoluteString}, methods ?? {}, events ?? {})

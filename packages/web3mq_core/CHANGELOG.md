@@ -15,3 +15,7 @@
 ## 0.1.0
 
 - fix issues.
+
+## 0.1.1
+
+- remove `WalletConnector`.

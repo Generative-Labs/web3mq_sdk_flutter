@@ -36,7 +36,7 @@ dependencies:
   url_launcher: ^6.1.11
   adaptive_number: ^1.0.0
   http_parser: ^4.0.2
-  web3mq_core: ^0.1.0
+  web3mq_core: ^0.1.1
   web3mq_websocket: ^0.1.0-dev.2
 
 dev_dependencies:

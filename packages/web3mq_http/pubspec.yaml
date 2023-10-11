@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   path: ^1.8.0
-  web3mq_core: ^0.1.0
+  web3mq_core: ^0.1.1
   dio: ^5.0.0
   collection: ^1.17.0
   equatable: ^2.0.5

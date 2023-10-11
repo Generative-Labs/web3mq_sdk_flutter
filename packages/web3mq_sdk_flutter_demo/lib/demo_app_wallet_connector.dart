@@ -1,7 +1,8 @@
+import 'package:web3mq/web3mq.dart';
 import 'package:web3mq_dapp_connect/web3mq_dapp_connect.dart';
 import 'package:web3mq_sdk_flutter_demo/main.dart';
 
-class DemoAppWalletConnector implements WalletConnector {
+class DemoAppWalletConnector extends WalletConnector {
   // connect the client when initailized.
   DemoAppWalletConnector() {
     dappConnectClient.connectUser();
@@ -16,7 +17,7 @@ class DemoAppWalletConnector implements WalletConnector {
           events: const {"chainChanged", "accountsChanged"})
     });
     final accounts = session.namespaces.values.first.accounts;
-    final wallet = _DemoAppWallet(accounts.toList());
+    final wallet = Wallet(accounts.toList());
     return wallet;
   }
 
@@ -28,13 +29,4 @@ class DemoAppWalletConnector implements WalletConnector {
     return await dappConnectClient.personalSign(
         message, address, session.topic);
   }
-}
-
-class _DemoAppWallet implements Wallet {
-  final List<String> _accounts;
-
-  _DemoAppWallet(this._accounts);
-
-  @override
-  List<String> get accounts => _accounts;
 }

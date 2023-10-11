@@ -206,7 +206,7 @@ extension ClientChat on Web3MQClient {
         completer.complete(response);
       }
     });
-    completer.future.timeout(Duration(seconds: 6), onTimeout: () {
+    completer.future.timeout(timeoutDuration, onTimeout: () {
       subscription.cancel();
       throw TimeoutException('messageStatusUpdated event timed out');
     }).then((_) {

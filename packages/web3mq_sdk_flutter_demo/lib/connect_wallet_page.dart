@@ -61,15 +61,12 @@ class _ConnectWalletPageState extends State<ConnectWalletPage> {
   void _connectWallet() async {
     // _showAccountModal();
     final wallet = await client.walletConnector?.connectWallet();
-    final accountString = wallet?.accounts.first;
-    if (null == accountString) return;
-    final account = Account.from(accountString);
-
-    final theAddress = account.address;
+    final did = wallet?.dids.first;
+    if (null == did) return;
+    final theAddress = did.value;
     setState(() {
       address = theAddress;
     });
-    final did = DID("eth", theAddress);
     try {
       final userInfo = await client.userInfo(did.type, did.value);
       if (null != userInfo) {

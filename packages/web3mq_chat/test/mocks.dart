@@ -5,6 +5,7 @@ import 'package:web3mq/src/api/notification_api.dart';
 import 'package:web3mq/src/api/user_api.dart';
 import 'package:web3mq/src/client/client.dart';
 import 'package:web3mq/src/http/http_client.dart';
+import 'package:web3mq/src/models/wallet_connector.dart';
 import 'package:web3mq/src/utils/signer.dart';
 import 'package:web3mq_core/logger.dart';
 

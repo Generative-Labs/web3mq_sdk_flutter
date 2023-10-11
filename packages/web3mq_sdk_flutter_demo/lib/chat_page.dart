@@ -102,9 +102,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   }
 
   void _listenMessageUpdated() {
-    client.on(EventType.messageUpdated).listen((event) {
-      final status = event.messageStatusResponse;
-      if (null == status) return;
+    client.messageStatusUpdingStream.listen((status) {
       final tempMessages = _messages;
       final index = tempMessages
           .indexWhere((element) => element.messageId == status.messageId);
@@ -119,6 +117,24 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
         _onMessagesUpdate(tempMessages);
       }
     });
+
+    // client.on(EventType.messageUpdated).listen((event) {
+    //   final status = event.messageStatusResponse;
+    //   if (null == status) return;
+    //   final tempMessages = _messages;
+    //   final index = tempMessages
+    //       .indexWhere((element) => element.messageId == status.messageId);
+    //   if (index != -1) {
+    //     final oldMessage = tempMessages[index];
+    //     final finalMessage = oldMessage.copyWith(
+    //         sendingStatus: (status.messageStatus == 'received' ||
+    //                 status.messageStatus == 'read')
+    //             ? MessageSendingStatus.sent
+    //             : MessageSendingStatus.failed);
+    //     tempMessages[index] = finalMessage;
+    //     _onMessagesUpdate(tempMessages);
+    //   }
+    // });
   }
 
   void _onMessagesUpdate(List<Message> messages) {
