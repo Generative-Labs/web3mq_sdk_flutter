@@ -8,17 +8,18 @@ import 'connect_wallet_page.dart';
 import 'home_page.dart';
 
 /// Note: replace the `apiKey` with your own.
-const apiKey = 'eKsEePNSVXTaBLRy';
+const apiKey = '';
 
+///
 final innerWalletConnector = InnerWalletConnector();
 
 /// A `Web3MQ` shared client.
-final client = Web3MQClient(apiKey, baseURL: DevEndpoint.us2);
+final client = Web3MQClient(apiKey, baseURL: TestnetEndpoint.us1);
 
 /// A `DappConnect` shared client.
 final dappConnectClient = DappConnectClient(
     apiKey,
-    baseURL: DevEndpoint.jp1,
+    baseURL: TestnetEndpoint.us1,
     AppMetadata('Dapp', 'for dapp testing', 'web3mq.com', const ['https://url'],
         'web3mqdemo://'));
 

@@ -33,9 +33,7 @@ class MyApp extends StatelessWidget {
         home: ChatsPage(
           title: 'title',
           client: client,
-          onTapChat: (p0) {
-            print('tapped chat : $p0');
-          },
+          onTapChat: (p0) {},
         ));
   }
 }

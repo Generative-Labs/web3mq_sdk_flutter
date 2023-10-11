@@ -4,8 +4,9 @@ import 'package:rxdart/rxdart.dart';
 import 'package:web3mq/src/api/responses.dart';
 import 'package:web3mq/src/models/channel_state.dart';
 import 'package:web3mq_websocket/web3mq_websocket.dart';
-import 'package:web3mq_core/models.dart';
 
+import '../models/message_sending_status.dart';
+import '../models/user.dart';
 import '../utils/signer.dart';
 
 import 'client.dart';

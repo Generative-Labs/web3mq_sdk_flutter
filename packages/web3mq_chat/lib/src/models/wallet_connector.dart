@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:web3mq_core/models.dart';
+import 'accounts.dart';
+import 'models.dart';
 
 ///
 class Wallet {
-  /// account_id support CAIP-10
+  /// account_id should supports CAIP-10
   List<String> accounts = [];
 
   /// Gets the list of DIDs.

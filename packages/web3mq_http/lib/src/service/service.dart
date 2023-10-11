@@ -1,4 +1,3 @@
-import 'package:web3mq_core/models.dart';
 import 'package:web3mq_core/logger.dart';
 
 import '../../web3mq_http.dart';
@@ -28,9 +27,10 @@ class Web3MQService {
   UtilsApi? _utils;
 
   /// Connect user to the service
-  Future<void> connectUser(User user) async {
-    _signer.connectUser(user);
-    _client.connectUser(user);
+  Future<void> connectUser(
+      String userId, String sessionKey, String didType, String didValue) async {
+    _signer.connectUser(userId, sessionKey);
+    _client.connectUser(sessionKey, didType, didValue);
   }
 
   /// Disconnect user from the service

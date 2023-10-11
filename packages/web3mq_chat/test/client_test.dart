@@ -2,8 +2,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 import 'package:web3mq/src/client/client.dart';
 import 'package:web3mq/src/error/error.dart';
-
-import 'package:web3mq_core/models.dart';
+import 'package:web3mq/src/models/did.dart';
+import 'package:web3mq/src/models/user.dart';
+import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 import 'fakes.dart';
 import 'mocks.dart';

@@ -6,7 +6,7 @@ import 'package:web3mq_core/models.dart';
 ///
 abstract class RequestSigner {
   ///
-  void connectUser(User user);
+  void connectUser(String userId, String sessionKey);
 
   ///
   void disconnectUser();
@@ -46,35 +46,38 @@ class Web3MQRequestSinedResult implements RequestSignedResult {
 
 ///
 class Web3MQRequestSigner implements RequestSigner {
-  ///
-  User? user;
+  String? sessionKey;
+
+  String? userId;
 
   ///
   @override
   Future<RequestSignedResult> sign(String? parameter) async {
-    final currentUser = user;
-    if (null == currentUser) {
+    final currentPrivateKey = sessionKey;
+    final currentUserId = userId;
+    if (null == currentUserId || currentPrivateKey == null) {
       throw Web3MQError("User is not connected");
     }
-    final keyPair = KeyPair.fromPrivateKeyHex(currentUser.sessionKey);
+    final keyPair = KeyPair.fromPrivateKeyHex(currentPrivateKey);
     final algorithm = cry.Ed25519();
     final aNewkeyPair = await algorithm.newKeyPairFromSeed(keyPair.privateKey);
     DateTime time = DateTime.now();
-    String raw =
-        "${currentUser.userId}$parameter${time.millisecondsSinceEpoch}";
+    String raw = "$userId$parameter${time.millisecondsSinceEpoch}";
     final signature =
         await algorithm.sign(utf8.encode(raw), keyPair: aNewkeyPair);
     return Web3MQRequestSinedResult(
-        base64Encode(signature.bytes), currentUser.userId, time);
+        base64Encode(signature.bytes), currentUserId, time);
   }
 
   @override
-  void connectUser(User user) {
-    this.user = user;
+  void connectUser(String userId, String sessionKey) {
+    this.sessionKey = sessionKey;
+    this.userId = userId;
   }
 
   @override
   void disconnectUser() {
-    user = null;
+    userId = null;
+    sessionKey = null;
   }
 }

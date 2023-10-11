@@ -12,7 +12,7 @@ import 'wallet_signer.dart';
 
 final client = DappConnectClient(
     'SwapChat:sign.iOS',
-    baseURL: DevEndpoint.sg1,
+    baseURL: TestnetEndpoint.us1,
     AppMetadata(
         'Web3MQ Wallet Flutter',
         'for dart dapp test',

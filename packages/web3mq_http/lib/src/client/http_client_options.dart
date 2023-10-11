@@ -4,12 +4,12 @@ part of 'http_client.dart';
 class Web3MQHttpClientOptions {
   /// Instantiates a new [Web3MQHttpClientOptions]
   const Web3MQHttpClientOptions({
-    String? baseUrl,
+    required this.baseUrl,
     this.connectTimeout = const Duration(seconds: 15),
     this.receiveTimeout = const Duration(seconds: 15),
     this.queryParameters = const {},
     this.headers = const {},
-  }) : baseUrl = baseUrl ?? DevEndpoint.sg1;
+  });
 
   /// base url to use with client.
   final String baseUrl;

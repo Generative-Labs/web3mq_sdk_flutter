@@ -1,5 +1,6 @@
-import 'package:web3mq_core/models.dart';
 import 'package:web3mq_websocket/src/models/ws_models.dart';
+
+import 'connection_status.dart';
 
 class EventType {
   /// Indicates any type of events

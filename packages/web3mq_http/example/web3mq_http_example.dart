@@ -1,4 +1,3 @@
-import 'package:web3mq_core/models.dart';
 import 'package:web3mq_http/src/model/pagination.dart';
 import 'package:web3mq_http/web3mq_http.dart';
 
@@ -7,10 +6,9 @@ void main() async {
 
   // If you want to execute the registration and login interfaces,
   // we strongly recommend that you use the web3mq package.
-  // Once you have the login credential User, you can use the service like above
+  // Once you have the credentials, you can use the service like above
 
-  final aUser = User('userId', DID('type', 'value'), 'session key');
-  await service.connectUser(aUser);
+  await service.connectUser('userId', 'sessionKey', 'didType', 'didValue');
 
   // fetch chats:
   final chats = await service.chat.queryChannels(Pagination(size: 20));

@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 import 'package:mutex/mutex.dart';
 
 import '../../web3mq.dart';
 import '../client/persistence_client.dart';
+import '../utils/logger.dart';
 import 'db/drift_chat_database.dart';
 import 'db/shared/native_db.dart';
 
-/// Various connection modes on which [Web3MQClientPersistenceClient] can work
+/// Various connection modes on which [Web3MQPersistenceClient] can work
 enum ConnectionMode {
   /// Connects the [PersistenceClient] on a regular/default isolate
   regular,
@@ -53,8 +55,7 @@ class Web3MQPersistenceClient extends PersistenceClient {
   bool get _debugIsConnected {
     assert(() {
       if (db == null) {
-        throw StateError(
-            '''
+        throw StateError('''
         $runtimeType hasn't been connected yet or used after `disconnect` 
         was called. Consider calling `connect` to create a connection. 
           ''');

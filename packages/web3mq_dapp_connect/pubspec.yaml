@@ -12,7 +12,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  web3mq_core: ^0.1.1
   web3mq_websocket: ^0.1.0-dev.2
   json_annotation: ^4.7.0
   equatable: ^2.0.5

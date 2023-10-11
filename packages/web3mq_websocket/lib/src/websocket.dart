@@ -9,12 +9,12 @@ import 'package:web3mq_websocket/src/message_signer.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web3mq_core/models.dart';
 
 import 'channel_sender.dart';
 import 'command_generator.dart';
 import 'error/error.dart';
 import 'models/buffer_convertible.dart';
+import 'models/connection_status.dart';
 import 'models/event.dart';
 import 'models/message_factory.dart';
 import 'models/pb/connect.pb.dart';

@@ -6,4 +6,3 @@ library web3mq_dapp_connect;
 export 'src/dapp_connect_client.dart';
 export 'src/model/export.dart';
 export 'src/error/error.dart';
-export 'package:web3mq_core/web3mq_core.dart';

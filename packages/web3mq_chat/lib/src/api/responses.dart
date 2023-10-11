@@ -4,10 +4,10 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:web3mq/src/models/cyber_user_follow_status.dart';
 import 'package:web3mq_websocket/web3mq_websocket.dart';
-import 'package:web3mq_core/models.dart';
 
 import '../models/channel_state.dart';
 import '../models/cyber_profile.dart';
+import '../models/message_sending_status.dart';
 import '../utils/serializer.dart';
 
 part 'responses.g.dart';

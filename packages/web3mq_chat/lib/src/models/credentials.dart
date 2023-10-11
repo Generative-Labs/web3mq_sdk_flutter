@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:web3mq_core/web3mq_core.dart';
+import 'package:web3mq/src/models/did.dart';
 
 part 'credentials.g.dart';
 

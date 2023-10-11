@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'package:cryptography/cryptography.dart' as cry;
 import 'package:intl/intl.dart';
+import 'package:logging/logging.dart';
 import 'package:pointycastle/api.dart' as pointycastle;
 import 'package:rxdart/rxdart.dart' as rx;
 import 'package:web3mq/src/api/contacts.api.dart';
@@ -20,14 +21,19 @@ import 'package:web3mq/src/utils/cyber_signing_key_storage.dart';
 import 'package:web3mq/src/utils/sign_text_factory.dart';
 import 'package:web3mq/src/utils/utils.dart';
 
-import 'package:web3mq_core/web3mq_core.dart';
 import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 import '../api/responses.dart';
 import '../http/http_client.dart';
+import '../models/accounts.dart';
+import '../models/credentials.dart';
 import '../models/cyber_profile.dart';
+import '../models/did.dart';
+import '../models/message_sending_status.dart';
 import '../models/pagination.dart';
+import '../models/user.dart';
 import '../models/wallet_connector.dart';
+import '../utils/logger.dart';
 import '../utils/signer.dart';
 import 'client_state.dart';
 
