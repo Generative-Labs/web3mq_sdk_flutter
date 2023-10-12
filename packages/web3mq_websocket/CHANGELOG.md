@@ -7,3 +7,7 @@
 ## 0.1.0-dev.2
 
 - adpot the `web3mq_dapp_connect` package.
+
+## 0.1.0-dev.3
+
+- update dependencies

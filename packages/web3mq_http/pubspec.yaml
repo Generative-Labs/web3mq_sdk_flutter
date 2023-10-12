@@ -1,6 +1,6 @@
 name: web3mq_http
 description: A Web3MQ JSON-RPC client based on the HTTP protocol.
-version: 0.1.0-dev.1
+version: 0.1.0-dev.2
 homepage: https://www.web3mq.com
 repository: https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_http
 issue_tracker: https://github.com/Generative-Labs/web3mq_sdk_flutter/issues

@@ -52,8 +52,6 @@ class Web3MQRequestSigner implements RequestSigner {
 
   String? userId;
 
-  cry.SimpleKeyPair? _keyPair;
-
   ///
   @override
   Future<RequestSignedResult> sign(String? parameter) async {
