@@ -16,8 +16,10 @@
 
 ## 0.1.1-dev.1
 
-- Add support for pre-registering addresses. Messages can now be sent to unregistered addresses by pre-registering them
-  using the new `preRegister` method.When the address is registered, it will receive any messages that were sent to it
+- Add support for pre-registering addresses. Messages can now be sent to unregistered addresses by
+  pre-registering them
+  using the new `preRegister` method.When the address is registered, it will receive any messages
+  that were sent to it
   while it was unregistered.
 
 ## 0.1.1
@@ -43,3 +45,8 @@
 ## 0.2.0-dev.1
 
 - rename and deprecate some apis for more readable.
+
+## 0.2.0-dev.2
+
+- update dependencies.
+- add new example code.

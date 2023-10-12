@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:json_annotation/json_annotation.dart';
+
 import 'app_metadata.dart';
 import 'namespace.dart';
 import 'session.dart';

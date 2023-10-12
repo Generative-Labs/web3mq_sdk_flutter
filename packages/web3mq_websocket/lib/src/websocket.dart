@@ -22,6 +22,7 @@ import 'models/pb/message.pb.dart';
 import 'models/ping_message.dart';
 import 'models/user.dart';
 import 'timer_helper.dart';
+import 'utils/keypair.dart';
 
 typedef WebSocketChannelProvider = WebSocketChannel Function(
   Uri uri, {
@@ -30,7 +31,6 @@ typedef WebSocketChannelProvider = WebSocketChannel Function(
 
 enum ConnectMode {
   normal,
-
   bridge,
 }
 

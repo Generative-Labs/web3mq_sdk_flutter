@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:web3mq/web3mq.dart';
 import 'package:web3mq_sdk_flutter_demo/thread_list_page.dart';
+
 import 'main.dart';
 
 class ChatPage extends StatefulWidget {
@@ -117,24 +118,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
         _onMessagesUpdate(tempMessages);
       }
     });
-
-    // client.on(EventType.messageUpdated).listen((event) {
-    //   final status = event.messageStatusResponse;
-    //   if (null == status) return;
-    //   final tempMessages = _messages;
-    //   final index = tempMessages
-    //       .indexWhere((element) => element.messageId == status.messageId);
-    //   if (index != -1) {
-    //     final oldMessage = tempMessages[index];
-    //     final finalMessage = oldMessage.copyWith(
-    //         sendingStatus: (status.messageStatus == 'received' ||
-    //                 status.messageStatus == 'read')
-    //             ? MessageSendingStatus.sent
-    //             : MessageSendingStatus.failed);
-    //     tempMessages[index] = finalMessage;
-    //     _onMessagesUpdate(tempMessages);
-    //   }
-    // });
   }
 
   void _onMessagesUpdate(List<Message> messages) {
@@ -214,7 +197,8 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
             Expanded(
               child: ListView.separated(
                 controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(), // new
+                physics: const AlwaysScrollableScrollPhysics(),
+                // new
                 separatorBuilder: (context, index) => const Divider(),
                 itemCount: _messages.length,
                 itemBuilder: (BuildContext context, int index) {

@@ -1,13 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
-import 'package:web3mq_core/models.dart';
+
+import '../model/endpoint.dart';
 
 class UtilsApi {
   final dio = Dio();
 
   /// Get the domain with lowest latency.
   Future<String> findTheLowestLatencyEndpoint() async {
-    final domains = DevEndpoint.all;
+    final domains = TestnetEndpoint.all;
     final results = await Future.wait(domains.map((e) => mesure(e)));
     final lowest = results.min;
     return domains[results.indexOf(lowest)];

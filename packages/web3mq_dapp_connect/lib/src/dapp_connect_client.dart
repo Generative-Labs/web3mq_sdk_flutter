@@ -2,18 +2,20 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:web3mq_core/logger.dart';
-import 'package:web3mq_core/models.dart';
+import 'package:web3mq_dapp_connect/src/utils/keypair.dart';
 import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 import 'error/error.dart';
 import 'model/export.dart';
 import 'serializer.dart';
-import 'storage/storage.dart';
-import 'utils/id_generator.dart';
 import 'storage/record.dart';
+import 'storage/storage.dart';
+import 'utils/endpoint.dart';
+import 'utils/id_generator.dart';
+import 'utils/logger.dart';
 
 ///
 abstract class DappConnectClientProtocol {
@@ -78,7 +80,7 @@ class DappConnectClient extends DappConnectClientProtocol {
 
   final LogHandlerFunction logHandlerFunction;
 
-  /// Default logger for the [Web3MQClient].
+  /// Default logger for the [DappConnectClient].
   Logger detachedLogger(String name) => Logger.detached(name)
     ..level = logLevel
     ..onRecord.listen(logHandlerFunction);
@@ -99,7 +101,7 @@ class DappConnectClient extends DappConnectClientProtocol {
         _appMetadata = metadata {
     _ws = ws ??
         Web3MQWebSocketManager(
-          baseUrl: baseURL ?? DevEndpoint.jp1,
+          baseUrl: baseURL ?? TestnetEndpoint.sg1,
           logger: detachedLogger('🔌'),
         );
 

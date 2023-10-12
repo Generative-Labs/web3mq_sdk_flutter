@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web3mq_core/models.dart';
 
 import '../model/export.dart';
+import '../utils/keypair.dart';
 import 'record.dart';
 
 /// Session proposal storage.

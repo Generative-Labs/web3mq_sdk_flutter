@@ -22,6 +22,7 @@ class MetadataInfo {
 class Owner {
   final String address;
   final String chainID;
+
   Owner(this.address, this.chainID);
 
   /// Create a new instance from a json

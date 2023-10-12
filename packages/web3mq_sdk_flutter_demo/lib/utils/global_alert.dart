@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// 
+///
 class GlobalAlertDialog {
   static showAlertDialog(BuildContext context, String message) {
     AlertDialog alertDialog = AlertDialog(

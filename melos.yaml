@@ -1,6 +1,9 @@
-name: web3mq
+name: web3mq_flutter
+repository: https://github.com/Generative-Labs/web3mq_sdk_flutter
+
 packages:
   - packages/*
+  - packages/*/example
 
 scripts:
   prepare: melos bootstrap

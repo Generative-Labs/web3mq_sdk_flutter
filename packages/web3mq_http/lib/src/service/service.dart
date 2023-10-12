@@ -1,4 +1,4 @@
-import 'package:web3mq_core/logger.dart';
+import 'package:logging/logging.dart';
 
 import '../../web3mq_http.dart';
 

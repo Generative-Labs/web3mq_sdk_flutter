@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:web3mq/web3mq.dart';
 import 'package:intl/intl.dart';
+import 'package:web3mq/web3mq.dart';
 
 /// A widget that displays a chat preview.
 /// It shows the last message of the channel, the last message time, the unread

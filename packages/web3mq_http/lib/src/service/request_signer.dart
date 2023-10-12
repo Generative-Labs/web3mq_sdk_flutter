@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:convert/convert.dart';
 import 'package:cryptography/cryptography.dart' as cry;
-import 'package:web3mq_core/models.dart';
+
+import '../model/error.dart';
 
 ///
 abstract class RequestSigner {
@@ -50,6 +52,8 @@ class Web3MQRequestSigner implements RequestSigner {
 
   String? userId;
 
+  cry.SimpleKeyPair? _keyPair;
+
   ///
   @override
   Future<RequestSignedResult> sign(String? parameter) async {
@@ -58,9 +62,10 @@ class Web3MQRequestSigner implements RequestSigner {
     if (null == currentUserId || currentPrivateKey == null) {
       throw Web3MQError("User is not connected");
     }
-    final keyPair = KeyPair.fromPrivateKeyHex(currentPrivateKey);
+    final currentPrivateKeyBytes = hex.decode(currentPrivateKey);
     final algorithm = cry.Ed25519();
-    final aNewkeyPair = await algorithm.newKeyPairFromSeed(keyPair.privateKey);
+    final aNewkeyPair =
+        await algorithm.newKeyPairFromSeed(currentPrivateKeyBytes);
     DateTime time = DateTime.now();
     String raw = "$userId$parameter${time.millisecondsSinceEpoch}";
     final signature =

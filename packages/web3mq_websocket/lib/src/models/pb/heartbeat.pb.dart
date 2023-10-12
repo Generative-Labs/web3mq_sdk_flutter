@@ -48,6 +48,7 @@ class WebsocketPingCommand extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   WebsocketPingCommand._() : super();
+
   factory WebsocketPingCommand({
     $core.String? nodeId,
     $core.String? userId,
@@ -69,17 +70,21 @@ class WebsocketPingCommand extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory WebsocketPingCommand.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory WebsocketPingCommand.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   WebsocketPingCommand clone() =>
       WebsocketPingCommand()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -87,11 +92,15 @@ class WebsocketPingCommand extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as WebsocketPingCommand))
           as WebsocketPingCommand; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static WebsocketPingCommand create() => WebsocketPingCommand._();
+
   WebsocketPingCommand createEmptyInstance() => create();
+
   static $pb.PbList<WebsocketPingCommand> createRepeated() =>
       $pb.PbList<WebsocketPingCommand>();
+
   @$core.pragma('dart2js:noInline')
   static WebsocketPingCommand getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<WebsocketPingCommand>(create);
@@ -99,6 +108,7 @@ class WebsocketPingCommand extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.String get nodeId => $_getSZ(0);
+
   @$pb.TagNumber(1)
   set nodeId($core.String v) {
     $_setString(0, v);
@@ -106,11 +116,13 @@ class WebsocketPingCommand extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasNodeId() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearNodeId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get userId => $_getSZ(1);
+
   @$pb.TagNumber(2)
   set userId($core.String v) {
     $_setString(1, v);
@@ -118,11 +130,13 @@ class WebsocketPingCommand extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasUserId() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearUserId() => clearField(2);
 
   @$pb.TagNumber(3)
   $fixnum.Int64 get timestamp => $_getI64(2);
+
   @$pb.TagNumber(3)
   set timestamp($fixnum.Int64 v) {
     $_setInt64(2, v);
@@ -130,11 +144,13 @@ class WebsocketPingCommand extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasTimestamp() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearTimestamp() => clearField(3);
 
   @$pb.TagNumber(4)
   $core.String get msgSign => $_getSZ(3);
+
   @$pb.TagNumber(4)
   set msgSign($core.String v) {
     $_setString(3, v);
@@ -142,6 +158,7 @@ class WebsocketPingCommand extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasMsgSign() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearMsgSign() => clearField(4);
 }
@@ -184,6 +201,7 @@ class WebsocketPongCommand extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   WebsocketPongCommand._() : super();
+
   factory WebsocketPongCommand({
     $core.String? nodeId,
     $core.String? userId,
@@ -205,17 +223,21 @@ class WebsocketPongCommand extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory WebsocketPongCommand.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory WebsocketPongCommand.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   WebsocketPongCommand clone() =>
       WebsocketPongCommand()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -223,11 +245,15 @@ class WebsocketPongCommand extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as WebsocketPongCommand))
           as WebsocketPongCommand; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static WebsocketPongCommand create() => WebsocketPongCommand._();
+
   WebsocketPongCommand createEmptyInstance() => create();
+
   static $pb.PbList<WebsocketPongCommand> createRepeated() =>
       $pb.PbList<WebsocketPongCommand>();
+
   @$core.pragma('dart2js:noInline')
   static WebsocketPongCommand getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<WebsocketPongCommand>(create);
@@ -235,6 +261,7 @@ class WebsocketPongCommand extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.String get nodeId => $_getSZ(0);
+
   @$pb.TagNumber(1)
   set nodeId($core.String v) {
     $_setString(0, v);
@@ -242,11 +269,13 @@ class WebsocketPongCommand extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasNodeId() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearNodeId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get userId => $_getSZ(1);
+
   @$pb.TagNumber(2)
   set userId($core.String v) {
     $_setString(1, v);
@@ -254,11 +283,13 @@ class WebsocketPongCommand extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasUserId() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearUserId() => clearField(2);
 
   @$pb.TagNumber(3)
   $fixnum.Int64 get timestamp => $_getI64(2);
+
   @$pb.TagNumber(3)
   set timestamp($fixnum.Int64 v) {
     $_setInt64(2, v);
@@ -266,11 +297,13 @@ class WebsocketPongCommand extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasTimestamp() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearTimestamp() => clearField(3);
 
   @$pb.TagNumber(4)
   $core.String get msgSign => $_getSZ(3);
+
   @$pb.TagNumber(4)
   set msgSign($core.String v) {
     $_setString(3, v);
@@ -278,6 +311,7 @@ class WebsocketPongCommand extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasMsgSign() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearMsgSign() => clearField(4);
 }

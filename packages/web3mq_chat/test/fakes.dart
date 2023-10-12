@@ -7,7 +7,8 @@ import 'package:web3mq/src/api/user_api.dart';
 import 'package:web3mq/src/api/web3mq_service.dart';
 import 'package:web3mq/src/client/client_state.dart';
 import 'package:web3mq/src/error/error.dart';
-import 'package:web3mq_core/models.dart';
+import 'package:web3mq/src/models/did.dart';
+import 'package:web3mq/src/models/user.dart';
 import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 import 'mocks.dart';

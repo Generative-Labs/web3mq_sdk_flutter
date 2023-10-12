@@ -12,7 +12,7 @@ import 'wallet_signer.dart';
 
 final client = DappConnectClient(
     'SwapChat:sign.iOS',
-    baseURL: TestnetEndpoint.us1,
+    baseURL: TestnetEndpoint.sg1,
     AppMetadata(
         'Web3MQ Wallet Flutter',
         'for dart dapp test',
@@ -206,17 +206,14 @@ class _MyHomePageState extends State<MyHomePage> {
           await client.rejectSessionProposal(sessionProposal.id);
           _dismissModal();
         }, onSelectedConfirm: (sessionProposal) async {
-          final accounts =
-              sessionProposal.requiredNamespaces.values.firstOrNull?.chains;
           final methods =
               sessionProposal.requiredNamespaces.values.firstOrNull?.methods;
           final events =
               sessionProposal.requiredNamespaces.values.firstOrNull?.events;
-          final defaultAccount =
-              Account.from(DemoAppWalletConnector.wallet.accounts.first);
+          final defaultAccount = DemoAppWalletConnector.wallet.accounts.first;
           final namespaces = {
-            'eip155': SessionNamespace(
-                {defaultAccount.absoluteString}, methods ?? {}, events ?? {})
+            'eip155':
+                SessionNamespace({defaultAccount}, methods ?? {}, events ?? {})
           };
           await client.approveSessionProposal(
               sessionProposal.id, namespaces, const Duration(days: 7));

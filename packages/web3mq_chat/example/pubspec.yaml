@@ -37,8 +37,15 @@ dependencies:
 
   walletconnect_flutter_v2: ^2.1.4
 
+  url_launcher: ^6.1.11
+
   web3mq:
     path: ../
+
+  web3dart: ^2.6.1
+  eth_sig_util: ^0.0.9
+
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:

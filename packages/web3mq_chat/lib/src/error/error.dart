@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:equatable/equatable.dart';
 
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
+import 'package:equatable/equatable.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../api/responses.dart';

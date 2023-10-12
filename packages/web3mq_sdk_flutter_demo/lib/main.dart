@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:web3mq/web3mq.dart';
-import 'package:web3mq_dapp_connect/web3mq_dapp_connect.dart';
-import 'package:web3mq_sdk_flutter_demo/inner_wallet_connector.dart';
+import 'package:web3mq_dapp_connect/web3mq_dapp_connect.dart' as wdc;
 
 import 'cache.dart';
 import 'connect_wallet_page.dart';
 import 'home_page.dart';
+import 'inner_wallet_connector.dart';
 
 /// Note: replace the `apiKey` with your own.
 const apiKey = '';
@@ -17,11 +17,11 @@ final innerWalletConnector = InnerWalletConnector();
 final client = Web3MQClient(apiKey, baseURL: TestnetEndpoint.us1);
 
 /// A `DappConnect` shared client.
-final dappConnectClient = DappConnectClient(
+final dappConnectClient = wdc.DappConnectClient(
     apiKey,
     baseURL: TestnetEndpoint.us1,
-    AppMetadata('Dapp', 'for dapp testing', 'web3mq.com', const ['https://url'],
-        'web3mqdemo://'));
+    wdc.AppMetadata('Dapp', 'for dapp testing', 'web3mq.com',
+        const ['https://url'], 'web3mqdemo://'));
 
 User? _currentUser;
 

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'accounts.dart';
 import 'models.dart';
 
 ///
@@ -16,7 +15,8 @@ class Wallet {
 
   /// Gets the DID of the given account.
   static DID getDidFromAccount(Account account) {
-    return DID(_walletType(account), account.address);
+    // convert account.address to lower case
+    return DID(_walletType(account), account.address.toLowerCase());
   }
 
   /// Gets the wallet type of the given account.

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 import 'participant.dart';
 import 'rpc_request.dart';
 

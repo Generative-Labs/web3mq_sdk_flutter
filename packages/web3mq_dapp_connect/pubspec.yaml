@@ -12,6 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  logging: ^1.1.0
   web3mq_websocket: ^0.1.0-dev.2
   json_annotation: ^4.7.0
   equatable: ^2.0.5

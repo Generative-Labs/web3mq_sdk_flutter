@@ -38,67 +38,6 @@ class FormDataConverter {
     }
   }
 
-  ///
-  // Map<String, dynamic> formDataStringToMap(String formDataString) {
-  //   final Map<String, dynamic> formDataMap = {};
-  //   final List<String> formDataSegments = formDataString.split('&');
-  //   for (final String formDataSegment in formDataSegments) {
-  //     final List<String> keyValue = formDataSegment.split('=');
-  //     if (keyValue.length == 2) {
-  //       final String key = Uri.decodeQueryComponent(keyValue[0]);
-  //       final String value = Uri.decodeQueryComponent(keyValue[1]);
-  //       final List<String> keySegments = key.split('[');
-  //       dynamic currentMap = formDataMap;
-  //       for (int i = 0; i < keySegments.length; i++) {
-  //         final String keySegment = keySegments[i].replaceAll(']', '');
-  //         if (i == keySegments.length - 1) {
-  //           currentMap[keySegment] = value;
-  //         } else {
-  //           if (!currentMap.containsKey(keySegment)) {
-  //             currentMap[keySegment] = {};
-  //           }
-  //           currentMap = currentMap[keySegment];
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return formDataMap;
-  // }
-
-  // static Map<String, dynamic> formDataStringToMap(String formDataString) {
-  //   final Map<String, dynamic> formDataMap = {};
-  //   final List<String> formDataSegments = formDataString.split('&');
-  //   for (final String formDataSegment in formDataSegments) {
-  //     final List<String> keyValue = formDataSegment.split('=');
-  //     if (keyValue.length == 2) {
-  //       final String key = Uri.decodeComponent(keyValue[0]);
-  //       final String value = Uri.decodeComponent(keyValue[1]);
-  //       final List<String> keySegments = key.split('[');
-  //       dynamic currentMap = formDataMap;
-  //       for (int i = 0; i < keySegments.length; i++) {
-  //         final String keySegment = keySegments[i].replaceAll(']', '');
-  //         if (i == keySegments.length - 1) {
-  //           if (keySegment.isEmpty) {
-  //             currentMap.add(value);
-  //           } else {
-  //             currentMap[keySegment] = value;
-  //           }
-  //         } else {
-  //           if (!currentMap.containsKey(keySegment)) {
-  //             if (keySegments[i + 1].startsWith(']')) {
-  //               currentMap[keySegment] = [];
-  //             } else {
-  //               currentMap[keySegment] = {};
-  //             }
-  //           }
-  //           currentMap = currentMap[keySegment];
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return formDataMap;
-  // }
-
   static Map<String, dynamic> formDataStringToMap(String formDataString) {
     final Map<String, dynamic> formDataMap = {};
     final List<String> formDataSegments = formDataString.split('&');

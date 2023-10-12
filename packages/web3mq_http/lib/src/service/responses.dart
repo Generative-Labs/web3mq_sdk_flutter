@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../model/message_sending_status.dart';
 import '../serializer.dart';
 
 part 'responses.g.dart';

@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
 import 'package:web3mq_http/src/client/web3mq_dio_error.dart';
+import 'package:web3mq_http/src/utils/crypto_utils.dart';
 
+import '../model/endpoint.dart';
 import '../model/error.dart';
 import 'interceptor/additional_headers_interceptor.dart';
 import 'interceptor/logging_interceptor.dart';
@@ -14,7 +16,7 @@ class Web3MQHttpClient {
       Web3MQHttpClientOptions? options,
       Logger? logger,
       Map<String, dynamic> additionalHeaders = const {}})
-      : _options = options ?? const Web3MQHttpClientOptions(baseUrl),
+      : _options = options ?? Web3MQHttpClientOptions(),
         httpClient = dio ?? Dio() {
     _additionalHeadersInterceptor.additionalHeaders = additionalHeaders;
     httpClient
@@ -49,8 +51,8 @@ class Web3MQHttpClient {
 
   Future<void> connectUser(
       String sessionKey, String didType, String didValue) async {
-    final keyPair = KeyPair.fromPrivateKeyHex(sessionKey);
-    final publicKeyHex = await keyPair.publicKeyHex;
+    final publicKeyHex =
+        CryptoUtils.getPublicKeyHexFromPrivateKeyHex(sessionKey);
     _additionalHeadersInterceptor.additionalHeaders = {
       "api-version": 2,
       "web3mq-request-pubkey": publicKeyHex,

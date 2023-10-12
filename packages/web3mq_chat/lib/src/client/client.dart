@@ -20,7 +20,6 @@ import 'package:web3mq/src/models/cyber_user_follow_status.dart';
 import 'package:web3mq/src/utils/cyber_signing_key_storage.dart';
 import 'package:web3mq/src/utils/sign_text_factory.dart';
 import 'package:web3mq/src/utils/utils.dart';
-
 import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 import '../api/responses.dart';
@@ -33,6 +32,7 @@ import '../models/message_sending_status.dart';
 import '../models/pagination.dart';
 import '../models/user.dart';
 import '../models/wallet_connector.dart';
+import '../utils/keypair.dart';
 import '../utils/logger.dart';
 import '../utils/signer.dart';
 import 'client_state.dart';

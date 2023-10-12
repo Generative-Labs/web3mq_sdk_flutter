@@ -7,8 +7,8 @@ import 'package:web3mq_websocket/web3mq_websocket.dart';
 
 import '../models/message_sending_status.dart';
 import '../models/user.dart';
+import '../utils/keypair.dart';
 import '../utils/signer.dart';
-
 import 'client.dart';
 
 class ClientState {
