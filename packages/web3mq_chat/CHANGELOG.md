@@ -50,3 +50,7 @@
 
 - update dependencies.
 - add new example code.
+
+## 0.2.0-dev.3
+
+- returns `null` when `userInfo` api response code 404.
