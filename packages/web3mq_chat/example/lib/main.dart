@@ -78,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
       });
       if (theDid == null) {
         throw Exception('you should connect wallet first');
-        return;
       }
       // get userId by userInfo api
       final userInfo = await client.userInfo(theDid.type, theDid.value);

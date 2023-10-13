@@ -150,6 +150,9 @@ class UserApi {
     if (res.code == 0) {
       return data;
     }
+    if (res.code == 404) {
+      return null;
+    }
     throw Web3MQNetworkError.raw(code: res.code, message: res.message ?? "");
   }
 
