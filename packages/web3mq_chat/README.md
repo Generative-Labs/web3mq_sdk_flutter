@@ -13,13 +13,9 @@
 - Flutter SDK: “>=3.7.0”
 - A Web3MQ API Key
 
-:::note
-
 Before all, you should have Flutter development environment, see more details on: [https://docs.flutter.dev/get-started/install](https://docs.flutter.dev/get-started/install)
 
 While we are committed to building an open and collectively owned public good, our early stage testnet requires an API key in order to connect. This is to control capacity to make sure that each early partner and developer is able to build a great experience on top of Web3MQ. [Apply here](https://web3mq.com/apply).
-
-:::
 
 ## Add dependency
 
@@ -101,11 +97,7 @@ For any first-time user of Web3MQ’s network, you’ll need to create credentia
 
 This method needs wallet signature, make sure you have setup `WalletConnector` already. `credentials` contains your `PrivateKey` and `UserId`.
 
-:::note
-
 `DIDs` have two parts: a type and a value. The type can be "eth" or "starknet", and the value is a wallet address.
-
-:::
 
 ```dart
 // Keep your credentials in a safe place!
@@ -228,59 +220,57 @@ final messages = await client.queryMessagesByUserId(userId, pagination)
 ## Code example
 
 ```dart
-// init a client
-final client = Web3MQClient(apiKey, baseURL: TestnetEndpoint.us1);
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/wallet_connectv2_connector.dart';
+import 'package:web3mq/web3mq.dart';
 
-// impl `WalletConnector` to interact with wallet.
-final walletConnector = WalletConnectV2Connector();
-// setup wallet connector 
-client.walletConnector = walletConnector;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
 
-final wallet = await walletConnector.connectWallet();
-final did = wallet.dids.firstOrNull;
-if (did == null) {
- throw Exception('you should connect wallet first');
-}
-// creates credential by a password
-final credential = await client.createCredentials(did, password);
-// generates session key by privateKey
-final sessionKey = await client.generateSessionKey(did, credential.privateKey, expiredDuration)
-// connect 
-await client.connectUser(sessionKey)
-// listen connection status 
-client.connectionStatusStream.listen((event) {
-    // handle the status
-});
+  final walletConnector = WalletConnectV2Connector();
+  final url = await UtilsApi().findTheLowestLatencyEndpoint();
+  final client = Web3MQClient('apiKey', baseURL: url, wc: walletConnector);
+ 
+ // This may throws an error when your device does not have a wallet that supports walletconnectV2.
+  final wallet = await walletConnector.connectWallet();
 
-//  creates a group 
-final group = await client.createGroup('Group Name', 'avatar url',
-      permissions: GroupPermission.public);
-// sends a message to a group 
-final message = await client.sendText('hello, world!', group.groupId);
+  final did = wallet.dids.firstOrNull;
+  if (did == null) {
+    throw Exception('No did found');
+  }
+  final user = await client.userInfo(did.type, did.value);
+  if (user == null) {
+    // User not found, we need to create credentials firstly.
+    final credentials = await client.createCredentials(did, 'your-password');
+    final sessionKey = await client.generateSessionKey(
+        did, credentials.userId, const Duration(days: 7));
+    await client.connectUser(sessionKey);
+  } else {
+    // if there's no private key cache, we need to ask for the password
+    // to retrieve the private key. Otherwise, we can just use the private key
+    // to generate the session key.
+    // `final sessionKey = await client.generateSessionKey(
+    //   did, user.userId, const Duration(days: 7));`
+    final sessionKey = await client.generateSessionKeyWithPassword(
+        did, 'your-password', const Duration(days: 7));
+    await client.connectUser(sessionKey);
+  }
 
-// track the message sending status 
-client.messageStatusUpdingStream.listen((status) {
-  if (message.messageId == status.messageId) {
-    if (status == 'received') {
-      // Congrats! you did it!
+  final group = await client.createGroup('test-group-name', null);
+  final message = await client.sendText('hello, chat', group.groupId);
+  client.messageStatusUpdingStream.listen((event) {
+    if (message.messageId == event.messageId &&
+        event.messageStatus == 'received') {
+      print('message sent successfully');
     }
-  }
-});
-
-client.state.channelsStream.listen((channelMap) {
-    // handle the new channel list 
-    final channels = channelMap.values.toList()
-});
-
-// receives new messages
-client.newMessageStream.listen((message) {
-  if (message.topic == group.groupId) {
-    // handle the message in the group
-  }
-});
-// to query the historical messages
-final pagination = TimePagination(limit: 20);
-final messages = await client.queryMessagesByGroupId(group.groupId, pagination);
+  });
+  client.newMessageStream.listen((message) {
+    if (message.topic == group.groupId) {
+      print('message received: ${message.text}');
+    }
+  });
+}
 ```
 
 ## What’s next
