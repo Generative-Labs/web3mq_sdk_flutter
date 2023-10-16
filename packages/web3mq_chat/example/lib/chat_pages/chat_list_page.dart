@@ -93,6 +93,13 @@ class _ChatsPageState extends State<ChatsPage> {
     await client.createGroup(groupName, null);
   }
 
+  void _onJoinGroup() async {
+    final groupId =
+        await AlertUtils.showTextField('Join Group', 'GroupId', context);
+    if (groupId == null || groupId.isEmpty) return;
+    await client.joinGroup(groupId);
+  }
+
   final _topicController = TextEditingController();
 
   final _contentController = TextEditingController();
@@ -187,10 +194,23 @@ class _ChatsPageState extends State<ChatsPage> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _onCreateGroup,
-        tooltip: 'Create grouop',
-        child: const Text('Create Group'),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: _onCreateGroup,
+            tooltip: 'Create grouop',
+            child: const Text('Create Group'),
+          ),
+          const SizedBox(
+            height: 32,
+          ),
+          FloatingActionButton(
+            onPressed: _onJoinGroup,
+            tooltip: 'Join grouop',
+            child: const Text('Join Group'),
+          )
+        ],
       ),
     );
   }

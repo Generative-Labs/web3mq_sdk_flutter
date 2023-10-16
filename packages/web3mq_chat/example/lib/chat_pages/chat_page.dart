@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:web3mq/web3mq.dart';
 
@@ -158,7 +159,23 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: GestureDetector(
+          onLongPress: () {
+            showMenu(
+              position: RelativeRect.fill,
+              context: context,
+              items: [
+                PopupMenuItem(
+                  child: const Text('Copy'),
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(text: widget.title));
+                  },
+                ),
+              ],
+            );
+          },
+          child: Text(widget.title),
+        ),
       ),
       body: SafeArea(
         child: Column(
