@@ -55,6 +55,10 @@ class WalletConnectV2Connector implements WalletConnector {
       throw Exception('Session is null');
     }
 
+    // just send request won't lanuch wallet automatically,
+    // so we need to launch it manually.
+    await launchUrl(Uri.parse('wc:'));
+
     final dynamic signResponse = await wcClient.request(
       topic: currentSession.topic,
       chainId: 'eip155:1',
@@ -63,9 +67,6 @@ class WalletConnectV2Connector implements WalletConnector {
         params: [message, address],
       ),
     );
-
-    // just send request won't lanuch wallet automatically,
-    // so we need to launch it manually
 
     return signResponse as String;
   }

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class AlertUtils {
   static final _textController = TextEditingController();
 
-  static Future<String?> showAlert(
+  ///
+  static Future<String?> showTextField(
       String title, String placeholder, BuildContext context) async {
     // tap button and return the result
     return await showDialog<String>(
@@ -44,5 +45,44 @@ class AlertUtils {
         );
       },
     );
+  }
+
+  static showText(String message, BuildContext buildContext) {
+    AlertDialog alertDialog = AlertDialog(
+      content: Text(message),
+      actions: [
+        TextButton(
+          child: const Text('close'),
+          onPressed: () {
+            Navigator.pop(buildContext);
+          },
+        ),
+      ],
+    );
+    showDialog(
+      context: buildContext,
+      builder: (BuildContext context) {
+        return alertDialog;
+      },
+    );
+  }
+
+  static showLoading(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+            backgroundColor: Colors.transparent,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [CircularProgressIndicator()],
+            ));
+      },
+    );
+  }
+
+  static hideLoading(BuildContext context) {
+    Navigator.of(context).pop();
   }
 }

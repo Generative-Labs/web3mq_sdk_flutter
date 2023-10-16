@@ -7,14 +7,14 @@ import 'package:web3mq/web3mq.dart';
 
 import 'chat_pages/chat_list_page.dart';
 
-// Replace your own API-Key
-const String yourApiKey = 'yourApiKey';
+// TODO: Replace your own API-Key here.
+const String yourApiKey = '';
 
 // WalletConnectV2Connector
 final _walletConnector = WalletConnectV2Connector();
 
 ///
-final client = Web3MQClient(yourApiKey, baseURL: TestnetEndpoint.sg1);
+final client = Web3MQClient(yourApiKey, baseURL: TestnetEndpoint.us1);
 
 void main() {
   runApp(const MyApp());
@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Web3MQ Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -70,7 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _connectWallet() async {
     try {
+      _showLoading();
       final wallet = await _walletConnector.connectWallet();
+      _hideLoading();
+
       // if wallet.dids.first has value, set it to _currentDid
       final theDid = wallet.dids.firstOrNull;
       setState(() {
@@ -85,7 +89,8 @@ class _MyHomePageState extends State<MyHomePage> {
         _userId = userInfo?.userId;
       });
     } catch (e) {
-      print('debug:e:$e');
+      _hideLoading();
+      _showToast(e.toString());
     }
   }
 
@@ -106,20 +111,31 @@ class _MyHomePageState extends State<MyHomePage> {
   void _createSessionKeyWhenUserNotExist() async {
     final password = await inputPassword('Create password');
     if (password == null) return;
-    final credentials = await client.createCredentials(_currentDid!, password);
-    final createdSessionKey = await client.generateSessionKey(
-        _currentDid!, credentials.privateKey, const Duration(days: 7));
-    setState(() {
-      _sessionKey = createdSessionKey;
-    });
+    try {
+      final credentials =
+          await client.createCredentials(_currentDid!, password);
+      final createdSessionKey = await client.generateSessionKey(
+          _currentDid!, credentials.privateKey, const Duration(days: 7));
+      setState(() {
+        _sessionKey = createdSessionKey;
+        _userId = credentials.userId;
+      });
+    } catch (e) {
+      // If any errors
+      if (!context.mounted) return;
+      await AlertUtils.showText(e.toString(), context);
+    }
   }
 
-  // generate session key when user exist, you could generate session key with password or privateKey.
+  // Generate session key when user exist, you could generate session key with
+  // password or privateKey.
   void _generateSessionKeyWhenUserExist() async {
     // user exist, generate session key with password.
     final password = await inputPassword('Input your password');
     if (password == null) return;
-    // If you cached the privateKey, you can use it to generate session key by `client.generateSessionKey(_currentDid!, privateKey, duration)`. Or you can use password to generate session key.
+    // If you cached the privateKey, you can use it to generate session
+    // key by `client.generateSessionKey(_currentDid!, privateKey, duration)`.
+    // Or you can use password to generate session key.
     final createdSessionKey = await client.generateSessionKeyWithPassword(
         _currentDid!, password, const Duration(days: 7));
     setState(() {
@@ -135,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<String?> inputPassword(String title) {
-    return AlertUtils.showAlert(title, 'password', context);
+    return AlertUtils.showTextField(title, 'password', context);
   }
 
   void _toChatListPage() {
@@ -146,6 +162,25 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _showLoading() {
+    if (context.mounted) {
+      // show a loading dialog
+      AlertUtils.showLoading(context);
+    }
+  }
+
+  void _hideLoading() {
+    if (context.mounted) {
+      // show a loading dialog
+      AlertUtils.hideLoading(context);
+    }
+  }
+
+  void _showToast(String text) {
+    if (!context.mounted) return;
+    AlertUtils.showText(text, context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,24 +188,25 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Center(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
                 'Connection status: ${_connectionStatus.name}',
               ),
-              const Divider(),
+              const SizedBox(height: 16),
               Text('DID Type: ${_currentDid?.type ?? ''}'),
-              const Divider(),
+              const SizedBox(height: 16),
               Text('DID Value: ${_currentDid?.value ?? ''}'),
-              const Divider(),
+              const SizedBox(height: 16),
               Text('UserId: $_userId'),
-              const Divider(),
+              const SizedBox(height: 16),
               Text('SessionKey: ${_sessionKey?.sessionKey ?? ''}'),
-              const Divider(),
+              const SizedBox(height: 16),
               ElevatedButton(
                   onPressed: _connectWallet,
                   child: const Text('1. Connect Wallet')),

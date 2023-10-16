@@ -88,7 +88,7 @@ class _ChatsPageState extends State<ChatsPage> {
 
   void _onCreateGroup() async {
     final groupName =
-        await AlertUtils.showAlert('Creat Group', 'Group Name', context);
+        await AlertUtils.showTextField('Creat Group', 'Group Name', context);
     if (groupName == null) return;
     await client.createGroup(groupName, null);
   }
