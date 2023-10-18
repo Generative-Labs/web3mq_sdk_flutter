@@ -39,6 +39,8 @@ dependencies:
 
   url_launcher: ^6.1.11
 
+  intl: ^0.18.0
+
   web3mq:
     path: ../
 

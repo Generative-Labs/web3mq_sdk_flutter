@@ -4,6 +4,7 @@ import 'dart:collection';
 
 import 'package:example/utils/alert_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:web3mq/web3mq.dart';
 
 import '../main.dart';
@@ -153,6 +154,8 @@ class _ChatsPageState extends State<ChatsPage> {
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  final formatter = DateFormat('MM/dd HH:mm');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,9 +163,38 @@ class _ChatsPageState extends State<ChatsPage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          IconButton(
-            onPressed: _onShowPublishMessageToTopicDialog,
+          PopupMenuButton<String>(
+            // add offset below the button
+            offset: const Offset(0, 44),
             icon: const Icon(Icons.add),
+            onSelected: (String result) {
+              switch (result) {
+                case 'Create group':
+                  _onCreateGroup();
+                  break;
+                case 'Join group':
+                  _onJoinGroup();
+                  break;
+                case 'Send message':
+                  _onShowPublishMessageToTopicDialog();
+                  break;
+                default:
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'Create group',
+                child: Text('Create group'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Join group',
+                child: Text('Join group'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Send message',
+                child: Text('Send message'),
+              ),
+            ],
           ),
         ],
       ),
@@ -171,7 +203,9 @@ class _ChatsPageState extends State<ChatsPage> {
           _page = 1;
           return _getChannels();
         },
-        child: ListView.builder(
+        child: ListView.separated(
+          separatorBuilder: (context, index) => const Divider(),
+          // add divier
           itemCount: _channels.length,
           itemBuilder: (context, index) {
             final item = _channels[index];
@@ -189,28 +223,13 @@ class _ChatsPageState extends State<ChatsPage> {
               },
               title: Text(item.channel.name),
               subtitle: Text(item.lastMessage?.text ?? ''),
-              trailing: Text(item.lastMessage?.timestamp.toString() ?? ''),
+              // timestamp to string
+              trailing: Text(formatter.format(
+                  DateTime.fromMillisecondsSinceEpoch(
+                      item.lastMessage?.timestamp ?? 0))),
             );
           },
         ),
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: _onCreateGroup,
-            tooltip: 'Create grouop',
-            child: const Text('Create Group'),
-          ),
-          const SizedBox(
-            height: 32,
-          ),
-          FloatingActionButton(
-            onPressed: _onJoinGroup,
-            tooltip: 'Join grouop',
-            child: const Text('Join Group'),
-          )
-        ],
       ),
     );
   }

@@ -28,8 +28,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
 
-    print('debug:topicId:${widget.topicId}');
-
     WidgetsBinding.instance.addObserver(this);
 
     // fetches messages from server
