@@ -37,14 +37,13 @@ class WalletConnectV2Connector implements WalletConnector {
     });
 
     final uri = resp.uri;
-    if (null != uri) {
-      await launchUrl(uri);
-      session = await resp.session.future;
-      final accounts = session!.namespaces['eip155']?.accounts;
-      return Wallet(accounts ?? []);
-    } else {
+    if (null == uri) {
       return Wallet([]);
     }
+    await launchUrl(uri);
+    session = await resp.session.future;
+    final accounts = session!.namespaces['eip155']?.accounts;
+    return Wallet(accounts ?? []);
   }
 
   @override

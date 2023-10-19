@@ -24,12 +24,36 @@ class _ChatsPageState extends State<ChatsPage> {
   bool _isLoading = false;
   int _page = 1;
 
+  final theTestGroupId = 'group:8d7851d94641d6b8b7986cc9030c661dffb900ef';
+
   @override
   void initState() {
     super.initState();
     if (!mounted) return;
 
     _listenChannels();
+    _ensureJoinedATestGroup(theTestGroupId);
+  }
+
+  // ensure joined a test group
+  void _ensureJoinedATestGroup(String groupId) {
+    client.groups().then((value) {
+      final result = value.result;
+      if (result.isEmpty) {
+        client.joinGroup(groupId);
+      } else {
+        bool joined = false;
+        for (int i = 0; i < result.length; i++) {
+          if (result[i].groupId == groupId) {
+            joined = true;
+            break;
+          }
+        }
+        if (!joined) {
+          client.joinGroup(groupId);
+        }
+      }
+    });
   }
 
   void _onChannelListUpdate(List<ChannelState> list) {
@@ -224,9 +248,10 @@ class _ChatsPageState extends State<ChatsPage> {
               title: Text(item.channel.name),
               subtitle: Text(item.lastMessage?.text ?? ''),
               // timestamp to string
-              trailing: Text(formatter.format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                      item.lastMessage?.timestamp ?? 0))),
+              trailing: item.lastMessage?.timestamp != null
+                  ? Text(formatter.format(DateTime.fromMillisecondsSinceEpoch(
+                      item.lastMessage?.timestamp ?? 0)))
+                  : null,
             );
           },
         ),
