@@ -4,7 +4,7 @@ This monorepo contains multiple web3mq tools based on the [Dart](<https://dart.d
 
 ## Example code and demoapp
 
-The example code for the package web3mq_chat is available at <https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_chat/example>. The corresponding app can be downloaded and experienced through this TestFlight beta link: <https://testflight.apple.com/join/Bb0dseGv>
+The example code for the package web3mq_chat is available at [web3mq_chat example code](https://github.com/Generative-Labs/web3mq_sdk_flutter/tree/main/packages/web3mq_chat/example). The corresponding app can be downloaded and experienced through this [TestFlight beta link](https://testflight.apple.com/join/Bb0dseGv)
 
 ## Packages
 
