@@ -19,7 +19,7 @@ class _ConnectPageState extends State<ConnectPage> {
   DID? _currentDid;
 
   // Get _userId by userInfo api
-  String? _userId;
+  String? _userId = '';
 
   // Get credentials by generateSessionKey
   User? _sessionKey;
@@ -102,11 +102,17 @@ class _ConnectPageState extends State<ConnectPage> {
     // If you cached the privateKey, you can use it to generate session
     // key by `client.generateSessionKey(_currentDid!, privateKey, duration)`.
     // Or you can use password to generate session key.
-    final createdSessionKey = await client.generateSessionKeyWithPassword(
-        _currentDid!, password, const Duration(days: 7));
-    setState(() {
-      _sessionKey = createdSessionKey;
-    });
+    try {
+      final createdSessionKey = await client.generateSessionKeyWithPassword(
+          _currentDid!, password, const Duration(days: 7));
+      setState(() {
+        _sessionKey = createdSessionKey;
+      });
+    } catch (e) {
+      // If any errors
+      if (!context.mounted) return;
+      await AlertUtils.showText(e.toString(), context);
+    }
   }
 
   void _onConnectClient() async {
@@ -147,6 +153,17 @@ class _ConnectPageState extends State<ConnectPage> {
     AlertUtils.showText(text, context);
   }
 
+  final ButtonStyle _defaultButtonStyle = TextButton.styleFrom(
+    foregroundColor: Colors.white,
+    disabledForegroundColor: const Color.fromRGBO(143, 107, 244, 1),
+    backgroundColor: const Color.fromRGBO(102, 60, 238, 1),
+    // background: rgba(247, 250, 255, 1);
+    disabledBackgroundColor: const Color.fromRGBO(247, 250, 255, 1),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(6)),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,9 +176,13 @@ class _ConnectPageState extends State<ConnectPage> {
           padding: const EdgeInsets.all(32),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            // mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Text(
+                style: const TextStyle(
+                    color: Colors.green,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
                 'Connection status: ${_connectionStatus.name}',
               ),
               const SizedBox(height: 16),
@@ -169,24 +190,39 @@ class _ConnectPageState extends State<ConnectPage> {
               const SizedBox(height: 16),
               Text('DID Value: ${_currentDid?.value ?? ''}'),
               const SizedBox(height: 16),
-              Text('UserId: $_userId'),
+              TextButton(
+                  style: _defaultButtonStyle,
+                  onPressed: _currentDid == null ? _connectWallet : null,
+                  child: const Text('Connect Wallet')),
+              const SizedBox(height: 16),
+              //
+              Text(
+                  'UserId: ${_userId ?? 'The current userId is empty, which means you have not created credentials yet. Clicking the "Generate session key" button below will create credentials (including userId) and session key for you.'}'),
+              const SizedBox(height: 16),
+              TextButton(
+                  style: _defaultButtonStyle,
+                  onPressed: _currentDid != null
+                      ? (_sessionKey == null ? _onGenerateSesionKey : null)
+                      : null,
+                  child: const Text('Generate Session Key')),
               const SizedBox(height: 16),
               Text('SessionKey: ${_sessionKey?.sessionKey ?? ''}'),
               const SizedBox(height: 16),
-              ElevatedButton(
-                  onPressed: _connectWallet,
-                  child: const Text('1. Connect Wallet')),
-              ElevatedButton(
-                  onPressed: _onGenerateSesionKey,
-                  child: const Text('2. Generate Session Key')),
-              ElevatedButton(
-                  onPressed: _sessionKey != null ? _onConnectClient : null,
-                  child: const Text('3. Connect Client')),
-              _connectionStatus == ConnectionStatus.connected
-                  ? ElevatedButton(
-                      onPressed: _toChatListPage,
-                      child: const Text('Go to Chat List Page'))
-                  : Container(),
+              TextButton(
+                  style: _defaultButtonStyle,
+                  onPressed: _sessionKey != null
+                      ? (_connectionStatus != ConnectionStatus.connected
+                          ? _onConnectClient
+                          : null)
+                      : null,
+                  child: const Text('Connect Client')),
+              const SizedBox(height: 16),
+              TextButton(
+                  style: _defaultButtonStyle,
+                  onPressed: _connectionStatus == ConnectionStatus.connected
+                      ? _toChatListPage
+                      : null,
+                  child: const Text('Go to Chat List Page'))
             ],
           ),
         ),
