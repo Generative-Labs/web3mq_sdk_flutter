@@ -228,33 +228,44 @@ class _ChatsPageState extends State<ChatsPage> {
           _page = 1;
           return _getChannels();
         },
-        child: ListView.separated(
-          separatorBuilder: (context, index) => const Divider(),
+        child: ListView.builder(
+          // separatorBuilder: (context, index) => const Divider(
+          //   indent: 32,
+          // ),
           // add divier
           itemCount: _channels.length,
           itemBuilder: (context, index) {
             final item = _channels[index];
-            return ListTile(
-              onTap: () {
-                if (!mounted) return;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ChatPage(
-                            topicId: item.channel.topic,
-                            title: item.channel.channelId,
-                          )),
-                );
-              },
-              leading: Image.network(
-                  'https://cdn.stamp.fyi/avatar/${item.channel.topic}?s=300'),
-              title: Text(item.channel.name),
-              subtitle: Text(item.lastMessage?.text ?? ''),
-              // timestamp to string
-              trailing: item.lastMessage?.timestamp != null
-                  ? Text(formatter.format(DateTime.fromMillisecondsSinceEpoch(
-                      item.lastMessage?.timestamp ?? 0)))
-                  : null,
+            return Column(
+              children: [
+                ListTile(
+                  onTap: () {
+                    if (!mounted) return;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChatPage(
+                                topicId: item.channel.topic,
+                                title: item.channel.channelId,
+                              )),
+                    );
+                  },
+                  leading: Image.network(
+                      'https://cdn.stamp.fyi/avatar/${item.channel.topic}?s=300'),
+                  title: Text(item.channel.name),
+                  subtitle: Text(item.lastMessage?.text ?? ''),
+                  // timestamp to string
+                  trailing: item.lastMessage?.timestamp != null
+                      ? Text(formatter.format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              item.lastMessage?.timestamp ?? 0)))
+                      : null,
+                ),
+                const Divider(
+                  indent: 16,
+                  thickness: 0.3,
+                ),
+              ],
             );
           },
         ),
