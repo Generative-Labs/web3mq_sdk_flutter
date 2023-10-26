@@ -112,15 +112,15 @@ class _ChatsPageState extends State<ChatsPage> {
   }
 
   void _onCreateGroup() async {
-    final groupName =
-        await AlertUtils.showTextField('Creat Group', 'Group Name', context);
+    final groupName = await AlertUtils.showTextField(
+        'Creat Group', null, 'Group Name', context);
     if (groupName == null) return;
     await client.createGroup(groupName, null);
   }
 
   void _onJoinGroup() async {
     final groupId =
-        await AlertUtils.showTextField('Join Group', 'GroupId', context);
+        await AlertUtils.showTextField('Join Group', null, 'GroupId', context);
     if (groupId == null || groupId.isEmpty) return;
     await client.joinGroup(groupId);
   }
@@ -185,6 +185,7 @@ class _ChatsPageState extends State<ChatsPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
         actions: [
           PopupMenuButton<String>(
@@ -245,6 +246,8 @@ class _ChatsPageState extends State<ChatsPage> {
                           )),
                 );
               },
+              leading: Image.network(
+                  'https://cdn.stamp.fyi/avatar/${item.channel.topic}?s=300'),
               title: Text(item.channel.name),
               subtitle: Text(item.lastMessage?.text ?? ''),
               // timestamp to string

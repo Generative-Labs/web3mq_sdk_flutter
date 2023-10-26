@@ -44,7 +44,8 @@ dependencies:
   web3mq:
     path: ../
 
-  web3dart: ^2.6.1
+  web3dart: ^2.7.1
+
   eth_sig_util: ^0.0.9
 
   shimmer: ^2.0.0

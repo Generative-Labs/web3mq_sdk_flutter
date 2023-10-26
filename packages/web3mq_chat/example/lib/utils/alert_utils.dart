@@ -5,7 +5,8 @@ class AlertUtils {
 
   ///
   static Future<String?> showTextField(
-      String title, String placeholder, BuildContext context) async {
+      String? title, String? body, String placeholder, BuildContext context,
+      {bool security = false}) async {
     // tap button and return the result
     return await showDialog<String>(
       context: context,
@@ -13,11 +14,13 @@ class AlertUtils {
       builder: (BuildContext context) {
         return AlertDialog(
           key: UniqueKey(),
-          title: Text(title),
+          title: title != null ? Text(title) : null,
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
+                body != null ? Text(body) : Container(),
                 TextField(
+                  obscureText: security,
                   decoration: InputDecoration(hintText: placeholder),
                   controller: _textController,
                 ),
@@ -47,9 +50,9 @@ class AlertUtils {
     );
   }
 
-  static showText(String message, BuildContext buildContext) {
+  static showText(String? message, BuildContext buildContext) {
     AlertDialog alertDialog = AlertDialog(
-      content: Text(message),
+      content: message != null ? Text(message) : null,
       actions: [
         TextButton(
           child: const Text('close'),
@@ -67,16 +70,22 @@ class AlertUtils {
     );
   }
 
-  static showLoading(BuildContext context) {
+  static showLoading(BuildContext context, {String? text}) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return const AlertDialog(
-            backgroundColor: Colors.transparent,
+        return AlertDialog(
+            backgroundColor: Colors.grey[100],
             content: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [CircularProgressIndicator()],
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(
+                  height: 8,
+                ),
+                text != null ? Text(text) : Container()
+              ],
             ));
       },
     );

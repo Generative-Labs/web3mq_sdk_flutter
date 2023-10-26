@@ -157,6 +157,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: GestureDetector(
           onLongPress: () {
             showMenu(
@@ -205,6 +206,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
               ),
             ),
             Container(
+              color: Colors.grey[100],
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [

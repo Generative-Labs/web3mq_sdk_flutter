@@ -75,7 +75,7 @@ class _ConnectPageState extends State<ConnectPage> {
 
   // create session key when user not exist, you should create credentials first.
   void _createSessionKeyWhenUserNotExist() async {
-    final password = await inputPassword('Create password');
+    final password = await inputPassword(inputPasswordText);
     if (password == null) return;
     try {
       final credentials =
@@ -93,11 +93,14 @@ class _ConnectPageState extends State<ConnectPage> {
     }
   }
 
+  String inputPasswordText =
+      "Use the password you've set before, or simply enter one if it's your first time. Remember Web3MQ does not store this password for you.";
+
   // Generate session key when user exist, you could generate session key with
   // password or privateKey.
   void _generateSessionKeyWhenUserExist() async {
     // user exist, generate session key with password.
-    final password = await inputPassword('Input your password');
+    final password = await inputPassword(inputPasswordText);
     if (password == null) return;
     // If you cached the privateKey, you can use it to generate session
     // key by `client.generateSessionKey(_currentDid!, privateKey, duration)`.
@@ -122,8 +125,9 @@ class _ConnectPageState extends State<ConnectPage> {
     await client.connectUser(_sessionKey!);
   }
 
-  Future<String?> inputPassword(String title) {
-    return AlertUtils.showTextField(title, 'password', context);
+  Future<String?> inputPassword(String body) {
+    return AlertUtils.showTextField(null, body, 'password', context,
+        security: true);
   }
 
   void _toChatListPage() {
@@ -137,7 +141,7 @@ class _ConnectPageState extends State<ConnectPage> {
   void _showLoading() {
     if (context.mounted) {
       // show a loading dialog
-      AlertUtils.showLoading(context);
+      AlertUtils.showLoading(context, text: 'via WalletConnectV2');
     }
   }
 
@@ -193,7 +197,7 @@ class _ConnectPageState extends State<ConnectPage> {
               TextButton(
                   style: _defaultButtonStyle,
                   onPressed: _currentDid == null ? _connectWallet : null,
-                  child: const Text('Connect Wallet')),
+                  child: const Text('Step 1: Connect Wallet')),
               const SizedBox(height: 16),
               //
               Text(
@@ -204,7 +208,7 @@ class _ConnectPageState extends State<ConnectPage> {
                   onPressed: _currentDid != null
                       ? (_sessionKey == null ? _onGenerateSesionKey : null)
                       : null,
-                  child: const Text('Generate Session Key')),
+                  child: const Text('Step 2: Generate Session Key')),
               const SizedBox(height: 16),
               Text('SessionKey: ${_sessionKey?.sessionKey ?? ''}'),
               const SizedBox(height: 16),
@@ -215,14 +219,14 @@ class _ConnectPageState extends State<ConnectPage> {
                           ? _onConnectClient
                           : null)
                       : null,
-                  child: const Text('Connect Client')),
+                  child: const Text('Step 3: Connect Client')),
               const SizedBox(height: 16),
               TextButton(
                   style: _defaultButtonStyle,
                   onPressed: _connectionStatus == ConnectionStatus.connected
                       ? _toChatListPage
                       : null,
-                  child: const Text('Go to Chat List Page'))
+                  child: const Text('Step 4: Go to Chat List Page'))
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:example/connect_page/connect_page.dart';
+import 'package:example/wallet_connector/inner_wallet_connector.dart';
 import 'package:example/wallet_connector/wallet_connect_v2_connector.dart';
 import 'package:flutter/material.dart';
 import 'package:web3mq/web3mq.dart';
@@ -28,7 +29,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Web3MQ Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       home: const ConnectPage(title: 'Web3MQ Demo Home Page'),
