@@ -39,12 +39,16 @@ abstract class Web3MQWebSocket {
   Future<Event> connect(WebSocketUser user,
       {ConnectMode mode = ConnectMode.normal});
 
+  /// Switches the url of the `web3mq` server.
+  Future<void> switchUrl(String url);
+
   /// Disconnect from the `web3mq` server.
   void disconnect();
 
   /// This notifies of connection status changes
   Stream<ConnectionStatus> get connectionStatusStream;
 
+  /// Sends message.
   void send(Web3MQBufferConvertible message);
 }
 
@@ -68,7 +72,7 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWebSocket {
   final String? appKey;
 
   /// Websocket base Url
-  final String baseUrl;
+  String baseUrl;
 
   /// The logger
   final Logger? _logger;
@@ -508,5 +512,22 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWebSocket {
     final scheme = baseUrl.startsWith('https') ? 'wss' : 'ws';
     final host = baseUrl.replaceAll(RegExp(r'(^\w+:|^)\/\/'), '');
     return Uri(scheme: scheme, host: host, path: "messages");
+  }
+
+  @override
+  Future<void> switchUrl(String url) async {
+    _logger?.info('Starting switchUrl with $url');
+    try {
+      final user = _user;
+      if (user == null) {
+        throw Web3MQWebSocketError(
+            "Switch url error: you should be connected first");
+      }
+      baseUrl = url;
+      disconnect();
+      connect(user, mode: _connectMode);
+    } catch (e, stk) {
+      _onConnectionError(e, stk);
+    }
   }
 }
