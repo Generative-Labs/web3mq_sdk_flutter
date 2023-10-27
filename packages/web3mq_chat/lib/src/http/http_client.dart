@@ -60,6 +60,10 @@ class Web3MQHttpClient {
 
   void close({bool force = false}) => httpClient.close(force: force);
 
+  void switchUrl(String url) {
+    httpClient.options.baseUrl = url;
+  }
+
   /// Handy method to make http GET request with error parsing.
   Future<Response<T>> get<T>(
     String path, {

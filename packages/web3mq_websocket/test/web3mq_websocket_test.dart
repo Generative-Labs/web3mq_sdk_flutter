@@ -121,7 +121,7 @@ void main() {
         ]),
       );
 
-      await webSocket.switchUrl('a-new-url');
+      webSocket.switchUrl('a-new-url');
       addTearDown(timer1.cancel);
     });
 

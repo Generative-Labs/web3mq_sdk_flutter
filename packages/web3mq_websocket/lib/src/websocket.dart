@@ -40,7 +40,7 @@ abstract class Web3MQWebSocket {
       {ConnectMode mode = ConnectMode.normal});
 
   /// Switches the url of the `web3mq` server.
-  Future<void> switchUrl(String url);
+  void switchUrl(String url);
 
   /// Disconnect from the `web3mq` server.
   void disconnect();
@@ -515,7 +515,7 @@ class Web3MQWebSocketManager with TimerHelper implements Web3MQWebSocket {
   }
 
   @override
-  Future<void> switchUrl(String url) async {
+  void switchUrl(String url) {
     _logger?.info('Starting switchUrl with $url');
     try {
       final user = _user;

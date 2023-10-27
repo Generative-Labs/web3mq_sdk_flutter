@@ -343,6 +343,12 @@ class Web3MQClient {
     _ws.disconnect();
   }
 
+  /// Switches the current endpoint to a new endpoint.
+  void switchUrl(String url) {
+    _ws.switchUrl(url);
+    _service.switchUrl(url);
+  }
+
   void _newMessageHandler(Web3MQRequestMessage message) {
     if (message.contentTopic.contains('user:') &&
         message.comeFrom != state.currentUser?.userId) {

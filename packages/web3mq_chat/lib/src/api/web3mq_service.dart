@@ -33,6 +33,10 @@ class Web3MQService {
   GroupApi? _group;
   UtilsApi? _utils;
 
+  void switchUrl(String url) {
+    _client.switchUrl(url);
+  }
+
   /// Api dedicated to users operations
   NotificationApi get notification =>
       _notification ??= NotificationApi(_client, _signer);
