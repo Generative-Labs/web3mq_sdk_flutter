@@ -1,0 +1,10 @@
+[package]
+    name = "web3mq_mls"
+    version = "0.1.0"
+    edition = "2021"
+
+[dependencies]
+    flutter_rust_bridge = "1"
+
+[lib]
+crate-type = ["lib", "staticlib", "cdylib"]

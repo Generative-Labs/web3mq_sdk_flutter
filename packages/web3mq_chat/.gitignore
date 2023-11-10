@@ -237,3 +237,8 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/dart,macos,windows,visualstudiocode,androidstudio,xcode
+
+
+### RUST 
+# 所有名字叫 target 下的子文件及子文件夹
+target/
