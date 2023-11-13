@@ -1,0 +1,11 @@
+[workspace]
+members = ["packages/web3mq_mls", "packages/web3mq_chat/example/native"]
+
+
+[workspace.dependencies]
+openmls = { git = "https://github.com/Generative-Labs/openmls.git", branch = "main", features = [
+    "test-utils",
+] }
+openmls_traits = { git = "https://github.com/Generative-Labs/openmls.git", branch = "main" }
+openmls_rust_crypto = { git = "https://github.com/Generative-Labs/openmls.git", branch = "main" }
+openmls_basic_credential = { git = "https://github.com/Generative-Labs/openmls.git", branch = "main" }
