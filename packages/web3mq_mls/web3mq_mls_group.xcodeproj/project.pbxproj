@@ -1,5 +1,6 @@
 // !$*UTF8*$!
 {
+	/* generated with cargo-xcode 1.9.0 */
 	archiveVersion = 1;
 	classes = {
 	};
@@ -7,12 +8,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CA00C9FB6FE1A4FBD9FA5238 /* Cargo.toml in Sources */ = {isa = PBXBuildFile; fileRef = CAF9B8593E843EF4668187A5 /* Cargo.toml */; settings = {COMPILER_FLAGS = "--lib"; }; };
-		CA01C9FB6FE12087CA0F0552 /* Cargo.toml in Sources */ = {isa = PBXBuildFile; fileRef = CAF9B8593E843EF4668187A5 /* Cargo.toml */; settings = {COMPILER_FLAGS = "--lib"; }; };
+		CA00BC18648459D54E1E48B7 /* Cargo.toml in Sources */ = {isa = PBXBuildFile; fileRef = CAF90C79936C3EF4668187A5 /* Cargo.toml */; settings = {COMPILER_FLAGS = "--lib"; }; };
+		CA01BC1864841F5B3E9F9F6E /* Cargo.toml in Sources */ = {isa = PBXBuildFile; fileRef = CAF90C79936C3EF4668187A5 /* Cargo.toml */; settings = {COMPILER_FLAGS = "--lib"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
-		CAF4B8593E84AC6C1400ACA8 /* PBXBuildRule */ = {
+		CAF40C79936CAC6C1400ACA8 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			dependencyFile = "$(DERIVED_FILE_DIR)/$(ARCHS)-$(EXECUTABLE_NAME).d";
@@ -31,31 +32,31 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
-		CA0009C13DBB2969E816930C /* libnative_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libnative_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		CA0185092185EAC3B2E0A336 /* native.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = native.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		CAF9B8593E843EF4668187A5 /* Cargo.toml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cargo.toml; sourceTree = "<group>"; };
+		CA0050772C209B9F796F0CEF /* libweb3mq_mls_group_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libweb3mq_mls_group_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA01690308A86B9FEF42B427 /* web3mq_mls_group.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = web3mq_mls_group.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAF90C79936C3EF4668187A5 /* Cargo.toml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Cargo.toml; path = Cargo.toml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		CAF0B8593E84D65BC3C892A8 = {
+		CAF00C79936CD65BC3C892A8 = {
 			isa = PBXGroup;
 			children = (
-				CAF9B8593E843EF4668187A5 /* Cargo.toml */,
-				CAF1B8593E8422869D176AE5 /* Products */,
-				CAF2B8593E8498AF0B5890DB /* Frameworks */,
+				CAF90C79936C3EF4668187A5 /* Cargo.toml */,
+				CAF10C79936C22869D176AE5 /* Products */,
+				CAF20C79936C98AF0B5890DB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
-		CAF1B8593E8422869D176AE5 /* Products */ = {
+		CAF10C79936C22869D176AE5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CA0009C13DBB2969E816930C /* libnative_static.a */,
-				CA0185092185EAC3B2E0A336 /* native.dylib */,
+				CA0050772C209B9F796F0CEF /* libweb3mq_mls_group_static.a */,
+				CA01690308A86B9FEF42B427 /* web3mq_mls_group.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CAF2B8593E8498AF0B5890DB /* Frameworks */ = {
+		CAF20C79936C98AF0B5890DB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -65,58 +66,58 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CA0009C13DBBA4FBD9FA5238 /* native-staticlib */ = {
+		CA0050772C2059D54E1E48B7 /* web3mq_mls_group-staticlib */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CA00F1B8E7FBA4FBD9FA5238 /* Build configuration list for PBXNativeTarget "native-staticlib" */;
+			buildConfigurationList = CA004A0F9CF459D54E1E48B7 /* Build configuration list for PBXNativeTarget "web3mq_mls_group-staticlib" */;
 			buildPhases = (
-				CA002B6231B9A4FBD9FA5238 /* Sources */,
+				CA00BABBD32E59D54E1E48B7 /* Sources */,
 			);
 			buildRules = (
-				CAF4B8593E84AC6C1400ACA8 /* PBXBuildRule */,
+				CAF40C79936CAC6C1400ACA8 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
-			name = "native-staticlib";
-			productName = libnative_static.a;
-			productReference = CA0009C13DBB2969E816930C /* libnative_static.a */;
+			name = "web3mq_mls_group-staticlib";
+			productName = libweb3mq_mls_group_static.a;
+			productReference = CA0050772C209B9F796F0CEF /* libweb3mq_mls_group_static.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		CA01850921852087CA0F0552 /* native-cdylib */ = {
+		CA01690308A81F5B3E9F9F6E /* web3mq_mls_group-cdylib */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CA01F1B8E7FB2087CA0F0552 /* Build configuration list for PBXNativeTarget "native-cdylib" */;
+			buildConfigurationList = CA014A0F9CF41F5B3E9F9F6E /* Build configuration list for PBXNativeTarget "web3mq_mls_group-cdylib" */;
 			buildPhases = (
-				CA012B6231B92087CA0F0552 /* Sources */,
+				CA01BABBD32E1F5B3E9F9F6E /* Sources */,
 			);
 			buildRules = (
-				CAF4B8593E84AC6C1400ACA8 /* PBXBuildRule */,
+				CAF40C79936CAC6C1400ACA8 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
-			name = "native-cdylib";
-			productName = native.dylib;
-			productReference = CA0185092185EAC3B2E0A336 /* native.dylib */;
+			name = "web3mq_mls_group-cdylib";
+			productName = web3mq_mls_group.dylib;
+			productReference = CA01690308A86B9FEF42B427 /* web3mq_mls_group.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		CAF3B8593E84E04653AD465F /* Project object */ = {
+		CAF30C79936CE04653AD465F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1510;
 				TargetAttributes = {
-					CA0009C13DBBA4FBD9FA5238 = {
+					CA0050772C2059D54E1E48B7 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
-					CA01850921852087CA0F0552 = {
+					CA01690308A81F5B3E9F9F6E = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = CAF6B8593E8480E02D6C7F57 /* Build configuration list for PBXProject "native" */;
+			buildConfigurationList = CAF60C79936C80E02D6C7F57 /* Build configuration list for PBXProject "web3mq_mls_group" */;
 			compatibilityVersion = "Xcode 11.4";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -124,90 +125,88 @@
 				en,
 				Base,
 			);
-			mainGroup = CAF0B8593E84D65BC3C892A8;
-			productRefGroup = CAF1B8593E8422869D176AE5 /* Products */;
+			mainGroup = CAF00C79936CD65BC3C892A8;
+			productRefGroup = CAF10C79936C22869D176AE5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CA0009C13DBBA4FBD9FA5238 /* native-staticlib */,
-				CA01850921852087CA0F0552 /* native-cdylib */,
+				CA0050772C2059D54E1E48B7 /* web3mq_mls_group-staticlib */,
+				CA01690308A81F5B3E9F9F6E /* web3mq_mls_group-cdylib */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		CA002B6231B9A4FBD9FA5238 /* Sources */ = {
+		CA00BABBD32E59D54E1E48B7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA00C9FB6FE1A4FBD9FA5238 /* Cargo.toml in Sources */,
+				CA00BC18648459D54E1E48B7 /* Cargo.toml in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CA012B6231B92087CA0F0552 /* Sources */ = {
+		CA01BABBD32E1F5B3E9F9F6E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA01C9FB6FE12087CA0F0552 /* Cargo.toml in Sources */,
+				CA01BC1864841F5B3E9F9F6E /* Cargo.toml in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		CA0005B7F6F8A4FBD9FA5238 /* Debug */ = {
+		CA0083B59CA659D54E1E48B7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CARGO_XCODE_CARGO_DEP_FILE_NAME = libnative.d;
-				CARGO_XCODE_CARGO_FILE_NAME = libnative.a;
+				CARGO_XCODE_CARGO_DEP_FILE_NAME = libweb3mq_mls_group.d;
+				CARGO_XCODE_CARGO_FILE_NAME = libweb3mq_mls_group.a;
 				INSTALL_GROUP = "";
 				INSTALL_MODE_FLAG = "";
 				INSTALL_OWNER = "";
-				PRODUCT_NAME = native_static;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "xrsimulator xros watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
-			};
-			name = Debug;
-		};
-		CA00CEA150AFA4FBD9FA5238 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CARGO_XCODE_CARGO_DEP_FILE_NAME = libnative.d;
-				CARGO_XCODE_CARGO_FILE_NAME = libnative.a;
-				INSTALL_GROUP = "";
-				INSTALL_MODE_FLAG = "";
-				INSTALL_OWNER = "";
-				PRODUCT_NAME = native_static;
+				PRODUCT_NAME = web3mq_mls_group_static;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "xrsimulator xros watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
 			};
 			name = Release;
 		};
-		CA0105B7F6F82087CA0F0552 /* Debug */ = {
+		CA00EB17191D59D54E1E48B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CARGO_XCODE_CARGO_DEP_FILE_NAME = libnative.d;
-				CARGO_XCODE_CARGO_FILE_NAME = libnative.dylib;
-				DEVELOPMENT_TEAM = 26583UCE94;
-				DYLIB_COMPATIBILITY_VERSION = 0;
-				PRODUCT_NAME = native;
-				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				CARGO_XCODE_CARGO_DEP_FILE_NAME = libweb3mq_mls_group.d;
+				CARGO_XCODE_CARGO_FILE_NAME = libweb3mq_mls_group.a;
+				INSTALL_GROUP = "";
+				INSTALL_MODE_FLAG = "";
+				INSTALL_OWNER = "";
+				PRODUCT_NAME = web3mq_mls_group_static;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "xrsimulator xros watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
 			};
 			name = Debug;
 		};
-		CA01CEA150AF2087CA0F0552 /* Release */ = {
+		CA0183B59CA61F5B3E9F9F6E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CARGO_XCODE_CARGO_DEP_FILE_NAME = libnative.d;
-				CARGO_XCODE_CARGO_FILE_NAME = libnative.dylib;
-				DEVELOPMENT_TEAM = 26583UCE94;
+				CARGO_XCODE_CARGO_DEP_FILE_NAME = libweb3mq_mls_group.d;
+				CARGO_XCODE_CARGO_FILE_NAME = libweb3mq_mls_group.dylib;
 				DYLIB_COMPATIBILITY_VERSION = 0;
-				PRODUCT_NAME = native;
+				PRODUCT_NAME = web3mq_mls_group;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 			};
 			name = Release;
 		};
-		CAF7563ECB1E3CC16B37690B /* Release */ = {
+		CA01EB17191D1F5B3E9F9F6E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CARGO_XCODE_CARGO_DEP_FILE_NAME = libweb3mq_mls_group.d;
+				CARGO_XCODE_CARGO_FILE_NAME = libweb3mq_mls_group.dylib;
+				DYLIB_COMPATIBILITY_VERSION = 0;
+				PRODUCT_NAME = web3mq_mls_group;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+			};
+			name = Debug;
+		};
+		CAF7ED89B0113CC16B37690B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ADDITIONAL_SDKS = macosx;
@@ -216,17 +215,16 @@
 				CARGO_XCODE_BUILD_PROFILE = release;
 				CARGO_XCODE_FEATURES = "";
 				CURRENT_PROJECT_VERSION = 0.1;
-				DYLIB_INSTALL_NAME_BASE = "@executable_path/../Frameworks/";
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_NAME = native;
+				PRODUCT_NAME = web3mq_mls_group;
 				RUSTUP_TOOLCHAIN = "";
 				SDKROOT = macosx;
 				SUPPORTS_MACCATALYST = YES;
 			};
 			name = Release;
 		};
-		CAF8563ECB1E228BE02872F8 /* Debug */ = {
+		CAF8ED89B011228BE02872F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ADDITIONAL_SDKS = macosx;
@@ -235,11 +233,10 @@
 				CARGO_XCODE_BUILD_PROFILE = debug;
 				CARGO_XCODE_FEATURES = "";
 				CURRENT_PROJECT_VERSION = 0.1;
-				DYLIB_INSTALL_NAME_BASE = "@executable_path/../Frameworks/";
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				MARKETING_VERSION = 0.1.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = native;
+				PRODUCT_NAME = web3mq_mls_group;
 				RUSTUP_TOOLCHAIN = "";
 				SDKROOT = macosx;
 				SUPPORTS_MACCATALYST = YES;
@@ -249,34 +246,34 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CA00F1B8E7FBA4FBD9FA5238 /* Build configuration list for PBXNativeTarget "native-staticlib" */ = {
+		CA004A0F9CF459D54E1E48B7 /* Build configuration list for PBXNativeTarget "web3mq_mls_group-staticlib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CA00CEA150AFA4FBD9FA5238 /* Release */,
-				CA0005B7F6F8A4FBD9FA5238 /* Debug */,
+				CA0083B59CA659D54E1E48B7 /* Release */,
+				CA00EB17191D59D54E1E48B7 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CA01F1B8E7FB2087CA0F0552 /* Build configuration list for PBXNativeTarget "native-cdylib" */ = {
+		CA014A0F9CF41F5B3E9F9F6E /* Build configuration list for PBXNativeTarget "web3mq_mls_group-cdylib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CA01CEA150AF2087CA0F0552 /* Release */,
-				CA0105B7F6F82087CA0F0552 /* Debug */,
+				CA0183B59CA61F5B3E9F9F6E /* Release */,
+				CA01EB17191D1F5B3E9F9F6E /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CAF6B8593E8480E02D6C7F57 /* Build configuration list for PBXProject "native" */ = {
+		CAF60C79936C80E02D6C7F57 /* Build configuration list for PBXProject "web3mq_mls_group" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CAF7563ECB1E3CC16B37690B /* Release */,
-				CAF8563ECB1E228BE02872F8 /* Debug */,
+				CAF7ED89B0113CC16B37690B /* Release */,
+				CAF8ED89B011228BE02872F8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = CAF3B8593E84E04653AD465F /* Project object */;
+	rootObject = CAF30C79936CE04653AD465F /* Project object */;
 }
