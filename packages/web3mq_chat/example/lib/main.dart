@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:example/connect_page/connect_page.dart';
+import 'package:example/ffi.dart';
 import 'package:example/wallet_connector/inner_wallet_connector.dart';
 import 'package:example/wallet_connector/wallet_connect_v2_connector.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +17,9 @@ final walletConnector = WalletConnectV2Connector();
 final client =
     Web3MQClient(yourApiKey, baseURL: TestnetEndpoint.us1, wc: walletConnector);
 
-void main() {
+void main() async {
   runApp(const MyApp());
+  print('hello: ${await api.greet()}');
 }
 
 class MyApp extends StatelessWidget {
