@@ -1,13 +1,22 @@
-use openmls::prelude::MlsMessageInBody::KeyPackage;
-use openmls::prelude::*;
 use std::collections::HashSet;
+
+use openmls::prelude::*;
 use tls_codec::{
     TlsByteSliceU16, TlsByteVecU16, TlsByteVecU32, TlsByteVecU8, TlsDeserialize, TlsSerialize,
     TlsSize, TlsVecU32,
 };
 
-/// The first value is the key package hash (output of `KeyPackage::hash`)
-/// and the second value is the corresponding key package.
+#[derive(Debug, Default, Clone)]
+pub struct ClientInfo {
+    pub client_name: String,
+    pub key_packages: ClientKeyPackages,
+    /// map of reserved key_packages [group_id, key_package_hash]
+    pub reserved_key_pkg_hash: HashSet<Vec<u8>>,
+    pub id: Vec<u8>,
+    pub msgs: Vec<MlsMessageIn>,
+    pub welcome_queue: Vec<MlsMessageIn>,
+}
+
 #[derive(
     Debug,
     Default,
@@ -21,26 +30,14 @@ use tls_codec::{
 )]
 pub struct ClientKeyPackages(pub TlsVecU32<(TlsByteVecU8, KeyPackageIn)>);
 
-/// Information about a client.
-#[derive(Debug, Default, Clone)]
-pub struct ClientInfo {
-    pub client_name: String,
-    pub key_packages: ClientKeyPackages,
-    pub reserved_key_pkg_hash: HashSet<Vec<u8>>,
-    pub id: Vec<u8>,
-    pub msgs: Vec<MlsMessageIn>,
-    pub welcome_queue: Vec<MlsMessageIn>,
-}
-
 impl ClientInfo {
     /// Create a new `ClientInfo` struct for a given client name and vector of
     /// key packages with corresponding hashes.
-    pub fn new(client_name: String, mut key_packages: Vec<(Vec<u8>, KeyPackageIn)>) -> Self {
+pub fn new(client_name: String, mut key_packages: Vec<(Vec<u8>, KeyPackageIn)>) -> Self {
         let key_package: KeyPackage = KeyPackage::from(key_packages[0].1.clone());
         let id = key_package.leaf_node().credential().identity().to_vec();
         Self {
             client_name,
-            id,
             key_packages: ClientKeyPackages(
                 key_packages
                     .drain(..)
@@ -49,6 +46,7 @@ impl ClientInfo {
                     .into(),
             ),
             reserved_key_pkg_hash: HashSet::new(),
+            id: id,
             msgs: Vec::new(),
             welcome_queue: Vec::new(),
         }
@@ -65,44 +63,16 @@ impl ClientInfo {
     /// The reserved hash ref will be used in DS::send_welcome and removed once welcome is distributed
     pub fn consume_kp(&mut self) -> Result<KeyPackageIn, String> {
         if self.key_packages.0.len() <= 1 {
-            // We keep one key package to handle ClientInfo serialization/deserialization issues
-            return Err("No more key package available".to_string());
+            // We keep one keypackage to handle ClientInfo serialization/deserialization issues
+            return Err("No more keypackage available".to_string());
         }
         match self.key_packages.0.pop() {
             Some(c) => {
                 self.reserved_key_pkg_hash.insert(c.0.into_vec());
                 Ok(c.1)
             }
-            None => Err("No more key package available".to_string()),
+            None => Err("No more keypackage available".to_string()),
         }
-    }
-}
-
-impl tls_codec::Size for ClientInfo {
-    fn tls_serialized_len(&self) -> usize {
-        TlsByteSliceU16(self.client_name.as_bytes()).tls_serialized_len()
-            + self.key_packages.tls_serialized_len()
-    }
-}
-
-impl tls_codec::Serialize for ClientInfo {
-    fn tls_serialize<W: std::io::Write>(&self, writer: &mut W) -> Result<usize, tls_codec::Error> {
-        let written = TlsByteSliceU16(self.client_name.as_bytes()).tls_serialize(writer)?;
-        self.key_packages.tls_serialize(writer).map(|l| l + written)
-    }
-}
-
-impl tls_codec::Deserialize for ClientInfo {
-    fn tls_deserialize<R: std::io::Read>(bytes: &mut R) -> Result<Self, tls_codec::Error> {
-        let client_name =
-            String::from_utf8_lossy(TlsByteVecU16::tls_deserialize(bytes)?.as_slice()).into();
-        let mut key_packages: Vec<(TlsByteVecU8, KeyPackageIn)> =
-            TlsVecU32::<(TlsByteVecU8, KeyPackageIn)>::tls_deserialize(bytes)?.into();
-        let key_packages = key_packages
-            .drain(..)
-            .map(|(e1, e2)| (e1.into(), e2))
-            .collect();
-        Ok(Self::new(client_name, key_packages))
     }
 }
 
@@ -127,6 +97,35 @@ impl GroupMessage {
                 .collect::<Vec<TlsByteVecU32>>()
                 .into(),
         }
+    }
+}
+
+impl tls_codec::Size for ClientInfo {
+    fn tls_serialized_len(&self) -> usize {
+        TlsByteSliceU16(self.client_name.as_bytes()).tls_serialized_len()
+            + self.key_packages.tls_serialized_len()
+    }
+}
+
+impl tls_codec::Serialize for ClientInfo {
+    fn tls_serialize<W: std::io::Write>(&self, writer: &mut W) -> Result<usize, tls_codec::Error> {
+        let written = TlsByteSliceU16(self.client_name.as_bytes()).tls_serialize(writer)?;
+        self.key_packages.tls_serialize(writer).map(|l| l + written)
+    }
+}
+
+impl tls_codec::Deserialize for ClientInfo {
+    fn tls_deserialize<R: std::io::Read>(bytes: &mut R) -> Result<Self, tls_codec::Error> {
+        let client_name =
+            String::from_utf8_lossy(TlsByteVecU16::tls_deserialize(bytes)?.as_slice()).into();
+
+        let mut key_packages: Vec<(TlsByteVecU8, KeyPackageIn)> =
+            TlsVecU32::<(TlsByteVecU8, KeyPackageIn)>::tls_deserialize(bytes)?.into();
+        let key_packages = key_packages
+            .drain(..)
+            .map(|(e1, e2)| (e1.into(), e2))
+            .collect();
+        Ok(Self::new(client_name, key_packages))
     }
 }
 

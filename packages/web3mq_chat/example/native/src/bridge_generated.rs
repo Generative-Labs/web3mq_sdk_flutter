@@ -32,6 +32,210 @@ fn wire_greet_impl(port_: MessagePort) {
         move || move |task_callback| Result::<_, ()>::Ok(greet()),
     )
 }
+fn wire_inital_user_impl(port_: MessagePort, user_id: impl Wire2Api<String> + UnwindSafe) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, bool, _>(
+        WrapInfo {
+            debug_name: "inital_user",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_user_id = user_id.wire2api();
+            move |task_callback| inital_user(api_user_id)
+        },
+    )
+}
+fn wire_register_impl(port_: MessagePort, user_id: impl Wire2Api<String> + UnwindSafe) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
+        WrapInfo {
+            debug_name: "register",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_user_id = user_id.wire2api();
+            move |task_callback| register(api_user_id)
+        },
+    )
+}
+fn wire_get_file_path_readable_impl(
+    port_: MessagePort,
+    user_id: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
+        WrapInfo {
+            debug_name: "get_file_path_readable",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_user_id = user_id.wire2api();
+            move |task_callback| Result::<_, ()>::Ok(get_file_path_readable(api_user_id))
+        },
+    )
+}
+fn wire_get_groups_impl(port_: MessagePort, user_id: impl Wire2Api<String> + UnwindSafe) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Vec<String>, _>(
+        WrapInfo {
+            debug_name: "get_groups",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_user_id = user_id.wire2api();
+            move |task_callback| get_groups(api_user_id)
+        },
+    )
+}
+fn wire_create_group_impl(
+    port_: MessagePort,
+    user_id: impl Wire2Api<String> + UnwindSafe,
+    group_id: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Vec<String>, _>(
+        WrapInfo {
+            debug_name: "create_group",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_user_id = user_id.wire2api();
+            let api_group_id = group_id.wire2api();
+            move |task_callback| create_group(api_user_id, api_group_id)
+        },
+    )
+}
+fn wire_update_impl(port_: MessagePort, user_id: impl Wire2Api<String> + UnwindSafe) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, (), _>(
+        WrapInfo {
+            debug_name: "update",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_user_id = user_id.wire2api();
+            move |task_callback| update(api_user_id)
+        },
+    )
+}
+fn wire_can_add_member_to_group_impl(
+    port_: MessagePort,
+    user_id: impl Wire2Api<String> + UnwindSafe,
+    target_user_id: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, bool, _>(
+        WrapInfo {
+            debug_name: "can_add_member_to_group",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_user_id = user_id.wire2api();
+            let api_target_user_id = target_user_id.wire2api();
+            move |task_callback| {
+                Result::<_, ()>::Ok(can_add_member_to_group(api_user_id, api_target_user_id))
+            }
+        },
+    )
+}
+fn wire_add_member_to_group_impl(
+    port_: MessagePort,
+    user_id: impl Wire2Api<String> + UnwindSafe,
+    member_user_id: impl Wire2Api<String> + UnwindSafe,
+    group_id: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, (), _>(
+        WrapInfo {
+            debug_name: "add_member_to_group",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_user_id = user_id.wire2api();
+            let api_member_user_id = member_user_id.wire2api();
+            let api_group_id = group_id.wire2api();
+            move |task_callback| add_member_to_group(api_user_id, api_member_user_id, api_group_id)
+        },
+    )
+}
+fn wire_send_msg_impl(
+    port_: MessagePort,
+    user_id: impl Wire2Api<String> + UnwindSafe,
+    msg: impl Wire2Api<String> + UnwindSafe,
+    group_id: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
+        WrapInfo {
+            debug_name: "send_msg",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_user_id = user_id.wire2api();
+            let api_msg = msg.wire2api();
+            let api_group_id = group_id.wire2api();
+            move |task_callback| send_msg(api_user_id, api_msg, api_group_id)
+        },
+    )
+}
+fn wire_read_msg_impl(
+    port_: MessagePort,
+    msg: impl Wire2Api<String> + UnwindSafe,
+    user_id: impl Wire2Api<String> + UnwindSafe,
+    sender_user_id: impl Wire2Api<String> + UnwindSafe,
+    group_id: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
+        WrapInfo {
+            debug_name: "read_msg",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_msg = msg.wire2api();
+            let api_user_id = user_id.wire2api();
+            let api_sender_user_id = sender_user_id.wire2api();
+            let api_group_id = group_id.wire2api();
+            move |task_callback| read_msg(api_msg, api_user_id, api_sender_user_id, api_group_id)
+        },
+    )
+}
+fn wire_get_all_messages_impl(
+    port_: MessagePort,
+    user_id: impl Wire2Api<String> + UnwindSafe,
+    group_id: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Vec<String>, _>(
+        WrapInfo {
+            debug_name: "get_all_messages",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_user_id = user_id.wire2api();
+            let api_group_id = group_id.wire2api();
+            move |task_callback| get_all_messages(api_user_id, api_group_id)
+        },
+    )
+}
+fn wire_leave_group_impl(
+    port_: MessagePort,
+    user_id: impl Wire2Api<String> + UnwindSafe,
+    group_id: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, (), _>(
+        WrapInfo {
+            debug_name: "leave_group",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_user_id = user_id.wire2api();
+            let api_group_id = group_id.wire2api();
+            move |task_callback| leave_group(api_user_id, api_group_id)
+        },
+    )
+}
 // Section: wrapper structs
 
 // Section: static checks
@@ -54,6 +258,13 @@ where
         (!self.is_null()).then(|| self.wire2api())
     }
 }
+
+impl Wire2Api<u8> for u8 {
+    fn wire2api(self) -> u8 {
+        self
+    }
+}
+
 // Section: impl IntoDart
 
 // Section: executor

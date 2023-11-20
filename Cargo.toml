@@ -1,6 +1,6 @@
 [workspace]
-members = ["packages/web3mq_mls", "packages/web3mq_chat/example/native"]
-
+members = ["packages/web3mq_mls_group", "packages/web3mq_chat/example/native"]
+# resolver = "2"
 
 [workspace.dependencies]
 openmls = { git = "https://github.com/Generative-Labs/openmls.git", branch = "main", features = [

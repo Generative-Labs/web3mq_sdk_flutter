@@ -1092,7 +1092,11 @@ dependencies = [
 name = "native"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "flutter_rust_bridge",
+ "futures",
+ "tokio",
+ "web3mq_mls_group",
 ]
 
 [[package]]
@@ -1718,6 +1722,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "signal-hook-registry"
+version = "1.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d8229b473baa5980ac72ef434c4415e70c4b5e71b423043adb4ba059f89c99a1"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "signature"
 version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1917,9 +1930,23 @@ dependencies = [
  "libc",
  "mio",
  "num_cpus",
+ "parking_lot",
  "pin-project-lite",
+ "signal-hook-registry",
  "socket2 0.5.5",
+ "tokio-macros",
  "windows-sys",
+]
+
+[[package]]
+name = "tokio-macros"
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5b8a1e28f2deaa14e508979454cb3a223b10b938b45af148bc0986de36f1923b"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.39",
 ]
 
 [[package]]
@@ -2059,8 +2086,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7daec296f25a1bae309c0cd5c29c4b260e510e6d813c286b19eaadf409d40fce"
 dependencies = [
  "cfg-if",
- "serde",
- "serde_json",
  "wasm-bindgen-macro",
 ]
 
@@ -2145,10 +2170,8 @@ dependencies = [
  "serde_json",
  "thiserror",
  "tls_codec",
+ "tokio",
  "url",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "web3mq_mls_group",
 ]
 
 [[package]]

@@ -10,7 +10,10 @@ class InnerWalletConnector implements web3mq.WalletConnector {
   // It's the testing account
   // you can replace your own private key here for testing.
   // Warning: care for your private key!
-  static const String _thePrivateKey = '';
+  // UserA: 6e229b5c5c3383c55f4e70e26df560b92e90f8da78da88fbc8a2701b1899f3d7
+  // UserB: e1ac9db61281f7b762f3da696e3f018898af12a1872fd3707c0c20c06bbbf45b
+  static const String _thePrivateKey =
+      'e1ac9db61281f7b762f3da696e3f018898af12a1872fd3707c0c20c06bbbf45b';
 
   final _InnerWallet _wallet = _InnerWallet.fromPrivateKey(_thePrivateKey);
 

@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:example/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:web3mq/web3mq.dart';
 
@@ -123,6 +126,12 @@ class _ConnectPageState extends State<ConnectPage> {
       throw Exception('you should generate session key first');
     }
     await client.connectUser(_sessionKey!);
+    if (_userId != null) {
+      final user = await api.initalUser(userId: _userId!);
+      print("debug: rust initial user :$user");
+      final result = await api.register(userId: _userId!);
+      print("debug: register  user :$result");
+    }
   }
 
   Future<String?> inputPassword(String body) {

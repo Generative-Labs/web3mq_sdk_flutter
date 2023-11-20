@@ -11,11 +11,11 @@ import 'package:web3mq/web3mq.dart';
 const String yourApiKey = '';
 
 // WalletConnectV2Connector
-final walletConnector = WalletConnectV2Connector();
+final walletConnector = InnerWalletConnector();
 
 ///
 final client =
-    Web3MQClient(yourApiKey, baseURL: TestnetEndpoint.us1, wc: walletConnector);
+    Web3MQClient(yourApiKey, baseURL: DevEndpoint.us2, wc: walletConnector);
 
 void main() async {
   runApp(const MyApp());

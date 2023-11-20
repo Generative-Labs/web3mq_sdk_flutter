@@ -15,7 +15,8 @@ enum WSCommandType {
   ping(code: 128),
   pong(code: 129),
   bridgeConnectRequest(code: 100),
-  bridgeConnectResponse(code: 101);
+  bridgeConnectResponse(code: 101),
+  mls(code: 200);
 
   const WSCommandType({
     required this.code,
@@ -45,6 +46,8 @@ enum WSCommandType {
         return WSCommandType.bridgeConnectRequest;
       case 101:
         return WSCommandType.bridgeConnectResponse;
+      case 200:
+        return WSCommandType.mls;
       default:
         throw Web3MQError("Invalid command code");
     }

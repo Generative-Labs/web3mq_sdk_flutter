@@ -1,14 +1,12 @@
 use openmls::prelude::*;
 use tls_codec::{Deserialize, TlsVecU16, TlsVecU32};
 use url::Url;
-use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::service::client_info::{ClientInfo, ClientKeyPackages, GroupMessage};
 use crate::service::user::User;
 
 use super::networking::{get, post};
 
-#[wasm_bindgen]
 pub struct Backend {
     ds_url: Url,
 }
@@ -52,14 +50,13 @@ impl Backend {
         url.set_path(&path);
 
         let response = get(&url).await?;
-
         match KeyPackageIn::tls_deserialize(&mut response.as_slice()) {
             Ok(kp) => Ok(kp),
             Err(e) => Err(format!("Error decoding server response: {e:?}")),
         }
     }
 
-    /// Publish client additional key packages
+    /// Publish client additional key packages.
     pub async fn publish_key_packages(
         &self,
         user: &User,

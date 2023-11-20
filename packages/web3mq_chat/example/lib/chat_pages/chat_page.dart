@@ -1,17 +1,27 @@
+import 'dart:convert';
+
+import 'package:example/ffi.dart';
+import 'package:example/utils/alert_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:web3dart/crypto.dart';
 import 'package:web3mq/web3mq.dart';
 
 import '../main.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage(
-      {super.key, required this.title, required this.topicId, this.threadId});
+      {super.key,
+      required this.title,
+      required this.topicId,
+      this.threadId,
+      required this.channelType});
 
   final String title;
   final String topicId;
   final String? threadId;
+  final String channelType;
 
   @override
   State<StatefulWidget> createState() => _ChatPageState();
@@ -33,14 +43,28 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     // fetches messages from server
     client
         .queryMessagesByTopic(widget.topicId, TimestampPagination(limit: 20))
-        .then((value) {
-      final result = value.result;
+        .then((value) async {
+      final result = await _processMLSMessages(value.result);
       _onMessagesUpdate(result);
       _markAllMessagesRead(result);
     });
 
     _listenMessages();
     _listenMessageUpdated();
+    final userId = client.state.currentUser?.userId ?? "";
+
+    _refreshMLS();
+  }
+
+  void _refreshMLS() {
+    if (widget.channelType == "group") {
+      final userId = client.state.currentUser?.userId ?? "";
+      api
+          .update(
+            userId: userId,
+          )
+          .then((value) => null);
+    }
   }
 
   void _markAllMessagesRead(List<Message> messages) {
@@ -77,13 +101,49 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   }
 
   void _listenMessages() {
-    client.newMessageStream.listen((message) {
+    client.newMessageStream.listen((message) async {
       if (message.topic == widget.topicId &&
           isThreadIdEqual(widget.threadId, message.threadId)) {
+        // processs the mls message if needed
+        if (_isGroup) {
+          message = await _processMLSMessage(message);
+        }
         _messages.add(message);
         _onMessagesUpdate(_messages);
       }
     });
+  }
+
+  Future<List<Message>> _processMLSMessages(List<Message> messages) async {
+    if (!_isGroup) return messages;
+    // _processMLSMessage each message in the messsages
+    final processedMessages = await Future.wait(
+      messages.map((e) async {
+        try {
+          return await _processMLSMessage(e);
+        } catch (_) {
+          // ignore error
+          return null;
+        }
+      }),
+    );
+    return processedMessages
+        .where((message) => message != null)
+        .cast<Message>()
+        .toList();
+  }
+
+  Future<Message> _processMLSMessage(Message message) async {
+    final userId = client.state.currentUser?.userId ?? "";
+    print("debug:read msg: ${message.text ?? ''}, groupID: ${widget.topicId}");
+
+    // convert utf8 to bytes
+    final mlsMsg = await api.readMsg(
+        userId: userId,
+        msg: message.text ?? '',
+        groupId: widget.topicId,
+        senderUserId: message.from);
+    return message.copyWith(text: mlsMsg);
   }
 
   bool isThreadIdEqual(String? threadIdA, String? threadIdB) {
@@ -116,10 +176,33 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     });
   }
 
-  void _sendMessage(String text) {
-    client.sendText(text, widget.topicId).then((value) {
-      final sendingMessage =
-          value.copyWith(sendingStatus: MessageSendingStatus.sending);
+  bool get _isGroup {
+    return widget.channelType == 'group';
+  }
+
+  Future<void> _sendMessage(String text) async {
+    String cipherSuite;
+    String message;
+    if (_isGroup) {
+      final userId = client.state.currentUser?.userId ?? "";
+      try {
+        message = await api.sendMsg(
+            userId: userId, msg: text, groupId: widget.topicId);
+      } catch (e) {
+        AlertUtils.showText(e.toString(), context);
+        return;
+      }
+      cipherSuite = 'MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519';
+      print("debug: mls group message: $message");
+    } else {
+      cipherSuite = 'NONE';
+      message = text;
+    }
+    client
+        .sendText(message, widget.topicId, cipherSuite: cipherSuite)
+        .then((value) {
+      final sendingMessage = value.copyWith(
+          text: text, sendingStatus: MessageSendingStatus.sending);
       final tempMessages = _messages;
       tempMessages.add(sendingMessage);
       _onMessagesUpdate(tempMessages);
@@ -175,6 +258,37 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
           },
           child: Text(widget.title),
         ),
+        // add a invite button
+        actions: [
+          TextButton(
+            child: const Text('Invite'),
+            onPressed: () async {
+              // pop up a textfield to input the userId
+              final taretUserId = await AlertUtils.showTextField(
+                  "Invite a member",
+                  "put the user id you want to invite",
+                  "user id",
+                  context);
+              if (taretUserId != null) {
+                final userId = client.state.currentUser?.userId ?? "";
+                final canInvite = await api.canAddMemberToGroup(
+                    userId: userId, targetUserId: taretUserId);
+                if (canInvite) {
+                  await client.invite(widget.topicId, [taretUserId]);
+                  // if success
+                  // if a use hasn't upload his key packages, it'll fails.
+                  await api.addMemberToGroup(
+                      userId: userId,
+                      groupId: widget.topicId,
+                      memberUserId: taretUserId);
+                } else {
+                  await AlertUtils.showText(
+                      "You can't invite this user", context);
+                }
+              }
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -221,8 +335,8 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                   ),
                   IconButton(
                     icon: const Icon(Icons.send),
-                    onPressed: () {
-                      _sendMessage(_textController.text);
+                    onPressed: () async {
+                      await _sendMessage(_textController.text);
                       _textController.clear();
                     },
                   ),
@@ -236,6 +350,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   }
 }
 
+///
 class ChatMessageCell extends StatelessWidget {
   final String username;
   final String message;

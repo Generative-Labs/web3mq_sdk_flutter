@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:web3mq/web3mq.dart';
 
+import '../ffi.dart';
 import '../main.dart';
 import 'chat_page.dart';
 
@@ -33,6 +34,7 @@ class _ChatsPageState extends State<ChatsPage> {
 
     _listenChannels();
     _ensureJoinedATestGroup(theTestGroupId);
+    _debugMLSGroups();
   }
 
   // ensure joined a test group
@@ -115,7 +117,18 @@ class _ChatsPageState extends State<ChatsPage> {
     final groupName = await AlertUtils.showTextField(
         'Creat Group', null, 'Group Name', context);
     if (groupName == null) return;
-    await client.createGroup(groupName, null);
+    final group = await client.createGroup(groupName, null);
+    final userId = client.state.currentUser?.userId ?? "";
+    final groups =
+        await api.createGroup(userId: userId, groupId: group.groupId);
+    print("create group: $groups");
+    _debugMLSGroups();
+  }
+
+  void _debugMLSGroups() async {
+    final userId = client.state.currentUser?.userId ?? "";
+    final groups = await api.getGroups(userId: userId);
+    print('debug: groups: $groups');
   }
 
   void _onJoinGroup() async {
@@ -123,6 +136,13 @@ class _ChatsPageState extends State<ChatsPage> {
         await AlertUtils.showTextField('Join Group', null, 'GroupId', context);
     if (groupId == null || groupId.isEmpty) return;
     await client.joinGroup(groupId);
+  }
+
+  void _onFollow() async {
+    final userId =
+        await AlertUtils.showTextField('Follow', null, 'UserId', context);
+    if (userId == null || userId.isEmpty) return;
+    await client.follow(userId, null);
   }
 
   final _topicController = TextEditingController();
@@ -203,6 +223,9 @@ class _ChatsPageState extends State<ChatsPage> {
                 case 'Send message':
                   _onShowPublishMessageToTopicDialog();
                   break;
+                case 'Follow':
+                  _onFollow();
+                  break;
                 default:
               }
             },
@@ -218,6 +241,10 @@ class _ChatsPageState extends State<ChatsPage> {
               const PopupMenuItem<String>(
                 value: 'Send message',
                 child: Text('Send message'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Follow',
+                child: Text('Follow user'),
               ),
             ],
           ),
@@ -247,6 +274,7 @@ class _ChatsPageState extends State<ChatsPage> {
                           builder: (context) => ChatPage(
                                 topicId: item.channel.topic,
                                 title: item.channel.channelId,
+                                channelType: item.channel.channelType,
                               )),
                     );
                   },

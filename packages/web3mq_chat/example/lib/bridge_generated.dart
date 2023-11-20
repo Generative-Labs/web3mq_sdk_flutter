@@ -14,6 +14,75 @@ abstract class Native {
   Future<String> greet({dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kGreetConstMeta;
+
+  ///
+  Future<bool> initalUser({required String userId, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kInitalUserConstMeta;
+
+  Future<String> register({required String userId, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kRegisterConstMeta;
+
+  Future<String> getFilePathReadable({required String userId, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kGetFilePathReadableConstMeta;
+
+  ///
+  Future<List<String>> getGroups({required String userId, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kGetGroupsConstMeta;
+
+  /// Create a group
+  Future<List<String>> createGroup(
+      {required String userId, required String groupId, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kCreateGroupConstMeta;
+
+  Future<void> update({required String userId, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kUpdateConstMeta;
+
+  Future<bool> canAddMemberToGroup(
+      {required String userId, required String targetUserId, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kCanAddMemberToGroupConstMeta;
+
+  Future<void> addMemberToGroup(
+      {required String userId,
+      required String memberUserId,
+      required String groupId,
+      dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kAddMemberToGroupConstMeta;
+
+  Future<String> sendMsg(
+      {required String userId,
+      required String msg,
+      required String groupId,
+      dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kSendMsgConstMeta;
+
+  Future<String> readMsg(
+      {required String msg,
+      required String userId,
+      required String senderUserId,
+      required String groupId,
+      dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kReadMsgConstMeta;
+
+  ///
+  Future<List<String>> getAllMessages(
+      {required String userId, required String groupId, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kGetAllMessagesConstMeta;
+
+  Future<void> leaveGroup(
+      {required String userId, required String groupId, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kLeaveGroupConstMeta;
 }
 
 class NativeImpl implements Native {
@@ -42,13 +111,275 @@ class NativeImpl implements Native {
         argNames: [],
       );
 
+  Future<bool> initalUser({required String userId, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(userId);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner.wire_inital_user(port_, arg0),
+      parseSuccessData: _wire2api_bool,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kInitalUserConstMeta,
+      argValues: [userId],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kInitalUserConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "inital_user",
+        argNames: ["userId"],
+      );
+
+  Future<String> register({required String userId, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(userId);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner.wire_register(port_, arg0),
+      parseSuccessData: _wire2api_String,
+      parseErrorData: _wire2api_String,
+      constMeta: kRegisterConstMeta,
+      argValues: [userId],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kRegisterConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "register",
+        argNames: ["userId"],
+      );
+
+  Future<String> getFilePathReadable({required String userId, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(userId);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_get_file_path_readable(port_, arg0),
+      parseSuccessData: _wire2api_String,
+      parseErrorData: null,
+      constMeta: kGetFilePathReadableConstMeta,
+      argValues: [userId],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kGetFilePathReadableConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "get_file_path_readable",
+        argNames: ["userId"],
+      );
+
+  Future<List<String>> getGroups({required String userId, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(userId);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner.wire_get_groups(port_, arg0),
+      parseSuccessData: _wire2api_StringList,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kGetGroupsConstMeta,
+      argValues: [userId],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kGetGroupsConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "get_groups",
+        argNames: ["userId"],
+      );
+
+  Future<List<String>> createGroup(
+      {required String userId, required String groupId, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(userId);
+    var arg1 = _platform.api2wire_String(groupId);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner.wire_create_group(port_, arg0, arg1),
+      parseSuccessData: _wire2api_StringList,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kCreateGroupConstMeta,
+      argValues: [userId, groupId],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kCreateGroupConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "create_group",
+        argNames: ["userId", "groupId"],
+      );
+
+  Future<void> update({required String userId, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(userId);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner.wire_update(port_, arg0),
+      parseSuccessData: _wire2api_unit,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kUpdateConstMeta,
+      argValues: [userId],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kUpdateConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "update",
+        argNames: ["userId"],
+      );
+
+  Future<bool> canAddMemberToGroup(
+      {required String userId, required String targetUserId, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(userId);
+    var arg1 = _platform.api2wire_String(targetUserId);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_can_add_member_to_group(port_, arg0, arg1),
+      parseSuccessData: _wire2api_bool,
+      parseErrorData: null,
+      constMeta: kCanAddMemberToGroupConstMeta,
+      argValues: [userId, targetUserId],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kCanAddMemberToGroupConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "can_add_member_to_group",
+        argNames: ["userId", "targetUserId"],
+      );
+
+  Future<void> addMemberToGroup(
+      {required String userId,
+      required String memberUserId,
+      required String groupId,
+      dynamic hint}) {
+    var arg0 = _platform.api2wire_String(userId);
+    var arg1 = _platform.api2wire_String(memberUserId);
+    var arg2 = _platform.api2wire_String(groupId);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_add_member_to_group(port_, arg0, arg1, arg2),
+      parseSuccessData: _wire2api_unit,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kAddMemberToGroupConstMeta,
+      argValues: [userId, memberUserId, groupId],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kAddMemberToGroupConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "add_member_to_group",
+        argNames: ["userId", "memberUserId", "groupId"],
+      );
+
+  Future<String> sendMsg(
+      {required String userId,
+      required String msg,
+      required String groupId,
+      dynamic hint}) {
+    var arg0 = _platform.api2wire_String(userId);
+    var arg1 = _platform.api2wire_String(msg);
+    var arg2 = _platform.api2wire_String(groupId);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_send_msg(port_, arg0, arg1, arg2),
+      parseSuccessData: _wire2api_String,
+      parseErrorData: _wire2api_String,
+      constMeta: kSendMsgConstMeta,
+      argValues: [userId, msg, groupId],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kSendMsgConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "send_msg",
+        argNames: ["userId", "msg", "groupId"],
+      );
+
+  Future<String> readMsg(
+      {required String msg,
+      required String userId,
+      required String senderUserId,
+      required String groupId,
+      dynamic hint}) {
+    var arg0 = _platform.api2wire_String(msg);
+    var arg1 = _platform.api2wire_String(userId);
+    var arg2 = _platform.api2wire_String(senderUserId);
+    var arg3 = _platform.api2wire_String(groupId);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_read_msg(port_, arg0, arg1, arg2, arg3),
+      parseSuccessData: _wire2api_String,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kReadMsgConstMeta,
+      argValues: [msg, userId, senderUserId, groupId],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kReadMsgConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "read_msg",
+        argNames: ["msg", "userId", "senderUserId", "groupId"],
+      );
+
+  Future<List<String>> getAllMessages(
+      {required String userId, required String groupId, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(userId);
+    var arg1 = _platform.api2wire_String(groupId);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_get_all_messages(port_, arg0, arg1),
+      parseSuccessData: _wire2api_StringList,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kGetAllMessagesConstMeta,
+      argValues: [userId, groupId],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kGetAllMessagesConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "get_all_messages",
+        argNames: ["userId", "groupId"],
+      );
+
+  Future<void> leaveGroup(
+      {required String userId, required String groupId, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(userId);
+    var arg1 = _platform.api2wire_String(groupId);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner.wire_leave_group(port_, arg0, arg1),
+      parseSuccessData: _wire2api_unit,
+      parseErrorData: _wire2api_String,
+      constMeta: kLeaveGroupConstMeta,
+      argValues: [userId, groupId],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kLeaveGroupConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "leave_group",
+        argNames: ["userId", "groupId"],
+      );
+
   void dispose() {
     _platform.dispose();
   }
 // Section: wire2api
 
+  FrbAnyhowException _wire2api_FrbAnyhowException(dynamic raw) {
+    return FrbAnyhowException(raw as String);
+  }
+
   String _wire2api_String(dynamic raw) {
     return raw as String;
+  }
+
+  List<String> _wire2api_StringList(dynamic raw) {
+    return (raw as List<dynamic>).cast<String>();
+  }
+
+  bool _wire2api_bool(dynamic raw) {
+    return raw as bool;
   }
 
   int _wire2api_u8(dynamic raw) {
@@ -58,9 +389,18 @@ class NativeImpl implements Native {
   Uint8List _wire2api_uint_8_list(dynamic raw) {
     return raw as Uint8List;
   }
+
+  void _wire2api_unit(dynamic raw) {
+    return;
+  }
 }
 
 // Section: api2wire
+
+@protected
+int api2wire_u8(int raw) {
+  return raw;
+}
 
 // Section: finalizer
 
@@ -69,6 +409,17 @@ class NativePlatform extends FlutterRustBridgeBase<NativeWire> {
 
 // Section: api2wire
 
+  @protected
+  ffi.Pointer<wire_uint_8_list> api2wire_String(String raw) {
+    return api2wire_uint_8_list(utf8.encoder.convert(raw));
+  }
+
+  @protected
+  ffi.Pointer<wire_uint_8_list> api2wire_uint_8_list(Uint8List raw) {
+    final ans = inner.new_uint_8_list_0(raw.length);
+    ans.ref.ptr.asTypedList(raw.length).setAll(0, raw);
+    return ans;
+  }
 // Section: finalizer
 
 // Section: api_fill_to_wire
@@ -182,6 +533,270 @@ class NativeWire implements FlutterRustBridgeWireBase {
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>('wire_greet');
   late final _wire_greet = _wire_greetPtr.asFunction<void Function(int)>();
 
+  void wire_inital_user(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> user_id,
+  ) {
+    return _wire_inital_user(
+      port_,
+      user_id,
+    );
+  }
+
+  late final _wire_inital_userPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>('wire_inital_user');
+  late final _wire_inital_user = _wire_inital_userPtr
+      .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_register(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> user_id,
+  ) {
+    return _wire_register(
+      port_,
+      user_id,
+    );
+  }
+
+  late final _wire_registerPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>('wire_register');
+  late final _wire_register = _wire_registerPtr
+      .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_get_file_path_readable(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> user_id,
+  ) {
+    return _wire_get_file_path_readable(
+      port_,
+      user_id,
+    );
+  }
+
+  late final _wire_get_file_path_readablePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_get_file_path_readable');
+  late final _wire_get_file_path_readable = _wire_get_file_path_readablePtr
+      .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_get_groups(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> user_id,
+  ) {
+    return _wire_get_groups(
+      port_,
+      user_id,
+    );
+  }
+
+  late final _wire_get_groupsPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>('wire_get_groups');
+  late final _wire_get_groups = _wire_get_groupsPtr
+      .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_create_group(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> user_id,
+    ffi.Pointer<wire_uint_8_list> group_id,
+  ) {
+    return _wire_create_group(
+      port_,
+      user_id,
+      group_id,
+    );
+  }
+
+  late final _wire_create_groupPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_create_group');
+  late final _wire_create_group = _wire_create_groupPtr.asFunction<
+      void Function(
+          int, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_update(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> user_id,
+  ) {
+    return _wire_update(
+      port_,
+      user_id,
+    );
+  }
+
+  late final _wire_updatePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>('wire_update');
+  late final _wire_update = _wire_updatePtr
+      .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_can_add_member_to_group(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> user_id,
+    ffi.Pointer<wire_uint_8_list> target_user_id,
+  ) {
+    return _wire_can_add_member_to_group(
+      port_,
+      user_id,
+      target_user_id,
+    );
+  }
+
+  late final _wire_can_add_member_to_groupPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_can_add_member_to_group');
+  late final _wire_can_add_member_to_group =
+      _wire_can_add_member_to_groupPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_add_member_to_group(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> user_id,
+    ffi.Pointer<wire_uint_8_list> member_user_id,
+    ffi.Pointer<wire_uint_8_list> group_id,
+  ) {
+    return _wire_add_member_to_group(
+      port_,
+      user_id,
+      member_user_id,
+      group_id,
+    );
+  }
+
+  late final _wire_add_member_to_groupPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_add_member_to_group');
+  late final _wire_add_member_to_group =
+      _wire_add_member_to_groupPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_send_msg(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> user_id,
+    ffi.Pointer<wire_uint_8_list> msg,
+    ffi.Pointer<wire_uint_8_list> group_id,
+  ) {
+    return _wire_send_msg(
+      port_,
+      user_id,
+      msg,
+      group_id,
+    );
+  }
+
+  late final _wire_send_msgPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_send_msg');
+  late final _wire_send_msg = _wire_send_msgPtr.asFunction<
+      void Function(int, ffi.Pointer<wire_uint_8_list>,
+          ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_read_msg(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> msg,
+    ffi.Pointer<wire_uint_8_list> user_id,
+    ffi.Pointer<wire_uint_8_list> sender_user_id,
+    ffi.Pointer<wire_uint_8_list> group_id,
+  ) {
+    return _wire_read_msg(
+      port_,
+      msg,
+      user_id,
+      sender_user_id,
+      group_id,
+    );
+  }
+
+  late final _wire_read_msgPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_read_msg');
+  late final _wire_read_msg = _wire_read_msgPtr.asFunction<
+      void Function(
+          int,
+          ffi.Pointer<wire_uint_8_list>,
+          ffi.Pointer<wire_uint_8_list>,
+          ffi.Pointer<wire_uint_8_list>,
+          ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_get_all_messages(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> user_id,
+    ffi.Pointer<wire_uint_8_list> group_id,
+  ) {
+    return _wire_get_all_messages(
+      port_,
+      user_id,
+      group_id,
+    );
+  }
+
+  late final _wire_get_all_messagesPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_get_all_messages');
+  late final _wire_get_all_messages = _wire_get_all_messagesPtr.asFunction<
+      void Function(
+          int, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_leave_group(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> user_id,
+    ffi.Pointer<wire_uint_8_list> group_id,
+  ) {
+    return _wire_leave_group(
+      port_,
+      user_id,
+      group_id,
+    );
+  }
+
+  late final _wire_leave_groupPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_leave_group');
+  late final _wire_leave_group = _wire_leave_groupPtr.asFunction<
+      void Function(
+          int, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
+
+  ffi.Pointer<wire_uint_8_list> new_uint_8_list_0(
+    int len,
+  ) {
+    return _new_uint_8_list_0(
+      len,
+    );
+  }
+
+  late final _new_uint_8_list_0Ptr = _lookup<
+          ffi
+          .NativeFunction<ffi.Pointer<wire_uint_8_list> Function(ffi.Int32)>>(
+      'new_uint_8_list_0');
+  late final _new_uint_8_list_0 = _new_uint_8_list_0Ptr
+      .asFunction<ffi.Pointer<wire_uint_8_list> Function(int)>();
+
   void free_WireSyncReturn(
     WireSyncReturn ptr,
   ) {
@@ -198,6 +813,13 @@ class NativeWire implements FlutterRustBridgeWireBase {
 }
 
 final class _Dart_Handle extends ffi.Opaque {}
+
+final class wire_uint_8_list extends ffi.Struct {
+  external ffi.Pointer<ffi.Uint8> ptr;
+
+  @ffi.Int32()
+  external int len;
+}
 
 typedef DartPostCObjectFnType = ffi.Pointer<
     ffi.NativeFunction<
