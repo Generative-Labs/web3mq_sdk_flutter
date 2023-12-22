@@ -37,7 +37,7 @@ dependencies:
   adaptive_number: ^1.0.0
   http_parser: ^4.0.2
   web3mq_websocket: ^0.1.0-dev.2
-  logging: ^1.1.0
+  logging: ^1.2.0
 
 dev_dependencies:
   lints: ^2.0.0
