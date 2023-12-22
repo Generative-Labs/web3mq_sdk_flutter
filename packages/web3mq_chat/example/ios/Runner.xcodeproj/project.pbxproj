@@ -11,6 +11,7 @@
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		37797F972729696D6C080E76 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AF1C13A4886F7AF02A6E069 /* Pods_RunnerTests.framework */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		653A41532B355A3F007BF9C4 /* librust_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 653A414E2B3559E4007BF9C4 /* librust_static.a */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -25,6 +26,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
 			remoteInfo = Runner;
+		};
+		653A414D2B3559E4007BF9C4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 653A41482B3559E4007BF9C4 /* rust.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CA00E53F5F723C0BDCB816E1;
+			remoteInfo = "rust-staticlib";
+		};
+		653A414F2B3559E4007BF9C4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 653A41482B3559E4007BF9C4 /* rust.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CA014F85CDADF106A24E505E;
+			remoteInfo = "rust-cdylib";
+		};
+		653A41512B355A27007BF9C4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 653A41482B3559E4007BF9C4 /* rust.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = CA00E53F5F72BCABECB12555;
+			remoteInfo = "rust-staticlib";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -52,6 +74,7 @@
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
+		653A41482B3559E4007BF9C4 /* rust.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = rust.xcodeproj; path = ../../../rust/rust.xcodeproj; sourceTree = "<group>"; };
 		6566F0472ADD369100C0E20E /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -73,6 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				653A41532B355A3F007BF9C4 /* librust_static.a in Frameworks */,
 				F271EE92833958AE4681E37D /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -107,6 +131,15 @@
 				331C807B294A618700263BE5 /* RunnerTests.swift */,
 			);
 			path = RunnerTests;
+			sourceTree = "<group>";
+		};
+		653A41492B3559E4007BF9C4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				653A414E2B3559E4007BF9C4 /* librust_static.a */,
+				653A41502B3559E4007BF9C4 /* rust.dylib */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
@@ -144,6 +177,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				653A41482B3559E4007BF9C4 /* rust.xcodeproj */,
 				6566F0472ADD369100C0E20E /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -204,6 +238,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				653A41522B355A27007BF9C4 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
@@ -241,6 +276,12 @@
 			mainGroup = 97C146E51CF9000F007C117D;
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 653A41492B3559E4007BF9C4 /* Products */;
+					ProjectRef = 653A41482B3559E4007BF9C4 /* rust.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
@@ -248,6 +289,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		653A414E2B3559E4007BF9C4 /* librust_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = librust_static.a;
+			remoteRef = 653A414D2B3559E4007BF9C4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		653A41502B3559E4007BF9C4 /* rust.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = rust.dylib;
+			remoteRef = 653A414F2B3559E4007BF9C4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		331C807F294A63A400263BE5 /* Resources */ = {
@@ -390,6 +448,11 @@
 			isa = PBXTargetDependency;
 			target = 97C146ED1CF9000F007C117D /* Runner */;
 			targetProxy = 331C8085294A63A400263BE5 /* PBXContainerItemProxy */;
+		};
+		653A41522B355A27007BF9C4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "rust-staticlib";
+			targetProxy = 653A41512B355A27007BF9C4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

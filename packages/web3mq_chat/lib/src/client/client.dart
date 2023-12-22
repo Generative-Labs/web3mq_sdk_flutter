@@ -13,6 +13,7 @@ import 'package:web3mq/src/api/cyber_service.dart';
 import 'package:web3mq/src/api/requests.dart';
 import 'package:web3mq/src/api/user_api.dart';
 import 'package:web3mq/src/api/web3mq_service.dart';
+import 'package:web3mq/src/client/mls_client.dart';
 import 'package:web3mq/src/client/persistence_client.dart';
 import 'package:web3mq/src/error/error.dart';
 import 'package:web3mq/src/models/channel_state.dart';
@@ -36,6 +37,7 @@ import '../utils/keypair.dart';
 import '../utils/logger.dart';
 import '../utils/signer.dart';
 import 'client_state.dart';
+import '../../native.dart';
 
 part 'client_chat.dart';
 part 'client_contacts.dart';
@@ -98,6 +100,8 @@ class Web3MQClient {
 
   ///
   CyberService? _cyberService;
+
+  final MlsClient _mlsClient = MlsClientImpl();
 
   ///
   late final Signer _signer;
@@ -240,6 +244,8 @@ class Web3MQClient {
     state.currentUser = user;
 
     _cyberService?.connect(user.userId);
+
+    _mlsClient.initialUser(userId: user.userId);
 
     try {
       if (_originalPersistenceClient != null) {
