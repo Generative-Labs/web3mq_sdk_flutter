@@ -2,6 +2,8 @@
 
 import 'package:drift/drift.dart';
 
+import 'channels.dart';
+
 /// Represents a [Members] table in [MoorChatDatabase].
 @DataClassName('MemberEntity')
 class Members extends Table {
@@ -10,7 +12,7 @@ class Members extends Table {
 
   /// The channel topic of which this user is part of
   TextColumn get channelTopic =>
-      text().customConstraint('REFERENCES channels(topic) ON DELETE CASCADE')();
+      text().references(Channels, #topic, onDelete: KeyAction.cascade)();
 
   /// The date of creation
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
