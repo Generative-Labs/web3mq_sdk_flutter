@@ -1,4 +1,5 @@
 {
   "cmake.sourceDirectory": "/Users/tommy/Documents/GitHubOpenSources/web3mq_sdk_flutter/packages/web3mq_sdk_flutter_demo/linux/flutter",
-  "cSpell.ignoreWords": ["_dylib"]
+  "cSpell.ignoreWords": ["_dylib"],
+  "editor.fontFamily": "Monaspace Neon, JetBrains Mono, monospace, Menlo, Monaco, 'Courier New'"
 }

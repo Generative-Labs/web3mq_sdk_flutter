@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:convert/convert.dart';
 import 'package:cryptography/cryptography.dart' as cry;
+import 'package:graphql/client.dart';
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 import 'package:pointycastle/api.dart' as pointycastle;
@@ -137,7 +138,7 @@ class Web3MQClient {
   Stream<Event> get _eventStream => _eventController.stream;
 
   /// Method called to add a new event to the [_eventController].
-  void handleEvent(Event event) {
+  Future<void> handleEvent(Event event) async {
     switch (event.type) {
       case EventType.notificationMessageNew:
         final notifications = event.notifications;
@@ -150,20 +151,29 @@ class Web3MQClient {
         break;
       case EventType.messageNew:
         final wsMessage = event.message;
-        if (null == wsMessage) return;
-        final message = Message.fromWSMessage(wsMessage)
+        if (null == wsMessage) return Future.value();
+        var message = Message.fromWSMessage(wsMessage)
             .copyWith(sendingStatus: MessageSendingStatus.sent);
+        if (message.cipherSuite == CipherSuit.mls) {
+          final text = await _mlsClient.mlsDecryptMsg(
+              userId: state.currentUser?.userId ?? '',
+              msg: message.text ?? '',
+              senderUserId: message.from,
+              groupId: message.topic);
+          message = message.copyWith(text: text);
+        }
         _newMessageController.add(message);
         break;
       case EventType.messageUpdated:
         final response = event.messageStatusResponse;
-        if (null == response) return;
+        if (null == response) return Future.value();
         _messageStatusUpdatingController.add(response);
         break;
       default:
         break;
     }
     _eventController.add(event);
+    return Future.value();
   }
 
   final _notificationController = rx.BehaviorSubject<List<Notification>>();

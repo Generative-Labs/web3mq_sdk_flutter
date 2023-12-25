@@ -88,7 +88,7 @@ extension ClientChat on Web3MQClient {
   /// Sends text message to the given topic.
   Future<Message> sendText(String text, String topic,
       {String? threadId,
-      String cipherSuite = 'NONE',
+      String cipherSuite = CipherSuit.none,
       bool needStore = true,
       Map<String, String>? extraData}) async {
     final user = state.currentUser;
@@ -97,6 +97,14 @@ extension ClientChat on Web3MQClient {
       throw Web3MQError("Send message error: you should be connected first");
     }
     final keyPair = KeyPair.fromPrivateKeyHex(user.sessionKey);
+    // if cipherSuite is mls, should encrypt message.
+    if (cipherSuite == CipherSuit.mls) {
+      text = await _mlsClient.mlsEncryptMsg(
+        userId: user.userId,
+        msg: text,
+        groupId: topic,
+      );
+    }
     final chatMessage = await MessageFactory.fromText(
         text, topic, user.userId, keyPair.privateKey, nodeId,
         threadId: threadId,
@@ -174,6 +182,8 @@ extension ClientChat on Web3MQClient {
   /// Get the events missed while offline to sync the offline storage
   /// Will automatically fetch [topic] and [lastSyncedAt] if [persistenceEnabled]
   Future<void> sync() async {
+    syncMlsGroupState();
+
     final persistenceClient = _persistenceClient;
     if (persistenceClient == null) return;
 
@@ -187,6 +197,15 @@ extension ClientChat on Web3MQClient {
     } catch (e, stk) {
       logger.severe('Error during sync', e, stk);
     }
+  }
+
+  void syncMlsGroupState() {
+    if (state.currentUser?.userId == null) return;
+    groups().then((value) {
+      final groupIds = value.result.map((e) => e.groupId).toList();
+      _mlsClient.syncMlsState(
+          userId: state.currentUser!.userId, groupIds: groupIds);
+    });
   }
 
   /// Marks all message in the given topic to read

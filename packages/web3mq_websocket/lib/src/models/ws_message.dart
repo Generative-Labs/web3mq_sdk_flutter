@@ -34,6 +34,8 @@ class CipherSuit {
 
   /// X25519/AES-GCM_SHA384
   static const String x25519 = 'X25519/AES-GCM_SHA384';
+
+  static const String mls = 'MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519';
 }
 
 /// This message is for websocket.
