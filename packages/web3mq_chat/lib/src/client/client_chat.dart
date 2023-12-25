@@ -98,7 +98,8 @@ extension ClientChat on Web3MQClient {
     }
     final keyPair = KeyPair.fromPrivateKeyHex(user.sessionKey);
     // if cipherSuite is mls, should encrypt message.
-    if (cipherSuite == CipherSuit.mls) {
+    if (cipherSuite == CipherSuit.mls &&
+        await _mlsClient.isMlsGroup(userId: user.userId, groupId: topic)) {
       text = await _mlsClient.mlsEncryptMsg(
         userId: user.userId,
         msg: text,
