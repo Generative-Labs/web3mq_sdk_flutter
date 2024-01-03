@@ -9,15 +9,13 @@ import 'package:logging/logging.dart';
 import 'package:pointycastle/api.dart' as pointycastle;
 import 'package:rxdart/rxdart.dart' as rx;
 import 'package:web3mq/src/api/contacts.api.dart';
-import 'package:web3mq/src/api/cyber_service.dart';
+import 'package:web3mq/src/api/extra_service.dart';
 import 'package:web3mq/src/api/requests.dart';
 import 'package:web3mq/src/api/user_api.dart';
 import 'package:web3mq/src/api/web3mq_service.dart';
 import 'package:web3mq/src/client/persistence_client.dart';
 import 'package:web3mq/src/error/error.dart';
 import 'package:web3mq/src/models/channel_state.dart';
-import 'package:web3mq/src/models/cyber_user_follow_status.dart';
-import 'package:web3mq/src/utils/cyber_signing_key_storage.dart';
 import 'package:web3mq/src/utils/sign_text_factory.dart';
 import 'package:web3mq/src/utils/utils.dart';
 import 'package:web3mq_websocket/web3mq_websocket.dart';
@@ -26,7 +24,6 @@ import '../api/responses.dart';
 import '../http/http_client.dart';
 import '../models/accounts.dart';
 import '../models/credentials.dart';
-import '../models/cyber_profile.dart';
 import '../models/did.dart';
 import '../models/message_sending_status.dart';
 import '../models/pagination.dart';
@@ -52,7 +49,7 @@ class Web3MQClient {
       Duration connectTimeout = const Duration(seconds: 15),
       Duration receiveTimeout = const Duration(seconds: 15),
       Web3MQService? apiService,
-      CyberService? cyberService,
+      List<ExtraService>? extraServices,
       Web3MQWebSocketManager? ws,
       Signer? signer,
       WalletConnector? wc}) {
@@ -70,7 +67,7 @@ class Web3MQClient {
           logger: detachedLogger('🕸️'),
         );
 
-    _cyberService = cyberService;
+    _extraServices = extraServices;
 
     _ws = ws ??
         Web3MQWebSocketManager(
@@ -97,7 +94,7 @@ class Web3MQClient {
   late final Web3MQService _service;
 
   ///
-  CyberService? _cyberService;
+  List<ExtraService>? _extraServices;
 
   ///
   late final Signer _signer;
@@ -239,7 +236,10 @@ class Web3MQClient {
 
     state.currentUser = user;
 
-    _cyberService?.connect(user.userId);
+    // connecting to extra services
+    _extraServices?.forEach((element) {
+      element.connect(user);
+    });
 
     try {
       if (_originalPersistenceClient != null) {
