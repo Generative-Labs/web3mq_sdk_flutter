@@ -250,12 +250,22 @@ class UserInfo {
 
   final int? timestamp;
 
-  @JsonKey(includeIfNull: false, toJson: Serializer.readOnly)
-  CyberProfile? cyberProfile;
-
   /// Create a new instance from a json
   static UserInfo fromJson(Map<String, dynamic> json) =>
       _$UserInfoFromJson(json);
+
+  ///
+  Map<String, Map<String, dynamic>> extraInfos = {};
+
+  /// Add extra info
+  void addExtraInfo(Map<String, dynamic> extraInfo, String serviceId) {
+    extraInfos[serviceId] = extraInfo;
+  }
+
+  /// Get extra info
+  void getExtraInfo(String serviceId) {
+    extraInfos[serviceId];
+  }
 
   UserInfo(
       this.didType,
@@ -729,9 +739,6 @@ class FollowUser {
   final String? avatarUrl;
 
   final String? nickname;
-
-  @JsonKey(includeIfNull: false, toJson: Serializer.readOnly)
-  CyberFollowStatus? cyberStatus;
 
   FollowUser(this.userId, this.followStatus, this.walletAddress,
       this.walletType, this.avatarUrl, this.nickname);

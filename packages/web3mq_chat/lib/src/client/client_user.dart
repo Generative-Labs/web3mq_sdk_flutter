@@ -4,23 +4,16 @@ part of 'client.dart';
 extension UserExtension on Web3MQClient {
   ///
   Future<UserInfo?> userInfo(String didType, String didValue) async {
-    final userInfoFuture = _service.user.userInfo(didType, didValue);
-    final List<Future> tasks = [userInfoFuture];
-    if (null != _cyberService) {
-      await _authCyberIfNeeded();
-      final cyberUserInfoFuture =
-          _cyberService!.profile.getProfileByAddress(didValue);
-      tasks.add(cyberUserInfoFuture);
+    final info = await _service.user.userInfo(didType, didValue);
+    if (_extraServices != null) {
+      for (var element in _extraServices!) {
+        final profile = await element.fetchProfile(didType, didValue);
+        if (profile != null && info != null) {
+          info.addExtraInfo(profile, element.serviceId);
+        }
+      }
     }
-    final results = await Future.wait(tasks);
-    if (results.isEmpty) {
-      return null;
-    }
-    final user = results.first as UserInfo?;
-    final cyberUserInfo =
-        results.length > 1 ? results[1] as CyberProfile? : null;
-    user?.cyberProfile = cyberUserInfo;
-    return user;
+    return info;
   }
 
   /// Updates user profile.
@@ -141,49 +134,6 @@ extension UserExtension on Web3MQClient {
           {String? userId}) =>
       generateSessionKey(did, privateKey, expiredDuration);
 
-  /// Register cyber signing key
-  Future<String> registerCyberSigningKey() async {
-    if (null == _cyberService) throw Web3MQError('Cyber service did not setup');
-
-    if (null == state.currentUser) {
-      throw Web3MQError('User did not setup');
-    }
-
-    await _authCyberIfNeeded();
-    final address = state.currentUser!.did.value;
-
-    final storage = CyberSigningKeyStorage();
-    final hasKey = await storage.hasSigningKeyByAddress(address);
-    if (hasKey) {
-      return await storage.getSigningKeyByAddress(address);
-    }
-
-    final privateKey = await storage.getSigningKeyByAddress(address);
-    final keyPair =
-        await cry.Ed25519().newKeyPairFromSeed(hex.decode(privateKey));
-    final publicKey = await keyPair.extractPublicKey();
-    final publicKeyHex = hex.encode(publicKey.bytes);
-
-    final acknowledgement = '''
-I authorize CyberConnect from this device using signing key:
-''';
-
-    final message = '$acknowledgement$publicKeyHex';
-    final signature =
-        await cry.Ed25519().sign(utf8.encode(message), keyPair: keyPair);
-    final signatureHex = hex.encode(signature.bytes);
-
-    final status = await _cyberService!.connection
-        .registerSigningKey(address, message, signatureHex, _apiKey);
-    if ('SUCCESS' == status) {
-      // persistence key
-      storage.setSigningKeyByAddress(address, privateKey);
-    } else {
-      throw Web3MQError('Register cyber signing key failed: $status');
-    }
-    return privateKey;
-  }
-
   Future<String> generateUserIdByDid(DID did) async {
     final bytes = utf8.encode('${did.type}:${did.value}');
     final sha224Bytes =
@@ -252,39 +202,6 @@ I authorize CyberConnect from this device using signing key:
     } catch (_) {}
     // Generate and return a new user ID if the user ID is null or an exception occurs
     return await generateUserIdByDid(DID(didType, didValue));
-  }
-
-  ///
-  Future<String?> _authCyberIfNeeded() async {
-    if (null == state.currentUser) {
-      return null;
-    }
-
-    if (null == walletConnector) {
-      return null;
-    }
-
-    if (null == _cyberService) {
-      return null;
-    }
-
-    final currentAccessToken = await _cyberService!.fetchAccessToken();
-    if (null != currentAccessToken) {
-      return currentAccessToken;
-    }
-
-    final domain = 'web3mq.com';
-    final address = state.currentUser!.did.value;
-
-    final message = await _cyberService!.auth.loginGetMessage(domain, address);
-    final signature = await walletConnector!.personalSign(message, address);
-    final token =
-        await _cyberService!.auth.loginVerify(domain, address, signature);
-
-    // persistence token
-    _cyberService?.saveAccessToken(token);
-
-    return token;
   }
 
   Future<String> _getPrivateKeyBySignature(String signature) async {
