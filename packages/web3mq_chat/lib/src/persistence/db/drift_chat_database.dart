@@ -33,12 +33,6 @@ class DriftChatDatabase extends _$DriftChatDatabase {
     QueryExecutor executor,
   ) : super(executor);
 
-  /// Instantiate a new database instance
-  DriftChatDatabase.connect(
-    this._userId,
-    DatabaseConnection connection,
-  ) : super.connect(connection);
-
   final String _userId;
 
   /// User id to which the database is connected

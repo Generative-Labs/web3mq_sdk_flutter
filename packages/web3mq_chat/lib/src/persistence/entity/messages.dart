@@ -1,5 +1,6 @@
 // coverage:ignore-file
 import 'package:drift/drift.dart';
+import 'channels.dart';
 
 import '../converter/converter.dart';
 
@@ -46,7 +47,7 @@ class Messages extends Table {
 
   /// The channel topic of which this message is part of
   TextColumn get channelTopic =>
-      text().customConstraint('REFERENCES channels(topic) ON DELETE CASCADE')();
+      text().references(Channels, #topic, onDelete: KeyAction.cascade)();
 
   /// The cipher suite of this message
   TextColumn get cipherSuite => text()();

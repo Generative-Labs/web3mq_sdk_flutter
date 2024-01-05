@@ -7,7 +7,7 @@ import '../../models/message_sending_status.dart';
 class MessageSendingStatusConverter
     extends TypeConverter<MessageSendingStatus, int> {
   @override
-  MessageSendingStatus? mapToDart(int? fromDb) {
+  MessageSendingStatus fromSql(int fromDb) {
     switch (fromDb) {
       case 0:
         return MessageSendingStatus.sending;
@@ -16,12 +16,12 @@ class MessageSendingStatusConverter
       case 2:
         return MessageSendingStatus.failed;
       default:
-        return null;
+        return MessageSendingStatus.sending;
     }
   }
 
   @override
-  int? mapToSql(MessageSendingStatus? value) {
+  int toSql(MessageSendingStatus value) {
     switch (value) {
       case MessageSendingStatus.sending:
         return 0;
@@ -30,7 +30,7 @@ class MessageSendingStatusConverter
       case MessageSendingStatus.failed:
         return 2;
       default:
-        return null;
+        return 0;
     }
   }
 }
