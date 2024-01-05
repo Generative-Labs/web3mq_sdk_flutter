@@ -8,11 +8,8 @@ issue_tracker: https://github.com/Generative-Labs/web3mq_sdk_flutter/issues
 
 environment:
   sdk: ">=2.18.0 <4.0.0"
-  flutter: ">=3.7.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
   intl: ^0.18.0
   uuid: ^3.0.1
   collection: ^1.17.2

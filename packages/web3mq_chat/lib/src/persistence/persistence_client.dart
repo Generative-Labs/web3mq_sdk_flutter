@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:mutex/mutex.dart';
 
@@ -41,7 +40,6 @@ class Web3MQPersistenceClient extends PersistenceClient {
   }
 
   /// [DriftChatDatabase] instance used by this client.
-  @visibleForTesting
   DriftChatDatabase? db;
 
   final Logger _logger;
@@ -49,13 +47,11 @@ class Web3MQPersistenceClient extends PersistenceClient {
   final bool _webUseIndexedDbIfSupported;
   final _mutex = ReadWriteMutex();
 
-  Future<T> _readProtected<T>(AsyncValueGetter<T> func) =>
-      _mutex.protectRead(func);
-
   bool get _debugIsConnected {
     assert(() {
       if (db == null) {
-        throw StateError('''
+        throw StateError(
+            '''
         $runtimeType hasn't been connected yet or used after `disconnect` 
         was called. Consider calling `connect` to create a connection. 
           ''');
@@ -94,96 +90,90 @@ class Web3MQPersistenceClient extends PersistenceClient {
   Future<Event?> getConnectionInfo() {
     assert(_debugIsConnected, '');
     _logger.info('getConnectionInfo');
-    return _readProtected(() => db!.connectionEventDao.connectionEvent);
+    return db!.connectionEventDao.connectionEvent;
   }
 
   @override
   Future<void> updateConnectionInfo(Event event) {
     assert(_debugIsConnected, '');
     _logger.info('updateConnectionInfo');
-    return _readProtected(
-      () => db!.connectionEventDao.updateConnectionEvent(event),
-    );
+    return db!.connectionEventDao.updateConnectionEvent(event);
   }
 
   @override
   Future<void> updateLastSyncAt(DateTime lastSyncAt) {
     assert(_debugIsConnected, '');
     _logger.info('updateLastSyncAt');
-    return _readProtected(
-      () => db!.connectionEventDao.updateLastSyncAt(lastSyncAt),
-    );
+    return db!.connectionEventDao.updateLastSyncAt(lastSyncAt);
   }
 
   @override
   Future<DateTime?> getLastSyncAt() {
     assert(_debugIsConnected, '');
     _logger.info('getLastSyncAt');
-    return _readProtected(() => db!.connectionEventDao.lastSyncAt);
+    return db!.connectionEventDao.lastSyncAt;
   }
 
   @override
   Future<void> deleteChannels(List<String> topics) {
     assert(_debugIsConnected, '');
     _logger.info('deleteChannels');
-    return _readProtected(() => db!.channelDao.deleteChannelByTopics(topics));
+    return db!.channelDao.deleteChannelByTopics(topics);
   }
 
   @override
   Future<List<String>> getChannelTopics() {
     assert(_debugIsConnected, '');
     _logger.info('getChannelTopics');
-    return _readProtected(() => db!.channelDao.topics);
+    return db!.channelDao.topics;
   }
 
   @override
-  Future<void> markAllToReadByTopic(String topic) {
+  Future<void> markAllToReadByTopic(String topic) async {
     assert(_debugIsConnected, '');
     _logger.info('markAllToReadByTopic');
-    return _readProtected(() async {
-      // mark channel.unreadCount to zero.
-      final channel = await db!.channelDao.getChannelByTopic(topic);
-      if (null != channel) {
-        final finalChannel = channel.copyWith(unreadMessageCount: 0);
-        db!.channelDao.updateChannels([finalChannel]);
-      }
-      return db!.messageDao.updateAllToReadByTopic(topic);
-    });
+    // mark channel.unreadCount to zero.
+    final channel = await db!.channelDao.getChannelByTopic(topic);
+    if (null != channel) {
+      final finalChannel = channel.copyWith(unreadMessageCount: 0);
+      db!.channelDao.updateChannels([finalChannel]);
+    }
+    return db!.messageDao.updateAllToReadByTopic(topic);
   }
 
   @override
   Future<Message?> getMessageById(String messageId) {
     assert(_debugIsConnected, '');
     _logger.info('getMessageById');
-    return _readProtected(() => db!.messageDao.getMessageById(messageId));
+    return db!.messageDao.getMessageById(messageId);
   }
 
   @override
   Future<void> deleteMessageByIds(List<String> messageIds) {
     assert(_debugIsConnected, '');
     _logger.info('deleteMessageByIds');
-    return _readProtected(() => db!.messageDao.deleteMessageByIds(messageIds));
+    return db!.messageDao.deleteMessageByIds(messageIds);
   }
 
   @override
   Future<void> deleteMessageByTopics(List<String> topics) {
     assert(_debugIsConnected, '');
     _logger.info('deleteMessageByTopics');
-    return _readProtected(() => db!.messageDao.deleteMessageByTopics(topics));
+    return db!.messageDao.deleteMessageByTopics(topics);
   }
 
   @override
   Future<List<Member>> getMembersByTopic(String topic) {
     assert(_debugIsConnected, '');
     _logger.info('getMembersByTopic');
-    return _readProtected(() => db!.memberDao.getMembersByTopic(topic));
+    return db!.memberDao.getMembersByTopic(topic);
   }
 
   @override
   Future<ChannelModel?> getChannelByTopic(String topic) {
     assert(_debugIsConnected, '');
     _logger.info('getChannelByTopic');
-    return _readProtected(() => db!.channelDao.getChannelByTopic(topic));
+    return db!.channelDao.getChannelByTopic(topic);
   }
 
   @override
@@ -193,68 +183,60 @@ class Web3MQPersistenceClient extends PersistenceClient {
   }) {
     assert(_debugIsConnected, '');
     _logger.info('getMessagesByTopic');
-    return _readProtected(
-      () => db!.messageDao.getMessagesByTopic(
-        topic,
-        messagePagination: messagePagination,
-      ),
+    return db!.messageDao.getMessagesByTopic(
+      topic,
+      messagePagination: messagePagination,
     );
   }
 
   @override
-  Future<Map<String, List<Message>>> getChannelThreads(String topic) {
+  Future<Map<String, List<Message>>> getChannelThreads(String topic) async {
     assert(_debugIsConnected, '');
     _logger.info('getChannelThreads');
-    return _readProtected(() async {
-      final messages = await db!.messageDao.getThreadMessages(topic);
-      final messageByParentIdDictionary = <String, List<Message>>{};
-      for (final message in messages) {
-        final parentId = message.threadId!;
-        messageByParentIdDictionary[parentId] = [
-          ...messageByParentIdDictionary[parentId] ?? [],
-          message,
-        ];
-      }
-      return messageByParentIdDictionary;
-    });
+    final messages = await db!.messageDao.getThreadMessages(topic);
+    final messageByParentIdDictionary = <String, List<Message>>{};
+    for (final message in messages) {
+      final parentId = message.threadId!;
+      messageByParentIdDictionary[parentId] = [
+        ...messageByParentIdDictionary[parentId] ?? [],
+        message,
+      ];
+    }
+    return messageByParentIdDictionary;
   }
 
   @override
   Future<List<ChannelState>> getChannelStates({
     Pagination? paginationParams,
-  }) {
+  }) async {
     assert(_debugIsConnected, '');
     _logger.info('getChannelStates');
-    return _readProtected(
-      () async {
-        final channels = await db!.channelQueryDao.getChannels();
+    final channels = await db!.channelQueryDao.getChannels();
 
-        List<ChannelState> channelStates = (await Future.wait(
-          channels.map((e) => getChannelStateByChannelId(e.channelId)),
-        ))
-            .where((state) => state != null)
-            .map((state) => state!)
-            .toList();
+    List<ChannelState> channelStates = (await Future.wait(
+      channels.map((e) => getChannelStateByChannelId(e.channelId)),
+    ))
+        .where((state) => state != null)
+        .map((state) => state!)
+        .toList();
 
-        chainedComparator(ChannelState a, ChannelState b) {
-          final dateA = a.channel.lastMessageAt ?? a.channel.createdAt;
-          final dateB = b.channel.lastMessageAt ?? b.channel.createdAt;
-          return dateB.compareTo(dateA);
-        }
+    chainedComparator(ChannelState a, ChannelState b) {
+      final dateA = a.channel.lastMessageAt ?? a.channel.createdAt;
+      final dateB = b.channel.lastMessageAt ?? b.channel.createdAt;
+      return dateB.compareTo(dateA);
+    }
 
-        channelStates.sort(chainedComparator);
-        if (paginationParams != null) {
-          int startIndex =
-              ((paginationParams.page ?? 1) - 1) * paginationParams.size;
-          return channelStates
-              .skip(startIndex)
-              .take(paginationParams.size)
-              .toList();
-        }
+    channelStates.sort(chainedComparator);
+    if (paginationParams != null) {
+      int startIndex =
+          ((paginationParams.page ?? 1) - 1) * paginationParams.size;
+      return channelStates
+          .skip(startIndex)
+          .take(paginationParams.size)
+          .toList();
+    }
 
-        return channelStates;
-      },
-    );
+    return channelStates;
   }
 
   @override
@@ -264,11 +246,9 @@ class Web3MQPersistenceClient extends PersistenceClient {
   }) {
     assert(_debugIsConnected, '');
     _logger.info('updateChannelQueries');
-    return _readProtected(
-      () => db!.channelQueryDao.updateChannelQueries(
-        topics,
-        clearQueryCache: clearQueryCache,
-      ),
+    return db!.channelQueryDao.updateChannelQueries(
+      topics,
+      clearQueryCache: clearQueryCache,
     );
   }
 
@@ -276,47 +256,45 @@ class Web3MQPersistenceClient extends PersistenceClient {
   Future<void> updateChannels(List<ChannelModel> channels) {
     assert(_debugIsConnected, '');
     _logger.info('updateChannels');
-    return _readProtected(() => db!.channelDao.updateChannels(channels));
+    return db!.channelDao.updateChannels(channels);
   }
 
   @override
   Future<void> bulkUpdateMembers(Map<String, List<Member>?> members) {
     assert(_debugIsConnected, '');
     _logger.info('bulkUpdateMembers');
-    return _readProtected(() => db!.memberDao.bulkUpdateMembers(members));
+    return db!.memberDao.bulkUpdateMembers(members);
   }
 
   @override
   Future<void> bulkUpdateMessages(Map<String, List<Message>?> messages) {
     assert(_debugIsConnected, '');
     _logger.info('bulkUpdateMessages');
-    return _readProtected(() => db!.messageDao.bulkUpdateMessages(messages));
+    return db!.messageDao.bulkUpdateMessages(messages);
   }
 
   @override
   Future<void> updateUsers(List<UserModel> users) {
     assert(_debugIsConnected, '');
     _logger.info('updateUsers');
-    return _readProtected(() => db!.userDao.updateUsers(users));
+    return db!.userDao.updateUsers(users);
   }
 
   @override
   Future<void> deleteMembersByTopics(List<String> topics) {
     assert(_debugIsConnected, '');
     _logger.info('deleteMembersByTopics');
-    return _readProtected(() => db!.memberDao.deleteMemberByTopics(topics));
+    return db!.memberDao.deleteMemberByTopics(topics);
   }
 
   @override
   Future<void> updateChannelStates(List<ChannelState> channelStates) {
     assert(_debugIsConnected, '');
     _logger.info('updateChannelStates');
-    return _readProtected(
-      () async => db!.transaction(
-        () async {
-          await super.updateChannelStates(channelStates);
-        },
-      ),
+    return db!.transaction(
+      () async {
+        await super.updateChannelStates(channelStates);
+      },
     );
   }
 

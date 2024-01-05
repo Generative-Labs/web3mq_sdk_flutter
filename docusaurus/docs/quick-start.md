@@ -19,7 +19,7 @@ dependencies:
   web3mq: 0.1.0
 ```
 
-You should then run `flutter packages get`
+You should then run `Dart pub get`
 
 ## Example Project
 
