@@ -54,3 +54,9 @@
 ## 0.2.0-dev.3
 
 - returns `null` when `userInfo` api response code 404.
+
+## 0.3.0-dev.1
+
+- Upgraded drift dependency.
+- Removed Flutter SDK dependency
+- Refactor `CyberService` to `ExtraService`
