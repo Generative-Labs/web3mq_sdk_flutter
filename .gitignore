@@ -242,6 +242,4 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
-# A temp test 
-
 # End of https://www.toptal.com/developers/gitignore/api/dart,macos,windows,visualstudiocode,androidstudio,xcode
